@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>qtquickcontrols2.conf</file>
+        <file>Images/Main.jpg</file>
+        <file>MainPage.qml</file>
+        <file>LoginPage.qml</file>
+        <file>Images/Board.jpg</file>
+        <file>Images/Login.jpg</file>
+        <file>GamePage.qml</file>
+        <file>Board.qml</file>
+        <file>Images/Wood2.jpg</file>
+        <file>Images/Wood5.jpg</file>
+        <file>BoardLeftSide.qml</file>
+        <file>BoardRightSide.qml</file>
+        <file>BoardBottomSide.qml</file>
+        <file>BoardTopSide.qml</file>
+    </qresource>
+</RCC>
