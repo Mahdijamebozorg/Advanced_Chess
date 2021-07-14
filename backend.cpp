@@ -16,13 +16,13 @@ QString BackEnd::getIcon()
 
 void BackEnd::choose(unsigned index)
 {
-    index++;
     unsigned i = index % 8;
     unsigned j = 0;
     for (; index > 8; j++) {
-        index /= 8;
+        index -= 8;
     }
-    i--;
-    j--;
-    //take to cpp
+
+    qDebug() << "i: " << i << " j: " << j;
+    Chessman_i = i;
+    Chessman_j = j;
 }

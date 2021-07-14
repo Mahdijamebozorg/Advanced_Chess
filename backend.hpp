@@ -12,7 +12,8 @@ class BackEnd : public QObject
 
 private:
     //ChessBoard
-    unsigned ChessmanIndex = 0;
+    unsigned Chessman_i = 0;
+    unsigned Chessman_j = 0;
 
 public:
     BackEnd();
