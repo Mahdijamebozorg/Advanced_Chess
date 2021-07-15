@@ -11,7 +11,7 @@ Page {
         anchors.bottomMargin: 0
         anchors.leftMargin: 0
         anchors.topMargin: 0
-        source: "qrc:/Images/Login.jpg"
+        source: "qrc:/Assets/Images/Login.jpg"
         anchors.fill: parent
 
         TextField {

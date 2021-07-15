@@ -11,15 +11,11 @@ class BackEnd : public QObject
     Q_OBJECT
 
 private:
-    //ChessBoard
-    unsigned ChessmanIndex = 0;
 
 public:
     BackEnd();
 
 public slots:
-    QString getIcon(); //?
-    void choose(unsigned index);
 
 signals:
 };

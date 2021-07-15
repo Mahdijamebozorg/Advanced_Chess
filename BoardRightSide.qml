@@ -9,7 +9,7 @@ Item {
             height: parent.height - 2
             id: rightSide
             anchors.centerIn: parent
-            source: "qrc:/Images/Wood5.jpg"
+            source: "qrc:/Assets/Images/Wood5.jpg"
 
             Text {
                 id: scoresSideText

@@ -7,7 +7,7 @@ Page {
     title: "Game Page"
     Image {
         anchors.fill: parent
-        source: "qrc:/Images/Wood2.jpg"
+        source: "qrc:/Assets/Images/Wood2.jpg"
 
         Board {
             id: board

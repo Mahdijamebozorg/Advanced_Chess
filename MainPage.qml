@@ -10,7 +10,7 @@ Page {
         anchors.fill: parent
         Image {
             id: image
-            source: "qrc:/Images/Main.jpg"
+            source: "qrc:/Assets/Images/Main.jpg"
             anchors.fill: parent
 
             Rectangle {

@@ -8,7 +8,7 @@ Item {
     Image {
         id: boardImage
         anchors.fill: parent
-        source: "qrc:/Images/Board.jpg"
+        source: "qrc:/Assets/Images/Board.jpg"
 
         GridView {
             id: gridView

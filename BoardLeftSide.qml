@@ -35,7 +35,7 @@ Item {
         color: "white"
         Image {
             id: leftSide
-            source: "qrc:/Images/Wood5.jpg"
+            source: "qrc:/Assets/Images/Wood5.jpg"
             width: parent.width - 2
             height: parent.height - 2
             anchors.centerIn: parent

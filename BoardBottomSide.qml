@@ -9,7 +9,7 @@ Item {
             height: 128
             id: wood4
             anchors.centerIn: parent
-            source: "qrc:/Images/Wood5.jpg"
+            source: "qrc:/Assets/Images/Wood5.jpg"
         }
     }
 }
