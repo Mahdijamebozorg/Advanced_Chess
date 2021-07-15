@@ -14,7 +14,7 @@ public:
   // Type alias
   using WhiteChessman  = std::array<std::shared_ptr<Chessman>, 16>;
   using BlackChessman  = std::array<std::shared_ptr<Chessman>, 16>;
-  using ChessBoardGame = std::shared_ptr<ChessBoard>;
+  using ChessBoardGame = std::shared_ptr<ChessBoard              >;
 
   // static member functions
   static std::shared_ptr<GameManager> &setGameManager();

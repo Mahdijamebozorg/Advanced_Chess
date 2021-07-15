@@ -747,6 +747,18 @@ qrc_qml.cpp: qml.qrc \
 		BoardLeftSide.qml \
 		qtquickcontrols2.conf \
 		main.qml \
+		Assets/Icons/BKing.png \
+		Assets/Icons/WPawn.png \
+		Assets/Icons/BKnight.png \
+		Assets/Icons/WKnight.png \
+		Assets/Icons/WRook.png \
+		Assets/Icons/WKing.png \
+		Assets/Icons/BQueen.png \
+		Assets/Icons/BPawn.png \
+		Assets/Icons/BBishop.png \
+		Assets/Icons/BRook.png \
+		Assets/Icons/WQueen.png \
+		Assets/Icons/WBishop.png \
 		Assets/Images/Wood5.jpg \
 		Assets/Images/Main.jpg \
 		Assets/Images/Board.jpg \

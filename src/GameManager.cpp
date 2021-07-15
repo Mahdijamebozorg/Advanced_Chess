@@ -1,12 +1,12 @@
-#include "Header/GameManager.hpp"
+#include "../Header/GameManager.hpp"
 
-#include "Header/Bishop.hpp"
-#include "Header/ChessBoard.hpp"
-#include "Header/King.hpp"
-#include "Header/Knight.hpp"
-#include "Header/Pawn.hpp"
-#include "Header/Queen.hpp"
-#include "Header/Rook.hpp"
+#include "../Header/Bishop.hpp"
+#include "../Header/ChessBoard.hpp"
+#include "../Header/King.hpp"
+#include "../Header/Knight.hpp"
+#include "../Header/Pawn.hpp"
+#include "../Header/Queen.hpp"
+#include "../Header/Rook.hpp"
 
 #include <stdexcept>
 
@@ -17,7 +17,7 @@ shared_ptr<GameManager> GameManager::game_manager = nullptr;
 shared_ptr<GameManager> &GameManager::setGameManager()
 {
   if(game_manager == nullptr)
-      game_manager = shared_ptr<GameManager>(new GameManager());
+    game_manager = unique_ptr<GameManager>(new GameManager());
 
   return game_manager;
 }

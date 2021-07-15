@@ -1,4 +1,4 @@
-#include "Header/ChessBoard.hpp"
+#include "../Header/ChessBoard.hpp"
 
 #include <stdexcept>
 

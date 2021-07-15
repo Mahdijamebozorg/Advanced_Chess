@@ -15,5 +15,17 @@
         <file>Assets/Images/Wood2.jpg</file>
         <file>Assets/Images/Wood5.jpg</file>
         <file>qtquickcontrols2.conf</file>
+        <file>Assets/Icons/BBishop.png</file>
+        <file>Assets/Icons/BKing.png</file>
+        <file>Assets/Icons/BKnight.png</file>
+        <file>Assets/Icons/BPawn.png</file>
+        <file>Assets/Icons/BQueen.png</file>
+        <file>Assets/Icons/BRook.png</file>
+        <file>Assets/Icons/WBishop.png</file>
+        <file>Assets/Icons/WKing.png</file>
+        <file>Assets/Icons/WKnight.png</file>
+        <file>Assets/Icons/WPawn.png</file>
+        <file>Assets/Icons/WQueen.png</file>
+        <file>Assets/Icons/WRook.png</file>
     </qresource>
 </RCC>

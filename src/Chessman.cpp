@@ -1,4 +1,4 @@
-#include "Header/Chessman.hpp"
+#include "../Header/Chessman.hpp"
 
 #include <stdexcept>
 
