@@ -19,6 +19,12 @@ public:
     BackEnd();
 
 public slots:
+    //login
+    void getP1Name(QString P1Name);
+    void getP2Name(QString P2Name);
+    void getGameName(QString GameName);
+
+    //board
     QString getIcon(); //?
     void choose(unsigned index);
 
