@@ -14,11 +14,11 @@ public:
   // Type alias
   using WhiteChessman  = std::array<std::shared_ptr<Chessman>, 16>;
   using BlackChessman  = std::array<std::shared_ptr<Chessman>, 16>;
-  using ChessBoardGame = std::shared_ptr<ChessBoard              >;
+  using ChessBoardGame = std::shared_ptr<ChessBoard>;
 
   // static member functions
-  static std::unique_ptr<GameManager>& setGameManager();
-  static std::unique_ptr<GameManager>& getGameManager();
+  static std::shared_ptr<GameManager> &setGameManager();
+  static std::shared_ptr<GameManager> &getGameManager();
 
   // move and hit chesspieces
   std::list<Chessman::Index> getCanGo (Chessman::ID, Chessman::Index            ) const;
@@ -32,8 +32,7 @@ private:
   BlackChessman  black_chessman          ;
   ChessBoardGame chess_board    = nullptr;
   // static pointer to this class for Singeleton pattern
-  static std::unique_ptr<GameManager> game_manager;
-
+  static std::shared_ptr<GameManager> game_manager;
 
   // private member functions
   // Constructor is private for use of pattern singeleton

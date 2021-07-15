@@ -5,6 +5,12 @@ BackEnd::BackEnd()
     
 }
 
+void BackEnd::getP1Name(QString P1Name) {}
+
+void BackEnd::getP2Name(QString P2Name) {}
+
+void BackEnd::getGameName(QString GameName) {}
+
 QString BackEnd::getIcon()
 {
     for (unsigned i = 0; i < 8; i++) {

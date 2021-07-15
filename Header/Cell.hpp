@@ -10,7 +10,7 @@ class Cell
 public:
   // Type alias
   using ChessPieces = std::shared_ptr<Chessman>;
-  using Color       = enum {WHITE, BLACK}      ;
+  using Color = enum { WHITE, BLACK };
 
   // Constructor
   Cell(                                   )         ; // Defatult Constructo

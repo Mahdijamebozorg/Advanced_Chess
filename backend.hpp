@@ -1,6 +1,8 @@
 #ifndef BACKEND_HPP
 #define BACKEND_HPP
 
+#include <Header/GameManager.hpp>
+#include <vector>
 #include <QDebug>
 #include <QObject>
 #include <QString>
@@ -14,6 +16,8 @@ private:
     //ChessBoard
     unsigned Chessman_i = 0;
     unsigned Chessman_j = 0;
+    std::shared_ptr<GameManager> manager = GameManager::setGameManager();
+    std::vector<QString> icons;
 
 public:
     BackEnd();

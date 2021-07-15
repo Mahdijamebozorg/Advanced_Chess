@@ -1,28 +1,28 @@
-#include "GameManager.hpp"
+#include "Header/GameManager.hpp"
 
-#include "ChessBoard.hpp"
-#include "Pawn.hpp"
-#include "Rook.hpp"
-#include "Knight.hpp"
-#include "Bishop.hpp"
-#include "Queen.hpp"
-#include "King.hpp"
+#include "Header/Bishop.hpp"
+#include "Header/ChessBoard.hpp"
+#include "Header/King.hpp"
+#include "Header/Knight.hpp"
+#include "Header/Pawn.hpp"
+#include "Header/Queen.hpp"
+#include "Header/Rook.hpp"
 
 #include <stdexcept>
 
 using namespace std;
 
-unique_ptr<GameManager> GameManager::game_manager = nullptr;
+shared_ptr<GameManager> GameManager::game_manager = nullptr;
 
-unique_ptr<GameManager>& GameManager::setGameManager()
+shared_ptr<GameManager> &GameManager::setGameManager()
 {
   if(game_manager == nullptr)
-    game_manager = unique_ptr<GameManager>(new GameManager());
+      game_manager = shared_ptr<GameManager>(new GameManager());
 
   return game_manager;
 }
 
-unique_ptr<GameManager>& GameManager::getGameManager()
+shared_ptr<GameManager> &GameManager::getGameManager()
 {
   return game_manager;
 }

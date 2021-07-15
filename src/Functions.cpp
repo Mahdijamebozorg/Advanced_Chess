@@ -1,6 +1,6 @@
 #include <stdexcept>
 
-#include "Chessman.hpp"
+#include "Header/Chessman.hpp"
 
 using namespace std;
 

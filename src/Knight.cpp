@@ -1,4 +1,4 @@
-#include "Knight.hpp"
+#include "Header/Knight.hpp"
 
 #include <vector>
 #include <stdexcept>
