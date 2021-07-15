@@ -53,13 +53,41 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = backend.cpp \
-		main.cpp qrc_qml.cpp \
+		main.cpp \
+		src/Bishop.cpp \
+		src/Cell.cpp \
+		src/ChessBoard.cpp \
+		src/Chessman.cpp \
+		src/Functions.cpp \
+		src/GameManager.cpp \
+		src/King.cpp \
+		src/Knight.cpp \
+		src/Pawn.cpp \
+		src/Queen.cpp \
+		src/Rook.cpp qrc_qml.cpp \
 		moc_backend.cpp
 OBJECTS       = backend.o \
 		main.o \
+		Bishop.o \
+		Cell.o \
+		ChessBoard.o \
+		Chessman.o \
+		Functions.o \
+		GameManager.o \
+		King.o \
+		Knight.o \
+		Pawn.o \
+		Queen.o \
+		Rook.o \
 		qrc_qml.o \
 		moc_backend.o
-DIST          = Images/login.jpg \
+DIST          = Images/Black/BBishop.png \
+		Images/Black/BKing.png \
+		Images/Black/BKnight.png \
+		Images/Black/BPawn.png \
+		Images/Black/BQueen.png \
+		Images/Black/BRook.png \
+		Images/login.jpg \
 		/opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/spec_pre.prf \
 		/opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/common/unix.conf \
 		/opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/common/linux.conf \
@@ -248,8 +276,29 @@ DIST          = Images/login.jpg \
 		/opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/exceptions.prf \
 		/opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/yacc.prf \
 		/opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/lex.prf \
-		Advanced_Chess.pro backend.hpp backend.cpp \
-		main.cpp
+		Advanced_Chess.pro Header/Bishop.hpp \
+		Header/Cell.hpp \
+		Header/ChessBoard.hpp \
+		Header/Chessman.hpp \
+		Header/GameManager.hpp \
+		Header/King.hpp \
+		Header/Knight.hpp \
+		Header/Pawn.hpp \
+		Header/Queen.hpp \
+		Header/Rook.hpp \
+		backend.hpp backend.cpp \
+		main.cpp \
+		src/Bishop.cpp \
+		src/Cell.cpp \
+		src/ChessBoard.cpp \
+		src/Chessman.cpp \
+		src/Functions.cpp \
+		src/GameManager.cpp \
+		src/King.cpp \
+		src/Knight.cpp \
+		src/Pawn.cpp \
+		src/Queen.cpp \
+		src/Rook.cpp
 QMAKE_TARGET  = Advanced_Chess
 DESTDIR       = 
 TARGET        = Advanced_Chess
@@ -658,8 +707,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents backend.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents backend.cpp main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Header/Bishop.hpp Header/Cell.hpp Header/ChessBoard.hpp Header/Chessman.hpp Header/GameManager.hpp Header/King.hpp Header/Knight.hpp Header/Pawn.hpp Header/Queen.hpp Header/Rook.hpp backend.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents backend.cpp main.cpp src/Bishop.cpp src/Cell.cpp src/ChessBoard.cpp src/Chessman.cpp src/Functions.cpp src/GameManager.cpp src/King.cpp src/Knight.cpp src/Pawn.cpp src/Queen.cpp src/Rook.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -715,6 +764,10 @@ compiler_moc_header_make_all: moc_backend.cpp
 compiler_moc_header_clean:
 	-$(DEL_FILE) moc_backend.cpp
 moc_backend.cpp: backend.hpp \
+		Header/GameManager.hpp \
+		Header/Chessman.hpp \
+		Header/ChessBoard.hpp \
+		Header/Cell.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
@@ -1185,6 +1238,10 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 ####### Compile
 
 backend.o: backend.cpp backend.hpp \
+		Header/GameManager.hpp \
+		Header/Chessman.hpp \
+		Header/ChessBoard.hpp \
+		Header/Cell.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
@@ -1639,6 +1696,10 @@ backend.o: backend.cpp backend.hpp \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o backend.o backend.cpp
 
 main.o: main.cpp backend.hpp \
+		Header/GameManager.hpp \
+		Header/Chessman.hpp \
+		Header/ChessBoard.hpp \
+		Header/Cell.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
@@ -2093,6 +2154,57 @@ main.o: main.cpp backend.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtGui/QGuiApplication \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtQml/QQmlApplicationEngine
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
+
+Bishop.o: src/Bishop.cpp Header/Bishop.hpp \
+		Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Bishop.o src/Bishop.cpp
+
+Cell.o: src/Cell.cpp Header/Cell.hpp \
+		Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Cell.o src/Cell.cpp
+
+ChessBoard.o: src/ChessBoard.cpp Header/ChessBoard.hpp \
+		Header/Cell.hpp \
+		Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ChessBoard.o src/ChessBoard.cpp
+
+Chessman.o: src/Chessman.cpp Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Chessman.o src/Chessman.cpp
+
+Functions.o: src/Functions.cpp Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Functions.o src/Functions.cpp
+
+GameManager.o: src/GameManager.cpp Header/GameManager.hpp \
+		Header/Chessman.hpp \
+		Header/ChessBoard.hpp \
+		Header/Cell.hpp \
+		Header/Bishop.hpp \
+		Header/King.hpp \
+		Header/Knight.hpp \
+		Header/Pawn.hpp \
+		Header/Queen.hpp \
+		Header/Rook.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GameManager.o src/GameManager.cpp
+
+King.o: src/King.cpp Header/King.hpp \
+		Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o King.o src/King.cpp
+
+Knight.o: src/Knight.cpp Header/Knight.hpp \
+		Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Knight.o src/Knight.cpp
+
+Pawn.o: src/Pawn.cpp Header/Pawn.hpp \
+		Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pawn.o src/Pawn.cpp
+
+Queen.o: src/Queen.cpp Header/Queen.hpp \
+		Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Queen.o src/Queen.cpp
+
+Rook.o: src/Rook.cpp Header/Rook.hpp \
+		Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Rook.o src/Rook.cpp
 
 qrc_qml.o: qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qml.o qrc_qml.cpp

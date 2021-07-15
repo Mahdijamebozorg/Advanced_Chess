@@ -1,31 +1,19 @@
 <RCC>
     <qresource prefix="/">
-        <file>main.qml</file>
-        <file>qtquickcontrols2.conf</file>
-        <file>MainPage.qml</file>
-        <file>LoginPage.qml</file>
-        <file>GamePage.qml</file>
         <file>Board.qml</file>
+        <file>BoardBottomSide.qml</file>
         <file>BoardLeftSide.qml</file>
         <file>BoardRightSide.qml</file>
-        <file>BoardBottomSide.qml</file>
         <file>BoardTopSide.qml</file>
+        <file>GamePage.qml</file>
+        <file>LoginPage.qml</file>
+        <file>main.qml</file>
+        <file>MainPage.qml</file>
         <file>Assets/Images/Board.jpg</file>
         <file>Assets/Images/Login.jpg</file>
         <file>Assets/Images/Main.jpg</file>
         <file>Assets/Images/Wood2.jpg</file>
         <file>Assets/Images/Wood5.jpg</file>
-        <file>Assets/Icons/BBishop.png</file>
-        <file>Assets/Icons/BKing.png</file>
-        <file>Assets/Icons/BKnight.png</file>
-        <file>Assets/Icons/BPawn.png</file>
-        <file>Assets/Icons/BQueen.png</file>
-        <file>Assets/Icons/BRook.png</file>
-        <file>Assets/Icons/WBishop.png</file>
-        <file>Assets/Icons/WKing.png</file>
-        <file>Assets/Icons/WKnight.png</file>
-        <file>Assets/Icons/WPawn.png</file>
-        <file>Assets/Icons/WQueen.png</file>
-        <file>Assets/Icons/WRook.png</file>
+        <file>qtquickcontrols2.conf</file>
     </qresource>
 </RCC>
