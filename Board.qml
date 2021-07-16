@@ -18,6 +18,7 @@ Item {
         anchors.fill: parent
         source: "qrc:/Assets/Images/Board.jpg"
 
+        //a grid of buttons for move source
         GridView {
             id: src
             anchors.centerIn: boardImage
@@ -39,6 +40,8 @@ Item {
                     onClicked: {
                         bknd.choose(index)
                     }
+
+                    //highlight canGo and canHit cells on choose
                     Connections {
                         target: bknd
                         onChoosen: {
@@ -53,6 +56,17 @@ Item {
                             }
                         }
                     }
+
+                    //unchoose the piece
+                    Connections {
+                        target: bknd
+                        onUnchoose: {
+                            srcCell.visible = true
+                            dest.visible = false
+                            cellRec.color = "#00000000"
+                            cellRec.border.width = 0
+                        }
+                    }
                 }
                 Image {
                     source: bknd.getIcon(index)
@@ -65,6 +79,8 @@ Item {
         Rectangle {
             color: "#ac8614"
         }
+
+        //new grid buttons for destination
         GridView {
             id: dest
             visible: false
@@ -82,10 +98,12 @@ Item {
                 flat: true
                 onClicked: {
                     if (bknd.isAvailable(index)) {
-                        bknd.move(index)
-                        mystack.replace("GamePage.qml")
-                    } else
-                        wrongChoose.open()
+                        if (bknd.move(index))
+                            mystack.replace("GamePage.qml")
+                    } else {
+                        if (!bknd.unchoosePiece(index))
+                            wrongChoose.open()
+                    }
                 }
             }
         }

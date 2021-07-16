@@ -5,6 +5,8 @@ Page {
     id: loginPage
     title: ""
     anchors.fill: parent
+
+    //Background
     Image {
         id: image
         anchors.rightMargin: 0
@@ -14,30 +16,32 @@ Page {
         source: "qrc:/Assets/Images/Login.jpg"
         anchors.fill: parent
 
+        //P1 Name
         TextField {
             id: player1
-            anchors.top: mystack.top
-            anchors.topMargin: 15
+            y: 10
             x: 15
             width: mystack.width * 0.2
-            height: mystack.height * 0.07
+            height: mystack.height * 0.05
             clip: true
             placeholderText: "player 1 name"
             placeholderTextColor: "#7c6d43"
             horizontalAlignment: Text.AlignHCenter
+            maximumLength: 20
         }
+        //color
         RadioButton {
             id: white1
-            anchors.left: player1.right
-            y: player1.y
-            clip: true
+            anchors.horizontalCenter: player1.horizontalCenter
+            anchors.top: player1.bottom
             text: white2.checked ? "Black" : "White"
+            font.pixelSize: 12
         }
 
+        //Game Name
         Rectangle {
             id: gameNameRec
-            anchors.top: mystack.top
-            anchors.topMargin: 50
+            y: 20
             x: loginPage.width / 2 - width / 2
             width: mystack.width * 0.2
             height: mystack.height * 0.07
@@ -46,33 +50,40 @@ Page {
             border.width: 1
             TextField {
                 id: gameName
+                horizontalAlignment: Text.AlignHCenter
                 anchors.centerIn: parent
                 placeholderText: "Game name"
                 placeholderTextColor: "#7c6d43"
+                width: gameNameRec.width * 0.8
+                maximumLength: 19
             }
         }
+
+        //P2 Name
         TextField {
             id: player2
             placeholderText: "player 2 name"
             placeholderTextColor: "#7c6d43"
-            anchors.right: white2.left
-            anchors.top: mystack.top
-            anchors.topMargin: 15
+            y: 10
+            x: mystack.width - width - 15
             width: mystack.width * 0.2
-            height: mystack.height * 0.07
+            height: mystack.height * 0.05
             clip: true
             horizontalAlignment: Text.AlignHCenter
+            maximumLength: 20
         }
+        //color
         RadioButton {
             id: white2
-            x: mystack.width - width - 15
-            y: player2.y
-            clip: true
+            anchors.horizontalCenter: player2.horizontalCenter
+            anchors.top: player2.bottom
             text: white1.checked ? "Black" : "White"
+            font.pixelSize: 12
             checked: true
         }
     }
 
+    //login style
     Rectangle {
         id: logrec
         x: mystack.width - width - 8
@@ -103,6 +114,8 @@ Page {
                 color: "#00000000"
             }
         }
+
+        //login button
         Button {
             id: login
             flat: true
@@ -119,6 +132,7 @@ Page {
         }
     }
 
+    //back style
     Rectangle {
         id: bkRec
         x: 8
@@ -150,6 +164,7 @@ Page {
             color: "#00000000"
         }
 
+        //back button
         Button {
             flat: true
             id: back

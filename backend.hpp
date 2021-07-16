@@ -14,9 +14,9 @@ class BackEnd : public QObject
 
 private:
     //ChessBoard
-    std::pair<unsigned, unsigned> src;
-    unsigned Chessman_i = 0;
-    unsigned Chessman_j = 0;
+    unsigned srcIndex;
+    unsigned destIndex;
+
     std::shared_ptr<GameManager> manager = GameManager::setGameManager();
 
     //test, these will be gotten from backend
@@ -51,10 +51,12 @@ public slots:
     void choose(unsigned index);
     bool isAvailable(unsigned index);
     bool canHitPiece(unsigned index);
-    void move(unsigned index);
+    bool move(unsigned index);
+    bool unchoosePiece(unsigned index);
 
 signals:
     void choosen();
+    void unchoose();
 };
 
 #endif // BACKEND_HPP
