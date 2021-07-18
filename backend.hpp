@@ -33,30 +33,39 @@ private:
                                       "qrc:/Assets/Icons/WQueen.png",
                                       "qrc:/Assets/Icons/WRook.png"};
     //test
-    std::vector<unsigned> canGo = {16, 17, 18, 19, 20, 21, 29, 37, 45, 53, 61};
-    std::vector<unsigned> canHit = {18, 29};
+    //    std::vector<unsigned> bkndcanGo = {16, 17, 18, 19, 20, 21, 29, 37, 45, 53, 61};
+    //    std::vector<unsigned> canHit = {18, 29};
 
 public:
     BackEnd();
 
 public slots:
 
-    //login
-    void getP1Name(QString P1Name);
-    void getP2Name(QString P2Name);
-    void getGameName(QString GameName);
+    //users
+    void setP1(QString P1Name);
+    unsigned getP1Score();
+    unsigned getP2Score();
+    void setP2(QString P2Name);
+    void setGameName(QString GameName);
+    QString getP1Name();
+    QString getP2Name();
+    QString getGameName();
 
     //board
     QString getIcon(unsigned index);
     void choose(unsigned index);
-    bool isAvailable(unsigned index);
-    bool canHitPiece(unsigned index);
-    bool move(unsigned index);
+    unsigned cellState();
+    bool canGo(unsigned index, std::vector<unsigned> bkndcanGo);
+    bool canHit(unsigned index, std::vector<unsigned> bkndcanGo);
+    void move(unsigned index);
     bool unchoosePiece(unsigned index);
 
 signals:
     void choosen();
     void unchoose();
 };
+
+std::pair<unsigned, unsigned> indexToIJ(unsigned index);
+unsigned IJToIndex(std::pair<unsigned, unsigned>);
 
 #endif // BACKEND_HPP

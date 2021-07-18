@@ -4,21 +4,52 @@ using namespace std;
 
 BackEnd::BackEnd() {}
 
-void BackEnd::getP1Name(QString P1Name) {}
+//____________________________________________________________________________________________ IJToIndex
 
-void BackEnd::getP2Name(QString P2Name) {}
+unsigned IJToIndex(pair<unsigned, unsigned> index)
+{
+    return index.second * 8 + index.first;
+}
+
+//____________________________________________________________________________________________ indexToIJ
+
+std::pair<unsigned, unsigned> indexToIJ(unsigned index)
+{
+    unsigned i = index % 8;
+    unsigned j = 0;
+    while (index > 8) {
+        j++;
+        index -= 8;
+    }
+    return make_pair(i, j);
+}
+
+//____________________________________________________________________________________________ getP1Name
+
+void BackEnd::setP1(QString P1Name)
+{
+    manager->setUser(P1Name.QString::toStdString());
+}
+
+//____________________________________________________________________________________________ getP2Name
+
+void BackEnd::setP2(QString P2Name)
+{
+    manager->setUser(P2Name.QString::toStdString());
+}
+
+//____________________________________________________________________________________________ getGameName
 
 void BackEnd::getGameName(QString GameName) {}
 
+//____________________________________________________________________________________________ getIcon
+
 QString BackEnd::getIcon(unsigned index)
 {
-    //get from Chessman class
-    //test
-    if (index <= 11)
-        return QString::fromStdString(icons[index]);
-    else
-        return "";
+    return QString::fromStdString(manager->getChessBoard().getCell(indexToIJ(index)).getIcon());
 }
+
+//____________________________________________________________________________________________ choose
 
 void BackEnd::choose(unsigned index)
 {
@@ -26,38 +57,56 @@ void BackEnd::choose(unsigned index)
     emit choosen();
 }
 
-bool BackEnd::move(unsigned index)
+//____________________________________________________________________________________________ canGo
+
+bool BackEnd::canGo(unsigned index, vector<pair<unsigned, unsigned>> bkndcanGo)
 {
-    if (unchoosePiece(index)) //if not moved
-    {
-        return false;
-    }
-
-    else {
-        destIndex = index;
-
-        //convert srcIndex to i & j
-        unsigned i1 = srcIndex % 8;
-        unsigned j1 = 0;
-        while (srcIndex > 8) {
-            j1++;
-            srcIndex -= 8;
+    for (auto const &item : bkndcanGo) {
+        if (IJToIndex(item) == index) {
+            return true;
         }
-
-        //convert destIndex to i & j
-        unsigned i2 = destIndex % 8;
-        unsigned j2 = 0;
-        while (destIndex > 8) {
-            j2++;
-            destIndex -= 8;
-        }
-
-        manager->movePiece(make_pair(i1, j1), make_pair(i2, j2));
-        return true;
-        //        //test
-        //        icons[2] = "qrc:/Assets/Icons/WRook.png";
     }
+    return false;
 }
+
+//____________________________________________________________________________________________ canHit
+
+bool BackEnd::canHit(unsigned index, vector<pair<unsigned, unsigned>> bkndcanHit)
+{
+    for (auto const &item : bkndcanHit) { //manager->canHin
+        if (IJToIndex(item) == index) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//____________________________________________________________________________________________ cellState
+
+unsigned BackEnd::cellState(unsigned index)
+{
+    pair<unsigned, unsigned> src = indexToIJ(index);
+    pair<vector<pair<unsigned, unsigned>>, vector<pair<unsigned, unsigned>>> state
+        = manager->getCellState(src);
+
+    //if can hit
+    if (canHit(index, state.second)) {
+        return 3;
+
+    }
+
+    //if can go
+    else if (canGo(index, state.first)) {
+        return 2;
+
+    }
+
+    //if unavailable
+    else
+        return 0;
+}
+
+//____________________________________________________________________________________________ unchoosePiece
 
 bool BackEnd::unchoosePiece(unsigned index)
 {
@@ -69,22 +118,11 @@ bool BackEnd::unchoosePiece(unsigned index)
     }
 }
 
-bool BackEnd::isAvailable(unsigned index)
-{
-    for (auto const &item : canGo) {
-        if (item == index) {
-            return true;
-        }
-    }
-    return false;
-}
+//____________________________________________________________________________________________ move
 
-bool BackEnd::canHitPiece(unsigned index)
+void BackEnd::move(unsigned index)
 {
-    for (auto const &item : canHit) { //manager->canHin
-        if (item == index) {
-            return true;
-        }
-    }
-    return false;
+    destIndex = index;
+
+    manager->movePiece(indexToIJ(srcIndex), indexToIJ((destIndex)));
 }

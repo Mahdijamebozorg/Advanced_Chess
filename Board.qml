@@ -47,7 +47,7 @@ Item {
                         onChoosen: {
                             srcCell.visible = false
                             dest.visible = true
-                            if (bknd.isAvailable(index)) {
+                            if (bknd.canGo(index)) {
                                 cellRec.color = "#ac8614"
                                 cellRec.border.color = "black"
                                 cellRec.border.width = 0.5
@@ -69,6 +69,7 @@ Item {
                     }
                 }
                 Image {
+                    id: chessmanIcon
                     source: bknd.getIcon(index)
                     anchors.centerIn: parent
                     width: parent.width * 0.85
@@ -97,10 +98,13 @@ Item {
                 height: dest.height / 8
                 flat: true
                 onClicked: {
-                    if (bknd.isAvailable(index)) {
-                        if (bknd.move(index))
-                            mystack.replace("GamePage.qml")
+
+                    //if piece can go there
+                    if (bknd.canGo(index)) {
+                        bknd.move(index)
+                        mystack.replace("GamePage.qml")
                     } else {
+                        //if piece can't go there and it's not its current square
                         if (!bknd.unchoosePiece(index))
                             wrongChoose.open()
                     }

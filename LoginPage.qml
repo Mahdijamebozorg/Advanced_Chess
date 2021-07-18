@@ -26,6 +26,7 @@ Page {
             clip: true
             placeholderText: "player 1 name"
             placeholderTextColor: "#7c6d43"
+            text: ""
             horizontalAlignment: Text.AlignHCenter
             maximumLength: 20
         }
@@ -34,6 +35,7 @@ Page {
             id: white1
             anchors.horizontalCenter: player1.horizontalCenter
             anchors.top: player1.bottom
+            height: 20
             text: white2.checked ? "Black" : "White"
             font.pixelSize: 12
         }
@@ -54,6 +56,7 @@ Page {
                 anchors.centerIn: parent
                 placeholderText: "Game name"
                 placeholderTextColor: "#7c6d43"
+                text: ""
                 width: gameNameRec.width * 0.8
                 maximumLength: 19
             }
@@ -68,7 +71,7 @@ Page {
             x: mystack.width - width - 15
             width: mystack.width * 0.2
             height: mystack.height * 0.05
-            clip: true
+            text: ""
             horizontalAlignment: Text.AlignHCenter
             maximumLength: 20
         }
@@ -77,6 +80,7 @@ Page {
             id: white2
             anchors.horizontalCenter: player2.horizontalCenter
             anchors.top: player2.bottom
+            height: 20
             text: white1.checked ? "Black" : "White"
             font.pixelSize: 12
             checked: true
@@ -125,9 +129,37 @@ Page {
             font.italic: true
             font.pointSize: 13
             onClicked: {
-                mystack.push("GamePage.qml")
-                window.width = 1200
-                window.height = 1000
+                var ok = true
+
+                //if player 1 name is empty
+                if (player1.text == "") {
+                    player1.placeholderTextColor = "red"
+                    ok = false
+                }
+
+                //if player 2 name is empty
+                if (player2.text == "") {
+                    player2.placeholderTextColor = "red"
+                    ok = false
+                }
+
+                //if game name is empty
+                if (gameName.text == "") {
+                    gameName.placeholderTextColor = "red"
+                    ok = false
+                } //if ok
+                else if (ok) {
+                    if (white1.checked) {
+                        bknd.setP1(player1.text)
+                        bknd.setP2(player2.text)
+                    } else {
+                        bknd.setP1(player2.text)
+                        bknd.setP2(player1.text)
+                    }
+                    mystack.push("GamePage.qml")
+                    window.width = 1200
+                    window.height = 1000
+                }
             }
         }
     }

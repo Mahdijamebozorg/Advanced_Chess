@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_BackEnd_t {
-    QByteArrayData data[17];
-    char stringdata0[145];
+    QByteArrayData data[20];
+    char stringdata0[172];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -45,16 +45,20 @@ QT_MOC_LITERAL(9, 72, 8), // "GameName"
 QT_MOC_LITERAL(10, 81, 7), // "getIcon"
 QT_MOC_LITERAL(11, 89, 5), // "index"
 QT_MOC_LITERAL(12, 95, 6), // "choose"
-QT_MOC_LITERAL(13, 102, 11), // "isAvailable"
-QT_MOC_LITERAL(14, 114, 11), // "canHitPiece"
-QT_MOC_LITERAL(15, 126, 4), // "move"
-QT_MOC_LITERAL(16, 131, 13) // "unchoosePiece"
+QT_MOC_LITERAL(13, 102, 9), // "cellState"
+QT_MOC_LITERAL(14, 112, 5), // "canGo"
+QT_MOC_LITERAL(15, 118, 17), // "std::vector<uint>"
+QT_MOC_LITERAL(16, 136, 9), // "bkndcanGo"
+QT_MOC_LITERAL(17, 146, 6), // "canHit"
+QT_MOC_LITERAL(18, 153, 4), // "move"
+QT_MOC_LITERAL(19, 158, 13) // "unchoosePiece"
 
     },
     "BackEnd\0choosen\0\0unchoose\0getP1Name\0"
     "P1Name\0getP2Name\0P2Name\0getGameName\0"
-    "GameName\0getIcon\0index\0choose\0isAvailable\0"
-    "canHitPiece\0move\0unchoosePiece"
+    "GameName\0getIcon\0index\0choose\0cellState\0"
+    "canGo\0std::vector<uint>\0bkndcanGo\0"
+    "canHit\0move\0unchoosePiece"
 };
 #undef QT_MOC_LITERAL
 
@@ -64,7 +68,7 @@ static const uint qt_meta_data_BackEnd[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      11,   14, // methods
+      12,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -72,19 +76,20 @@ static const uint qt_meta_data_BackEnd[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   69,    2, 0x06 /* Public */,
-       3,    0,   70,    2, 0x06 /* Public */,
+       1,    0,   74,    2, 0x06 /* Public */,
+       3,    0,   75,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    1,   71,    2, 0x0a /* Public */,
-       6,    1,   74,    2, 0x0a /* Public */,
-       8,    1,   77,    2, 0x0a /* Public */,
-      10,    1,   80,    2, 0x0a /* Public */,
-      12,    1,   83,    2, 0x0a /* Public */,
-      13,    1,   86,    2, 0x0a /* Public */,
-      14,    1,   89,    2, 0x0a /* Public */,
-      15,    1,   92,    2, 0x0a /* Public */,
-      16,    1,   95,    2, 0x0a /* Public */,
+       4,    1,   76,    2, 0x0a /* Public */,
+       6,    1,   79,    2, 0x0a /* Public */,
+       8,    1,   82,    2, 0x0a /* Public */,
+      10,    1,   85,    2, 0x0a /* Public */,
+      12,    1,   88,    2, 0x0a /* Public */,
+      13,    0,   91,    2, 0x0a /* Public */,
+      14,    2,   92,    2, 0x0a /* Public */,
+      17,    2,   97,    2, 0x0a /* Public */,
+      18,    1,  102,    2, 0x0a /* Public */,
+      19,    1,  105,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -96,9 +101,10 @@ static const uint qt_meta_data_BackEnd[] = {
     QMetaType::Void, QMetaType::QString,    9,
     QMetaType::QString, QMetaType::UInt,   11,
     QMetaType::Void, QMetaType::UInt,   11,
-    QMetaType::Bool, QMetaType::UInt,   11,
-    QMetaType::Bool, QMetaType::UInt,   11,
-    QMetaType::Bool, QMetaType::UInt,   11,
+    QMetaType::UInt,
+    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 15,   11,   16,
+    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 15,   11,   16,
+    QMetaType::Void, QMetaType::UInt,   11,
     QMetaType::Bool, QMetaType::UInt,   11,
 
        0        // eod
@@ -118,13 +124,14 @@ void BackEnd::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 5: { QString _r = _t->getIcon((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
         case 6: _t->choose((*reinterpret_cast< uint(*)>(_a[1]))); break;
-        case 7: { bool _r = _t->isAvailable((*reinterpret_cast< uint(*)>(_a[1])));
+        case 7: { uint _r = _t->cellState();
+            if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
+        case 8: { bool _r = _t->canGo((*reinterpret_cast< uint(*)>(_a[1])),(*reinterpret_cast< std::vector<uint>(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 8: { bool _r = _t->canHitPiece((*reinterpret_cast< uint(*)>(_a[1])));
+        case 9: { bool _r = _t->canHit((*reinterpret_cast< uint(*)>(_a[1])),(*reinterpret_cast< std::vector<uint>(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 9: { bool _r = _t->move((*reinterpret_cast< uint(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 10: { bool _r = _t->unchoosePiece((*reinterpret_cast< uint(*)>(_a[1])));
+        case 10: _t->move((*reinterpret_cast< uint(*)>(_a[1]))); break;
+        case 11: { bool _r = _t->unchoosePiece((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
@@ -176,13 +183,13 @@ int BackEnd::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 11)
+        if (_id < 12)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 11;
+        _id -= 12;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 11)
+        if (_id < 12)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 11;
+        _id -= 12;
     }
     return _id;
 }
