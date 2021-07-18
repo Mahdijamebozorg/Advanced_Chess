@@ -22,7 +22,7 @@ Page {
             y: 10
             x: 15
             width: mystack.width * 0.2
-            height: mystack.height * 0.05
+            height: mystack.height * 0.06
             clip: true
             placeholderText: "player 1 name"
             placeholderTextColor: "#7c6d43"
@@ -70,7 +70,7 @@ Page {
             y: 10
             x: mystack.width - width - 15
             width: mystack.width * 0.2
-            height: mystack.height * 0.05
+            height: mystack.height * 0.06
             text: ""
             horizontalAlignment: Text.AlignHCenter
             maximumLength: 20
@@ -156,6 +156,8 @@ Page {
                         bknd.setP1(player2.text)
                         bknd.setP2(player1.text)
                     }
+                    bknd.setGameName(gameName.text)
+                    bknd.startGame()
                     mystack.push("GamePage.qml")
                     window.width = 1200
                     window.height = 1000

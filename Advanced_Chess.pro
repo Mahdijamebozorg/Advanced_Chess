@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         backend.cpp \
         main.cpp \
+        src/AccessGame.cpp \
         src/Bishop.cpp \
         src/Cell.cpp \
         src/ChessBoard.cpp \
@@ -26,7 +27,8 @@ SOURCES += \
         src/Knight.cpp \
         src/Pawn.cpp \
         src/Queen.cpp \
-        src/Rook.cpp
+        src/Rook.cpp \
+        src/User.cpp
 
 RESOURCES += \
     qml.qrc
@@ -43,6 +45,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Header/AccessGame.hpp \
     Header/Bishop.hpp \
     Header/Cell.hpp \
     Header/ChessBoard.hpp \
@@ -53,6 +56,7 @@ HEADERS += \
     Header/Pawn.hpp \
     Header/Queen.hpp \
     Header/Rook.hpp \
+    Header/User.hpp \
     backend.hpp
 
 DISTFILES += \

@@ -65,8 +65,8 @@ Item {
 
                     Text {
                         id: gameName
-                        text: "Name:"
-                        color: "#aa882a"
+                        text: bknd.getGameName()
+                        color: "#e2d29d"
                         anchors.horizontalCenter: gamenamecol.horizontalCenter
                     }
                 }

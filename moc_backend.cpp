@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_BackEnd_t {
-    QByteArrayData data[20];
-    char stringdata0[172];
+    QByteArrayData data[28];
+    char stringdata0[276];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -35,30 +35,40 @@ static const qt_meta_stringdata_BackEnd_t qt_meta_stringdata_BackEnd = {
 QT_MOC_LITERAL(0, 0, 7), // "BackEnd"
 QT_MOC_LITERAL(1, 8, 7), // "choosen"
 QT_MOC_LITERAL(2, 16, 0), // ""
-QT_MOC_LITERAL(3, 17, 8), // "unchoose"
-QT_MOC_LITERAL(4, 26, 9), // "getP1Name"
-QT_MOC_LITERAL(5, 36, 6), // "P1Name"
-QT_MOC_LITERAL(6, 43, 9), // "getP2Name"
-QT_MOC_LITERAL(7, 53, 6), // "P2Name"
-QT_MOC_LITERAL(8, 60, 11), // "getGameName"
-QT_MOC_LITERAL(9, 72, 8), // "GameName"
-QT_MOC_LITERAL(10, 81, 7), // "getIcon"
-QT_MOC_LITERAL(11, 89, 5), // "index"
-QT_MOC_LITERAL(12, 95, 6), // "choose"
-QT_MOC_LITERAL(13, 102, 9), // "cellState"
-QT_MOC_LITERAL(14, 112, 5), // "canGo"
-QT_MOC_LITERAL(15, 118, 17), // "std::vector<uint>"
-QT_MOC_LITERAL(16, 136, 9), // "bkndcanGo"
-QT_MOC_LITERAL(17, 146, 6), // "canHit"
-QT_MOC_LITERAL(18, 153, 4), // "move"
-QT_MOC_LITERAL(19, 158, 13) // "unchoosePiece"
+QT_MOC_LITERAL(3, 17, 9), // "unchoosen"
+QT_MOC_LITERAL(4, 27, 9), // "startGame"
+QT_MOC_LITERAL(5, 37, 5), // "setP1"
+QT_MOC_LITERAL(6, 43, 6), // "P1Name"
+QT_MOC_LITERAL(7, 50, 12), // "getP1_PScore"
+QT_MOC_LITERAL(8, 63, 12), // "getP1_NScore"
+QT_MOC_LITERAL(9, 76, 12), // "getP2_PScore"
+QT_MOC_LITERAL(10, 89, 12), // "getP2_NScore"
+QT_MOC_LITERAL(11, 102, 5), // "setP2"
+QT_MOC_LITERAL(12, 108, 6), // "P2Name"
+QT_MOC_LITERAL(13, 115, 11), // "setGameName"
+QT_MOC_LITERAL(14, 127, 8), // "GameName"
+QT_MOC_LITERAL(15, 136, 9), // "getP1Name"
+QT_MOC_LITERAL(16, 146, 9), // "getP2Name"
+QT_MOC_LITERAL(17, 156, 11), // "getGameName"
+QT_MOC_LITERAL(18, 168, 7), // "getIcon"
+QT_MOC_LITERAL(19, 176, 5), // "index"
+QT_MOC_LITERAL(20, 182, 6), // "choose"
+QT_MOC_LITERAL(21, 189, 9), // "cellState"
+QT_MOC_LITERAL(22, 199, 5), // "canGo"
+QT_MOC_LITERAL(23, 205, 34), // "std::vector<std::pair<uint,ui..."
+QT_MOC_LITERAL(24, 240, 9), // "bkndcanGo"
+QT_MOC_LITERAL(25, 250, 6), // "canHit"
+QT_MOC_LITERAL(26, 257, 4), // "move"
+QT_MOC_LITERAL(27, 262, 13) // "unchoosePiece"
 
     },
-    "BackEnd\0choosen\0\0unchoose\0getP1Name\0"
-    "P1Name\0getP2Name\0P2Name\0getGameName\0"
-    "GameName\0getIcon\0index\0choose\0cellState\0"
-    "canGo\0std::vector<uint>\0bkndcanGo\0"
-    "canHit\0move\0unchoosePiece"
+    "BackEnd\0choosen\0\0unchoosen\0startGame\0"
+    "setP1\0P1Name\0getP1_PScore\0getP1_NScore\0"
+    "getP2_PScore\0getP2_NScore\0setP2\0P2Name\0"
+    "setGameName\0GameName\0getP1Name\0getP2Name\0"
+    "getGameName\0getIcon\0index\0choose\0"
+    "cellState\0canGo\0std::vector<std::pair<uint,uint> >\0"
+    "bkndcanGo\0canHit\0move\0unchoosePiece"
 };
 #undef QT_MOC_LITERAL
 
@@ -68,7 +78,7 @@ static const uint qt_meta_data_BackEnd[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      20,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -76,36 +86,52 @@ static const uint qt_meta_data_BackEnd[] = {
        2,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,   74,    2, 0x06 /* Public */,
-       3,    0,   75,    2, 0x06 /* Public */,
+       1,    0,  114,    2, 0x06 /* Public */,
+       3,    0,  115,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       4,    1,   76,    2, 0x0a /* Public */,
-       6,    1,   79,    2, 0x0a /* Public */,
-       8,    1,   82,    2, 0x0a /* Public */,
-      10,    1,   85,    2, 0x0a /* Public */,
-      12,    1,   88,    2, 0x0a /* Public */,
-      13,    0,   91,    2, 0x0a /* Public */,
-      14,    2,   92,    2, 0x0a /* Public */,
-      17,    2,   97,    2, 0x0a /* Public */,
-      18,    1,  102,    2, 0x0a /* Public */,
-      19,    1,  105,    2, 0x0a /* Public */,
+       4,    0,  116,    2, 0x0a /* Public */,
+       5,    1,  117,    2, 0x0a /* Public */,
+       7,    0,  120,    2, 0x0a /* Public */,
+       8,    0,  121,    2, 0x0a /* Public */,
+       9,    0,  122,    2, 0x0a /* Public */,
+      10,    0,  123,    2, 0x0a /* Public */,
+      11,    1,  124,    2, 0x0a /* Public */,
+      13,    1,  127,    2, 0x0a /* Public */,
+      15,    0,  130,    2, 0x0a /* Public */,
+      16,    0,  131,    2, 0x0a /* Public */,
+      17,    0,  132,    2, 0x0a /* Public */,
+      18,    1,  133,    2, 0x0a /* Public */,
+      20,    1,  136,    2, 0x0a /* Public */,
+      21,    1,  139,    2, 0x0a /* Public */,
+      22,    2,  142,    2, 0x0a /* Public */,
+      25,    2,  147,    2, 0x0a /* Public */,
+      26,    1,  152,    2, 0x0a /* Public */,
+      27,    1,  155,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
     QMetaType::Void,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::QString,    5,
-    QMetaType::Void, QMetaType::QString,    7,
-    QMetaType::Void, QMetaType::QString,    9,
-    QMetaType::QString, QMetaType::UInt,   11,
-    QMetaType::Void, QMetaType::UInt,   11,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::QString,    6,
     QMetaType::UInt,
-    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 15,   11,   16,
-    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 15,   11,   16,
-    QMetaType::Void, QMetaType::UInt,   11,
-    QMetaType::Bool, QMetaType::UInt,   11,
+    QMetaType::UInt,
+    QMetaType::UInt,
+    QMetaType::UInt,
+    QMetaType::Void, QMetaType::QString,   12,
+    QMetaType::Void, QMetaType::QString,   14,
+    QMetaType::QString,
+    QMetaType::QString,
+    QMetaType::QString,
+    QMetaType::QString, QMetaType::UInt,   19,
+    QMetaType::Void, QMetaType::UInt,   19,
+    QMetaType::UInt, QMetaType::UInt,   19,
+    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 23,   19,   24,
+    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 23,   19,   24,
+    QMetaType::Bool, QMetaType::UInt,   19,
+    QMetaType::Bool, QMetaType::UInt,   19,
 
        0        // eod
 };
@@ -117,21 +143,37 @@ void BackEnd::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         Q_UNUSED(_t)
         switch (_id) {
         case 0: _t->choosen(); break;
-        case 1: _t->unchoose(); break;
-        case 2: _t->getP1Name((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 3: _t->getP2Name((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 4: _t->getGameName((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 5: { QString _r = _t->getIcon((*reinterpret_cast< uint(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 6: _t->choose((*reinterpret_cast< uint(*)>(_a[1]))); break;
-        case 7: { uint _r = _t->cellState();
+        case 1: _t->unchoosen(); break;
+        case 2: _t->startGame(); break;
+        case 3: _t->setP1((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 4: { uint _r = _t->getP1_PScore();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 8: { bool _r = _t->canGo((*reinterpret_cast< uint(*)>(_a[1])),(*reinterpret_cast< std::vector<uint>(*)>(_a[2])));
+        case 5: { uint _r = _t->getP1_NScore();
+            if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
+        case 6: { uint _r = _t->getP2_PScore();
+            if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
+        case 7: { uint _r = _t->getP2_NScore();
+            if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
+        case 8: _t->setP2((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 9: _t->setGameName((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 10: { QString _r = _t->getP1Name();
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
+        case 11: { QString _r = _t->getP2Name();
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
+        case 12: { QString _r = _t->getGameName();
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
+        case 13: { QString _r = _t->getIcon((*reinterpret_cast< uint(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
+        case 14: _t->choose((*reinterpret_cast< uint(*)>(_a[1]))); break;
+        case 15: { uint _r = _t->cellState((*reinterpret_cast< uint(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
+        case 16: { bool _r = _t->canGo((*reinterpret_cast< uint(*)>(_a[1])),(*reinterpret_cast< std::vector<std::pair<uint,uint> >(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 9: { bool _r = _t->canHit((*reinterpret_cast< uint(*)>(_a[1])),(*reinterpret_cast< std::vector<uint>(*)>(_a[2])));
+        case 17: { bool _r = _t->canHit((*reinterpret_cast< uint(*)>(_a[1])),(*reinterpret_cast< std::vector<std::pair<uint,uint> >(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 10: _t->move((*reinterpret_cast< uint(*)>(_a[1]))); break;
-        case 11: { bool _r = _t->unchoosePiece((*reinterpret_cast< uint(*)>(_a[1])));
+        case 18: { bool _r = _t->move((*reinterpret_cast< uint(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
+        case 19: { bool _r = _t->unchoosePiece((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
         default: ;
         }
@@ -146,7 +188,7 @@ void BackEnd::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         }
         {
             using _t = void (BackEnd::*)();
-            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&BackEnd::unchoose)) {
+            if (*reinterpret_cast<_t *>(_a[1]) == static_cast<_t>(&BackEnd::unchoosen)) {
                 *result = 1;
                 return;
             }
@@ -183,13 +225,13 @@ int BackEnd::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 20)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 20;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 20)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 12;
+        _id -= 20;
     }
     return _id;
 }
@@ -201,7 +243,7 @@ void BackEnd::choosen()
 }
 
 // SIGNAL 1
-void BackEnd::unchoose()
+void BackEnd::unchoosen()
 {
     QMetaObject::activate(this, &staticMetaObject, 1, nullptr);
 }

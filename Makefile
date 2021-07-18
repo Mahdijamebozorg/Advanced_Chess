@@ -54,6 +54,7 @@ OBJECTS_DIR   = ./
 
 SOURCES       = backend.cpp \
 		main.cpp \
+		src/AccessGame.cpp \
 		src/Bishop.cpp \
 		src/Cell.cpp \
 		src/ChessBoard.cpp \
@@ -64,10 +65,12 @@ SOURCES       = backend.cpp \
 		src/Knight.cpp \
 		src/Pawn.cpp \
 		src/Queen.cpp \
-		src/Rook.cpp qrc_qml.cpp \
+		src/Rook.cpp \
+		src/User.cpp qrc_qml.cpp \
 		moc_backend.cpp
 OBJECTS       = backend.o \
 		main.o \
+		AccessGame.o \
 		Bishop.o \
 		Cell.o \
 		ChessBoard.o \
@@ -79,6 +82,7 @@ OBJECTS       = backend.o \
 		Pawn.o \
 		Queen.o \
 		Rook.o \
+		User.o \
 		qrc_qml.o \
 		moc_backend.o
 DIST          = Images/Black/BBishop.png \
@@ -276,7 +280,8 @@ DIST          = Images/Black/BBishop.png \
 		/opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/exceptions.prf \
 		/opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/yacc.prf \
 		/opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/lex.prf \
-		Advanced_Chess.pro Header/Bishop.hpp \
+		Advanced_Chess.pro Header/AccessGame.hpp \
+		Header/Bishop.hpp \
 		Header/Cell.hpp \
 		Header/ChessBoard.hpp \
 		Header/Chessman.hpp \
@@ -286,8 +291,10 @@ DIST          = Images/Black/BBishop.png \
 		Header/Pawn.hpp \
 		Header/Queen.hpp \
 		Header/Rook.hpp \
+		Header/User.hpp \
 		backend.hpp backend.cpp \
 		main.cpp \
+		src/AccessGame.cpp \
 		src/Bishop.cpp \
 		src/Cell.cpp \
 		src/ChessBoard.cpp \
@@ -298,7 +305,8 @@ DIST          = Images/Black/BBishop.png \
 		src/Knight.cpp \
 		src/Pawn.cpp \
 		src/Queen.cpp \
-		src/Rook.cpp
+		src/Rook.cpp \
+		src/User.cpp
 QMAKE_TARGET  = Advanced_Chess
 DESTDIR       = 
 TARGET        = Advanced_Chess
@@ -707,8 +715,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Header/Bishop.hpp Header/Cell.hpp Header/ChessBoard.hpp Header/Chessman.hpp Header/GameManager.hpp Header/King.hpp Header/Knight.hpp Header/Pawn.hpp Header/Queen.hpp Header/Rook.hpp backend.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents backend.cpp main.cpp src/Bishop.cpp src/Cell.cpp src/ChessBoard.cpp src/Chessman.cpp src/Functions.cpp src/GameManager.cpp src/King.cpp src/Knight.cpp src/Pawn.cpp src/Queen.cpp src/Rook.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Header/AccessGame.hpp Header/Bishop.hpp Header/Cell.hpp Header/ChessBoard.hpp Header/Chessman.hpp Header/GameManager.hpp Header/King.hpp Header/Knight.hpp Header/Pawn.hpp Header/Queen.hpp Header/Rook.hpp Header/User.hpp backend.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents backend.cpp main.cpp src/AccessGame.cpp src/Bishop.cpp src/Cell.cpp src/ChessBoard.cpp src/Chessman.cpp src/Functions.cpp src/GameManager.cpp src/King.cpp src/Knight.cpp src/Pawn.cpp src/Queen.cpp src/Rook.cpp src/User.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -777,6 +785,8 @@ compiler_moc_header_clean:
 	-$(DEL_FILE) moc_backend.cpp
 moc_backend.cpp: backend.hpp \
 		Header/GameManager.hpp \
+		Header/User.hpp \
+		Header/AccessGame.hpp \
 		Header/Chessman.hpp \
 		Header/ChessBoard.hpp \
 		Header/Cell.hpp \
@@ -1251,6 +1261,8 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 backend.o: backend.cpp backend.hpp \
 		Header/GameManager.hpp \
+		Header/User.hpp \
+		Header/AccessGame.hpp \
 		Header/Chessman.hpp \
 		Header/ChessBoard.hpp \
 		Header/Cell.hpp \
@@ -1709,6 +1721,8 @@ backend.o: backend.cpp backend.hpp \
 
 main.o: main.cpp backend.hpp \
 		Header/GameManager.hpp \
+		Header/User.hpp \
+		Header/AccessGame.hpp \
 		Header/Chessman.hpp \
 		Header/ChessBoard.hpp \
 		Header/Cell.hpp \
@@ -2167,6 +2181,18 @@ main.o: main.cpp backend.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtQml/QQmlApplicationEngine
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
+AccessGame.o: src/AccessGame.cpp Header/AccessGame.hpp \
+		Header/Chessman.hpp \
+		Header/ChessBoard.hpp \
+		Header/Cell.hpp \
+		Header/Pawn.hpp \
+		Header/Rook.hpp \
+		Header/Knight.hpp \
+		Header/Bishop.hpp \
+		Header/Queen.hpp \
+		Header/King.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o AccessGame.o src/AccessGame.cpp
+
 Bishop.o: src/Bishop.cpp Header/Bishop.hpp \
 		Header/Chessman.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Bishop.o src/Bishop.cpp
@@ -2177,7 +2203,9 @@ Cell.o: src/Cell.cpp Header/Cell.hpp \
 
 ChessBoard.o: src/ChessBoard.cpp Header/ChessBoard.hpp \
 		Header/Cell.hpp \
-		Header/Chessman.hpp
+		Header/Chessman.hpp \
+		Header/AccessGame.hpp \
+		Header/User.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ChessBoard.o src/ChessBoard.cpp
 
 Chessman.o: src/Chessman.cpp Header/Chessman.hpp
@@ -2187,15 +2215,11 @@ Functions.o: src/Functions.cpp Header/Chessman.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Functions.o src/Functions.cpp
 
 GameManager.o: src/GameManager.cpp Header/GameManager.hpp \
+		Header/User.hpp \
+		Header/AccessGame.hpp \
 		Header/Chessman.hpp \
 		Header/ChessBoard.hpp \
-		Header/Cell.hpp \
-		Header/Bishop.hpp \
-		Header/King.hpp \
-		Header/Knight.hpp \
-		Header/Pawn.hpp \
-		Header/Queen.hpp \
-		Header/Rook.hpp
+		Header/Cell.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GameManager.o src/GameManager.cpp
 
 King.o: src/King.cpp Header/King.hpp \
@@ -2217,6 +2241,11 @@ Queen.o: src/Queen.cpp Header/Queen.hpp \
 Rook.o: src/Rook.cpp Header/Rook.hpp \
 		Header/Chessman.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Rook.o src/Rook.cpp
+
+User.o: src/User.cpp Header/User.hpp \
+		Header/AccessGame.hpp \
+		Header/Chessman.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o User.o src/User.cpp
 
 qrc_qml.o: qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_qml.o qrc_qml.cpp

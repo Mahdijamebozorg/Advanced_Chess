@@ -47,12 +47,27 @@ Item {
                         onChoosen: {
                             srcCell.visible = false
                             dest.visible = true
-                            if (bknd.canGo(index)) {
+                            switch (bknd.cellState(index)) {
+
+                                //can hit
+                            case 2:
+
+                                cellRec.color = "#811717"
+                                cellRec.border.color = "black"
+                                cellRec.border.width = 0.5
+                                break
+
+                                //can go
+                            case 1:
+
                                 cellRec.color = "#ac8614"
                                 cellRec.border.color = "black"
                                 cellRec.border.width = 0.5
-                                if (bknd.canHitPiece(index))
-                                    cellRec.color = "#811717"
+                                break
+
+                                //unavailable
+                            case 0:
+                                break
                             }
                         }
                     }
@@ -60,7 +75,7 @@ Item {
                     //unchoose the piece
                     Connections {
                         target: bknd
-                        onUnchoose: {
+                        onUnchoosen: {
                             srcCell.visible = true
                             dest.visible = false
                             cellRec.color = "#00000000"
@@ -76,9 +91,6 @@ Item {
                     height: parent.height * 0.85
                 }
             }
-        }
-        Rectangle {
-            color: "#ac8614"
         }
 
         //new grid buttons for destination
@@ -100,15 +112,15 @@ Item {
                 onClicked: {
 
                     //if piece can go there
-                    if (bknd.canGo(index)) {
-                        bknd.move(index)
+                    if (bknd.move(index))
                         mystack.replace("GamePage.qml")
-                    } else {
+                    else {
                         //if piece can't go there and it's not its current square
                         if (!bknd.unchoosePiece(index))
                             wrongChoose.open()
                     }
                 }
+                text: index
             }
         }
     }
