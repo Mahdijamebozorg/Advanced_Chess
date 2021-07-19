@@ -92,6 +92,7 @@ static const uint qt_meta_data_BackEnd[] = {
        3,    0,  120,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
+<<<<<<< HEAD
        4,    0,  121,    2, 0x0a /* Public */,
        5,    1,  122,    2, 0x0a /* Public */,
        7,    1,  125,    2, 0x0a /* Public */,
@@ -111,6 +112,26 @@ static const uint qt_meta_data_BackEnd[] = {
       26,    1,  157,    2, 0x0a /* Public */,
       27,    1,  160,    2, 0x0a /* Public */,
       28,    0,  163,    2, 0x0a /* Public */,
+=======
+       4,    0,  116,    2, 0x0a /* Public */,
+       5,    1,  117,    2, 0x0a /* Public */,
+       7,    1,  120,    2, 0x0a /* Public */,
+       9,    1,  123,    2, 0x0a /* Public */,
+      11,    0,  126,    2, 0x0a /* Public */,
+      12,    0,  127,    2, 0x0a /* Public */,
+      13,    0,  128,    2, 0x0a /* Public */,
+      14,    0,  129,    2, 0x0a /* Public */,
+      15,    0,  130,    2, 0x0a /* Public */,
+      16,    0,  131,    2, 0x0a /* Public */,
+      17,    0,  132,    2, 0x0a /* Public */,
+      18,    1,  133,    2, 0x0a /* Public */,
+      20,    1,  136,    2, 0x0a /* Public */,
+      21,    1,  139,    2, 0x0a /* Public */,
+      22,    2,  142,    2, 0x0a /* Public */,
+      25,    2,  147,    2, 0x0a /* Public */,
+      26,    1,  152,    2, 0x0a /* Public */,
+      27,    1,  155,    2, 0x0a /* Public */,
+>>>>>>> 255f95ab2c52e92d509f212bc0932fa0a99aea62
 
  // signals: parameters
     QMetaType::Void,

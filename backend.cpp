@@ -121,6 +121,7 @@ unsigned BackEnd::choose(unsigned index)
         qDebug() << s.what();
         return UNACCESSABLE;
     }
+
     qDebug() << "canGo" << srcState.first;
     qDebug() << "canHit" << srcState.second;
 
@@ -210,6 +211,8 @@ bool BackEnd::move(unsigned index)
     }
 
     qDebug() << "moved from" << indexToIJ(srcIndex) << " to " << indexToIJ(destIndex);
+
     manager->changeTurn();
+
     return true;
 }

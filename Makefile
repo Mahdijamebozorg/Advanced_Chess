@@ -787,11 +787,12 @@ compiler_moc_header_clean:
 	-$(DEL_FILE) moc_backend.cpp
 moc_backend.cpp: backend.hpp \
 		Header/GameManager.hpp \
-		Header/User.hpp \
 		Header/AccessGame.hpp \
 		Header/Chessman.hpp \
+		Header/Exceptions.hpp \
 		Header/ChessBoard.hpp \
 		Header/Cell.hpp \
+		Header/User.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
@@ -1263,11 +1264,12 @@ compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_heade
 
 backend.o: backend.cpp backend.hpp \
 		Header/GameManager.hpp \
-		Header/User.hpp \
 		Header/AccessGame.hpp \
 		Header/Chessman.hpp \
+		Header/Exceptions.hpp \
 		Header/ChessBoard.hpp \
 		Header/Cell.hpp \
+		Header/User.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
@@ -1724,11 +1726,12 @@ backend.o: backend.cpp backend.hpp \
 
 main.o: main.cpp backend.hpp \
 		Header/GameManager.hpp \
-		Header/User.hpp \
 		Header/AccessGame.hpp \
 		Header/Chessman.hpp \
+		Header/Exceptions.hpp \
 		Header/ChessBoard.hpp \
 		Header/Cell.hpp \
+		Header/User.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
@@ -2186,6 +2189,7 @@ main.o: main.cpp backend.hpp \
 
 AccessGame.o: src/AccessGame.cpp Header/AccessGame.hpp \
 		Header/Chessman.hpp \
+		Header/Exceptions.hpp \
 		Header/ChessBoard.hpp \
 		Header/Cell.hpp \
 		Header/Pawn.hpp \
@@ -2197,16 +2201,19 @@ AccessGame.o: src/AccessGame.cpp Header/AccessGame.hpp \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o AccessGame.o src/AccessGame.cpp
 
 Bishop.o: src/Bishop.cpp Header/Bishop.hpp \
-		Header/Chessman.hpp
+		Header/Chessman.hpp \
+		Header/Exceptions.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Bishop.o src/Bishop.cpp
 
 Cell.o: src/Cell.cpp Header/Cell.hpp \
-		Header/Chessman.hpp
+		Header/Chessman.hpp \
+		Header/Exceptions.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Cell.o src/Cell.cpp
 
 ChessBoard.o: src/ChessBoard.cpp Header/ChessBoard.hpp \
 		Header/Cell.hpp \
 		Header/Chessman.hpp \
+		Header/Exceptions.hpp \
 		Header/AccessGame.hpp \
 		Header/User.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
@@ -2275,18 +2282,21 @@ ChessBoard.o: src/ChessBoard.cpp Header/ChessBoard.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qsharedpointer_impl.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ChessBoard.o src/ChessBoard.cpp
 
-Chessman.o: src/Chessman.cpp Header/Chessman.hpp
+Chessman.o: src/Chessman.cpp Header/Chessman.hpp \
+		Header/Exceptions.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Chessman.o src/Chessman.cpp
 
-Functions.o: src/Functions.cpp Header/Chessman.hpp
+Functions.o: src/Functions.cpp Header/Chessman.hpp \
+		Header/Exceptions.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Functions.o src/Functions.cpp
 
 GameManager.o: src/GameManager.cpp Header/GameManager.hpp \
-		Header/User.hpp \
 		Header/AccessGame.hpp \
 		Header/Chessman.hpp \
+		Header/Exceptions.hpp \
 		Header/ChessBoard.hpp \
 		Header/Cell.hpp \
+<<<<<<< HEAD
 		Header/Pawn.hpp \
 		Header/Rook.hpp \
 		Header/Bishop.hpp \
@@ -2294,18 +2304,24 @@ GameManager.o: src/GameManager.cpp Header/GameManager.hpp \
 		Header/Knight.hpp \
 		Header/Queen.hpp \
 		Header/Exceptions.hpp
+=======
+		Header/User.hpp
+>>>>>>> 255f95ab2c52e92d509f212bc0932fa0a99aea62
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o GameManager.o src/GameManager.cpp
 
 King.o: src/King.cpp Header/King.hpp \
-		Header/Chessman.hpp
+		Header/Chessman.hpp \
+		Header/Exceptions.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o King.o src/King.cpp
 
 Knight.o: src/Knight.cpp Header/Knight.hpp \
-		Header/Chessman.hpp
+		Header/Chessman.hpp \
+		Header/Exceptions.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Knight.o src/Knight.cpp
 
 Pawn.o: src/Pawn.cpp Header/Pawn.hpp \
 		Header/Chessman.hpp \
+<<<<<<< HEAD
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
@@ -2370,19 +2386,25 @@ Pawn.o: src/Pawn.cpp Header/Pawn.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qcontiguouscache.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qsharedpointer.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qsharedpointer_impl.h
+=======
+		Header/Exceptions.hpp
+>>>>>>> 255f95ab2c52e92d509f212bc0932fa0a99aea62
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Pawn.o src/Pawn.cpp
 
 Queen.o: src/Queen.cpp Header/Queen.hpp \
-		Header/Chessman.hpp
+		Header/Chessman.hpp \
+		Header/Exceptions.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Queen.o src/Queen.cpp
 
 Rook.o: src/Rook.cpp Header/Rook.hpp \
-		Header/Chessman.hpp
+		Header/Chessman.hpp \
+		Header/Exceptions.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Rook.o src/Rook.cpp
 
 User.o: src/User.cpp Header/User.hpp \
 		Header/AccessGame.hpp \
-		Header/Chessman.hpp
+		Header/Chessman.hpp \
+		Header/Exceptions.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o User.o src/User.cpp
 
 qrc_qml.o: qrc_qml.cpp 
