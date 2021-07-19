@@ -50,6 +50,7 @@ HEADERS += \
     Header/Cell.hpp \
     Header/ChessBoard.hpp \
     Header/Chessman.hpp \
+    Header/Exceptions.hpp \
     Header/GameManager.hpp \
     Header/King.hpp \
     Header/Knight.hpp \

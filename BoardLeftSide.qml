@@ -27,7 +27,9 @@ Item {
         height: 100
         title: "Are you sure?"
         standardButtons: Dialog.Ok | Dialog.Cancel
-        //        onAccepted:
+        onAccepted: {
+            mystack.replace("GamePage.qml")
+        }
         onRejected: restartAlert.close()
     }
     Rectangle {
@@ -85,67 +87,79 @@ Item {
                     id: undoRec
                     color: "#00000000"
                     border.color: "#7c6d43"
-                    width: leftSide.width - 20
-                    height: leftSide.height * 0.08
+                    width: leftSide.width - 30
+                    height: leftSide.height * 0.07
                     anchors.horizontalCenter: orderCol.horizontalCenter
-                    Button {
-                        id: undo
-                        width: undoRec.width - 2
+                    Image {
                         anchors.centerIn: parent
+                        width: undoRec.width - 2
                         height: undoRec.height - 2
-                        flat: true
-                        Text {
-                            text: "Undo"
-                            color: "#aa882a"
-                            anchors.centerIn: parent
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        Button {
+                            id: undo
+                            anchors.fill: parent
+                            flat: true
+                            onClicked: {
+                                bknd.undo()
+                                mystack.replace("GamePage.qml")
+                            }
+                            Text {
+                                text: "Undo"
+                                color: "#aa882a"
+                                anchors.centerIn: parent
+                            }
                         }
                     }
                 }
 
                 //restart
                 Rectangle {
-                    id: restartRec
                     color: "#00000000"
                     border.color: "#7c6d43"
-                    width: leftSide.width - 20
-                    height: leftSide.height * 0.08
+                    width: leftSide.width - 30
+                    height: leftSide.height * 0.07
                     anchors.horizontalCenter: orderCol.horizontalCenter
-                    Button {
-                        id: restart
-                        width: restartRec.width - 2
+                    Image {
                         anchors.centerIn: parent
-                        height: restartRec.height - 2
-                        flat: true
-                        Text {
-                            text: "Restart"
-                            color: "#aa882a"
-                            anchors.centerIn: parent
+                        width: undoRec.width - 2
+                        height: undoRec.height - 2
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        Button {
+                            id: restart
+                            anchors.fill: parent
+                            flat: true
+                            Text {
+                                text: "Restart"
+                                color: "#aa882a"
+                                anchors.centerIn: parent
+                            }
+                            onPressed: restartAlert.open()
                         }
-                        onPressed: restartAlert.open()
                     }
                 }
-
                 //cancel
                 Rectangle {
-                    id: cancelRec
                     color: "#00000000"
                     border.color: "#7c6d43"
-                    width: leftSide.width - 20
-                    height: leftSide.height * 0.08
+                    width: leftSide.width - 30
+                    height: leftSide.height * 0.07
                     anchors.horizontalCenter: orderCol.horizontalCenter
-                    Button {
-                        id: cancel
-                        width: cancelRec.width - 2
+                    Image {
                         anchors.centerIn: parent
-                        height: cancelRec.height - 2
-                        flat: true
-                        onClicked: {
-                            cancelAlert.open()
-                        }
-                        Text {
-                            text: "Cancel"
-                            color: "#aa882a"
-                            anchors.centerIn: parent
+                        width: undoRec.width - 2
+                        height: undoRec.height - 2
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        Button {
+                            anchors.fill: parent
+                            flat: true
+                            onClicked: {
+                                cancelAlert.open()
+                            }
+                            Text {
+                                text: "Cancel"
+                                color: "#aa882a"
+                                anchors.centerIn: parent
+                            }
                         }
                     }
                 }

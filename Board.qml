@@ -7,7 +7,8 @@ Item {
         id: wrongChoose
         title: "Error"
         Text {
-            text: "Can't go there!"
+            id: errText
+            text: "An error!"
         }
     }
     id: board
@@ -23,7 +24,7 @@ Item {
             id: src
             anchors.centerIn: boardImage
             width: boardImage.width - 60
-            height: boardImage.height - 60
+            height: boardImage.height - 58
             cellWidth: width / 8
             cellHeight: height / 8
             model: 64
@@ -38,16 +39,44 @@ Item {
                     anchors.fill: parent
                     flat: true
                     onClicked: {
-                        bknd.choose(index)
+
+                        switch (bknd.choose(index)) {
+                            //can hit
+                        case 2:
+                            //used "Connections" to prevent crowdness
+                            break
+
+                            //can go
+                        case 1:
+                            errText.text = "Can't move this color now!"
+                            wrongChoose.open()
+                            break
+
+                            //unavailable
+                        case 0:
+                            errText.text = "This tile is empty!"
+                            wrongChoose.open()
+                            break
+                        }
                     }
 
                     //highlight canGo and canHit cells on choose
                     Connections {
                         target: bknd
                         onChoosen: {
+
+                            //shows second choose buttons
                             srcCell.visible = false
                             dest.visible = true
+
                             switch (bknd.cellState(index)) {
+                                //is selected
+                            case 3:
+
+                                cellRec.color = "#bca972"
+                                cellRec.border.color = "black"
+                                cellRec.border.width = 0.5
+                                break
 
                                 //can hit
                             case 2:
@@ -60,13 +89,14 @@ Item {
                                 //can go
                             case 1:
 
-                                cellRec.color = "#ac8614"
+                                cellRec.color = "#a4883d"
                                 cellRec.border.color = "black"
                                 cellRec.border.width = 0.5
                                 break
 
                                 //unavailable
                             case 0:
+                                //can set a color for unavailabe squares
                                 break
                             }
                         }
@@ -93,6 +123,9 @@ Item {
             }
         }
 
+        Rectangle {
+            color: "#a4883d"
+        }
         //new grid buttons for destination
         GridView {
             id: dest
@@ -116,11 +149,12 @@ Item {
                         mystack.replace("GamePage.qml")
                     else {
                         //if piece can't go there and it's not its current square
-                        if (!bknd.unchoosePiece(index))
+                        if (!bknd.unchoosePiece(index)) {
+                            errText.text = "Can't move there!"
                             wrongChoose.open()
+                        }
                     }
                 }
-                text: index
             }
         }
     }

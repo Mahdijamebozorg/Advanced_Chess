@@ -27,5 +27,6 @@
         <file>Assets/Icons/WPawn.png</file>
         <file>Assets/Icons/WQueen.png</file>
         <file>Assets/Icons/WRook.png</file>
+        <file>Assets/Images/wood1.jpeg</file>
     </qresource>
 </RCC>

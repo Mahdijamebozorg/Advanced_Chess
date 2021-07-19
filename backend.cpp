@@ -1,8 +1,7 @@
 #include "backend.hpp"
+#include "Header/Exceptions.hpp"
 
 using namespace std;
-
-BackEnd::BackEnd() {}
 
 void BackEnd::startGame()
 {
@@ -103,12 +102,31 @@ QString BackEnd::getIcon(unsigned index)
 }
 
 //__________________________________________________________________________ choose
-void BackEnd::choose(unsigned index)
+unsigned BackEnd::choose(unsigned index)
 {
-    srcIndex = index;
     qDebug() << "choosen: " << index;
     qDebug() << "choosen: " << indexToIJ(index);
+
+    Chessman::Index src = indexToIJ(index);
+    try {
+        srcState = manager->getCellState(src);
+    }
+
+    catch (EmptySquare &s) {
+        qDebug() << s.what();
+        return EMPTY;
+    }
+
+    catch (AccessDenied &s) {
+        qDebug() << s.what();
+        return UNACCESSABLE;
+    }
+    qDebug() << "canGo" << srcState.first;
+    qDebug() << "canHit" << srcState.second;
+
+    srcIndex = index;
     emit choosen();
+    return OK;
 }
 
 //__________________________________________________________________________ canGo
@@ -116,7 +134,7 @@ void BackEnd::choose(unsigned index)
 bool BackEnd::canGo(unsigned index, std::vector<std::pair<unsigned int, unsigned int>> bkndcanGo)
 {
     for (auto const &item : bkndcanGo) {
-        if (IJToIndex(item) == index)
+        if (IJToIndex(item) == index) //if this square is in the available squares which piece can go
             return true;
     }
     return false;
@@ -127,7 +145,8 @@ bool BackEnd::canGo(unsigned index, std::vector<std::pair<unsigned int, unsigned
 bool BackEnd::canHit(unsigned index, std::vector<std::pair<unsigned int, unsigned int>> bkndcanHit)
 {
     for (auto const &item : bkndcanHit) {
-        if (IJToIndex(item) == index)
+        if (IJToIndex(item)
+            == index) //if this square is in the available squares which piece can hit
             return true;
     }
     return false;
@@ -137,28 +156,17 @@ bool BackEnd::canHit(unsigned index, std::vector<std::pair<unsigned int, unsigne
 
 unsigned BackEnd::cellState(unsigned index)
 {
-    Chessman::Index src = indexToIJ(index);
-    pair<vector<Chessman::Index>, vector<Chessman::Index>> state; //includes canGo and canHit
-    try {
-        state = manager->getCellState(src);
-    } catch (invalid_argument &s) {
-        qDebug() << s.what();
-        return 0;
-    } catch (...) {
-        qDebug() << "an error happened";
-        return 0;
-    }
-    //if can hit
-    if (canHit(index, state.second))
-        return 2;
+    if (index == srcIndex)
+        return SELECTED;
 
-    //if can go
-    else if (canGo(index, state.first))
-        return 1;
+    if (canHit(index, srcState.second))
+        return CANHIT;
 
-    //if unavailable
+    else if (canGo(index, srcState.first))
+        return CANGO;
+
     else
-        return 0;
+        return UNAVAILABLE;
 }
 
 //__________________________________________________________________________ unchoosePiece
@@ -168,8 +176,17 @@ bool BackEnd::unchoosePiece(unsigned index)
     if (index == srcIndex) {
         emit unchoosen();
         return true;
-    } else
+    }
+
+    else
         return false;
+}
+
+//__________________________________________________________________________ unchoosePiece
+
+void BackEnd::undo()
+{
+    manager->undo();
 }
 
 //__________________________________________________________________________ move
@@ -178,14 +195,21 @@ bool BackEnd::move(unsigned index)
 {
     qDebug() << "destination: " << index;
     qDebug() << "destination: " << indexToIJ(index);
+
     if (cellState(index) == 0)
         return false;
 
     destIndex = index;
+
     try {
         manager->movePiece(indexToIJ(srcIndex), indexToIJ(destIndex));
-    } catch (...) {
+    }
+
+    catch (...) {
         return false;
     }
+
+    qDebug() << "moved from" << indexToIJ(srcIndex) << " to " << indexToIJ(destIndex);
+    manager->changeTurn();
     return true;
 }
