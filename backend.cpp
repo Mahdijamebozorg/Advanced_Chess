@@ -176,12 +176,41 @@ unsigned BackEnd::cellState(unsigned index)
         return UNAVAILABLE;
 }
 
+//__________________________________________________________________________ getSrcIndex
+
+unsigned BackEnd::getSrcIndex()
+{
+    qDebug() << "src";
+    return srcIndex;
+}
+
+//__________________________________________________________________________ getDestIndex
+
+unsigned BackEnd::getDestIndex()
+{
+    qDebug() << "dest";
+    return destIndex;
+}
+
+//__________________________________________________________________________ isMoved
+
+bool BackEnd::isMoved(unsigned index)
+{
+    if (srcIndex != -1 && destIndex != -1)
+        if (index == previewsSrc || index == destIndex)
+            return true;
+
+    return false;
+}
+
 //__________________________________________________________________________ unchoosePiece
 
 bool BackEnd::unchoosePiece(unsigned index)
 {
     if (index == srcIndex) {
-        emit unchoosen();
+        if (!change) //____________unchoose will clear colored cells and we don't want!
+            emit unchoosen();
+        change = false;
         return true;
     }
 
@@ -189,22 +218,64 @@ bool BackEnd::unchoosePiece(unsigned index)
         return false;
 }
 
-//__________________________________________________________________________ unchoosePiece
+//__________________________________________________________________________ P1 outs
 
-void BackEnd::undo()
+QString BackEnd::getP1OutsIcon(unsigned index)
 {
-    manager->undo();
+    auto outs = manager->getUser1()->getAccessGame().getChessmansOut();
+
+    if (index + 1 > outs.size() || outs.size() == 0)
+        return "";
+    else {
+        return QString::fromStdString(outs[index]->getIcon());
+    }
+}
+
+//__________________________________________________________________________ P2 outs
+
+QString BackEnd::getP2OutsIcon(unsigned index)
+{
+    auto outs = manager->getUser2()->getAccessGame().getChessmansOut();
+
+    if (index + 1 > outs.size() || outs.size() == 0)
+        return "";
+    else {
+        return QString::fromStdString(outs[index]->getIcon());
+    }
 }
 
 //__________________________________________________________________________ move
 
 bool BackEnd::move(unsigned index)
 {
-    qDebug() << "destination: " << index;
-    qDebug() << "destination: " << indexToIJ(index);
+    qDebug() << "from: " << srcIndex;
+    qDebug() << "from: " << indexToIJ(srcIndex);
 
-    if (cellState(index) == 0)
+    qDebug() << "to: " << index;
+    qDebug() << "to: " << indexToIJ(index);
+
+    //unchoose and
+    if (cellState(index) == SELECTED)
         return false;
+
+    //change choosen piece
+    if (manager->getChessBoardGame()->getCell(indexToIJ(index)).isFull()
+        && manager->getChessBoardGame()->getCell(indexToIJ(srcIndex)).isFull())
+        if (manager->getChessBoardGame()->getCell(indexToIJ(index)).getChessPieces()->getColor()
+            == manager->getChessBoardGame()
+                   ->getCell(indexToIJ(srcIndex))
+                   .getChessPieces()
+                   ->getColor()) {
+            qDebug() << "change";
+            change = true;
+            emit unchoosen();
+            choose(index);
+            return false;
+        }
+
+    if (cellState(index) == UNAVAILABLE) {
+        return false;
+    }
 
     destIndex = index;
 
@@ -220,5 +291,13 @@ bool BackEnd::move(unsigned index)
 
     manager->changeTurn();
 
+    previewsSrc = srcIndex;
     return true;
+}
+
+//__________________________________________________________________________ undo
+
+void BackEnd::undo()
+{
+    manager->undo();
 }

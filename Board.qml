@@ -21,6 +21,7 @@ Item {
 
         //a grid of buttons for move source
         GridView {
+            interactive: false
             id: src
             anchors.centerIn: boardImage
             width: boardImage.width - 60
@@ -31,9 +32,12 @@ Item {
 
             delegate: Rectangle {
                 id: cellRec
-                color: "#00000000"
+
                 width: src.width / 8
                 height: src.height / 8
+                border.width: bknd.isMoved(index) ? 3 : 0.5
+                border.color: bknd.isMoved(index) ? "#d0f06d" : "black"
+                color: "#00000000"
                 Button {
                     id: srcCell
                     anchors.fill: parent
@@ -41,18 +45,18 @@ Item {
                     onClicked: {
 
                         switch (bknd.choose(index)) {
-                            //can hit
+                            //OK
                         case 2:
                             //used "Connections" to prevent crowdness
                             break
 
-                            //can go
+                            //unaccessable
                         case 1:
                             errText.text = "Can't move this color now!"
                             wrongChoose.open()
                             break
 
-                            //unavailable
+                            //empty
                         case 0:
                             errText.text = "This tile is empty!"
                             wrongChoose.open()
@@ -97,7 +101,6 @@ Item {
                                 //unavailable
                             case 0:
                                 //can set a color for unavailabe squares
-                                break
                             }
                         }
                     }
@@ -109,7 +112,11 @@ Item {
                             srcCell.visible = true
                             dest.visible = false
                             cellRec.color = "#00000000"
-                            cellRec.border.width = 0
+
+                            cellRec.border.color = bknd.isMoved(
+                                        index) ? "#d0f06d" : "balck"
+
+                            cellRec.border.width = bknd.isMoved(index) ? 3 : 0.5
                         }
                     }
                 }
@@ -124,10 +131,11 @@ Item {
         }
 
         Rectangle {
-            color: "#a4883d"
+            color: "#62d487"
         }
         //new grid buttons for destination
         GridView {
+            interactive: false
             id: dest
             visible: false
             anchors.centerIn: boardImage
@@ -145,9 +153,9 @@ Item {
                 onClicked: {
 
                     //if piece can go there
-                    if (bknd.move(index))
+                    if (bknd.move(index)) {
                         mystack.replace("GamePage.qml")
-                    else {
+                    } else {
                         //if piece can't go there and it's not its current square
                         if (!bknd.unchoosePiece(index)) {
                             errText.text = "Can't move there!"

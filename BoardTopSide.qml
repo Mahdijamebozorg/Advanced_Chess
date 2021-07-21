@@ -13,6 +13,7 @@ Item {
             source: "qrc:/Assets/Images/Wood5.jpg"
 
             GridView {
+                interactive: false
                 id: topGrid
                 anchors.centerIn: parent
                 width: parent.width - 20
@@ -30,7 +31,8 @@ Item {
 
                     //outs icons
                     Image {
-                        source: bknd.getOutsIcon(index)
+                        anchors.centerIn: parent
+                        source: bknd.getP2OutsIcon(index)
                         height: topCell.height * 0.8
                         width: topCell.width * 0.8
                     }

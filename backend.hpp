@@ -14,8 +14,10 @@ class BackEnd : public QObject
 
 private:
     //ChessBoard
-    unsigned srcIndex;
-    unsigned destIndex;
+    int previewsSrc = -1;
+    int srcIndex = -1;
+    int destIndex = -1;
+    bool change = false;
 
     //    std::shared_ptr<GameManager> manager = GameManager::setGameManager("fdsfd");
     std::shared_ptr<GameManager> manager = GameManager::setGameManager(std::string("game"));
@@ -55,17 +57,28 @@ public slots:
     //________________________________________________________ board
     QString getIcon(unsigned index);
 
-    unsigned choose(unsigned index);
-
     unsigned cellState(unsigned index);
+
+    unsigned getSrcIndex();
+
+    unsigned getDestIndex();
+
+    bool isMoved(unsigned index);
+
+    //__________________________________________________________ movement
+    bool canHit(unsigned index, std::vector<std::pair<unsigned int, unsigned int>> bkndcanGo);
 
     bool canGo(unsigned index, std::vector<std::pair<unsigned int, unsigned int>> bkndcanGo);
 
-    bool canHit(unsigned index, std::vector<std::pair<unsigned int, unsigned int>> bkndcanGo);
-
-    bool move(unsigned index);
+    unsigned choose(unsigned index);
 
     bool unchoosePiece(unsigned index);
+
+    QString getP1OutsIcon(unsigned index);
+
+    QString getP2OutsIcon(unsigned index);
+
+    bool move(unsigned index);
 
     void undo();
 
