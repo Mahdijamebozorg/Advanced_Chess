@@ -68,23 +68,29 @@ QString BackEnd::getP2Name()
 
 unsigned BackEnd::getP1_PScore()
 {
-    return manager->getUser1()->getScore();
+    return manager->getUser1()->getPosetiveScore();
 }
 
 //__________________________________________________________________________ get P1 Negative Score
 
-unsigned BackEnd::getP1_NScore() {}
+unsigned BackEnd::getP1_NScore()
+{
+    return manager->getUser1()->getNegativeScore();
+}
 
 //__________________________________________________________________________ get P2 Positive Score
 
 unsigned BackEnd::getP2_PScore()
 {
-    return manager->getUser2()->getScore();
+    return manager->getUser2()->getPosetiveScore();
 }
 
 //__________________________________________________________________________ get P2 Negative Score
 
-unsigned BackEnd::getP2_NScore() {}
+unsigned BackEnd::getP2_NScore()
+{
+    return manager->getUser2()->getNegativeScore();
+}
 
 //______________________________________________________________________________________________________ Board options
 //__________________________________________________________________________ getGameName

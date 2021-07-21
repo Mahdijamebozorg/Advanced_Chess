@@ -28,20 +28,9 @@ Item {
                     color: "#00000000"
                     border.color: "#7c6d43"
 
-                    //return outs
-                    Button {
-                        id: p1Outs
-                        height: bottomCell.height
-                        width: bottomCell.width
-                        flat: true
-                        onClicked: {
-                            mystack.replace("GamePage.qml")
-                        }
-                    }
-
                     //outs icons
                     Image {
-                        source: ""
+                        source: bknd.getOutsIcon(index)
                         height: bottomCell.height * 0.8
                         width: bottomCell.width * 0.8
                     }

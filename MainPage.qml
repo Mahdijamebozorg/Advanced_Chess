@@ -4,84 +4,86 @@ import QtQuick.Controls 2.5
 Page {
     title: "Wellcome"
     id: mainPage
-    anchors.fill: parent
-    Rectangle {
-        id: rec
+    anchors.fill: mystack
+    Image {
+        id: image
+        source: "qrc:/Assets/Images/Main.jpg"
         anchors.fill: parent
-        Image {
-            id: image
-            source: "qrc:/Assets/Images/Main.jpg"
-            anchors.fill: parent
 
-            Rectangle {
-                id: rectangle
-                x: 29
-                y: 54
-                width: 202
-                height: 82
-                border.color: "#182127"
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.168
-                        color: "#182127"
-                    }
-
-                    GradientStop {
-                        position: 0.499
-                        color: "#ffffff"
-                    }
-
-                    GradientStop {
-                        position: 0.819
-                        color: "#000000"
-                    }
+        Rectangle {
+            id: rectangle
+            x: 29
+            y: 54
+            width: 202
+            height: 82
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#00000000"
                 }
-            }
+                GradientStop {
+                    position: 0.175
+                    color: "#182127"
+                }
 
-            Rectangle {
-                id: rectangle1
-                x: 29
-                y: 175
-                width: 202
-                height: 82
-                border.color: "#182127"
-                gradient: Gradient {
-                    GradientStop {
-                        position: 0.168
-                        color: "#182127"
-                    }
+                GradientStop {
+                    position: 0.5
+                    color: "#ffffff"
+                }
 
-                    GradientStop {
-                        position: 0.499
-                        color: "#ffffff"
-                    }
-
-                    GradientStop {
-                        position: 0.819
-                        color: "#000000"
-                    }
+                GradientStop {
+                    position: 0.85
+                    color: "#000000"
+                }
+                GradientStop {
+                    position: 1
+                    color: "#00000000"
                 }
             }
             Button {
                 id: start
-                x: 29
-                y: 40
-                width: 202
-                height: 103
+                anchors.fill: parent
                 text: qsTr("Start")
                 font.bold: true
                 font.italic: true
-                font.underline: false
                 font.pointSize: 13
                 onClicked: mystack.push("LoginPage.qml")
             }
+        }
 
+        Rectangle {
+            id: rectangle1
+            x: 29
+            y: 175
+            width: 202
+            height: 82
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#00000000"
+                }
+                GradientStop {
+                    position: 0.175
+                    color: "#182127"
+                }
+
+                GradientStop {
+                    position: 0.5
+                    color: "#ffffff"
+                }
+
+                GradientStop {
+                    position: 0.85
+                    color: "#000000"
+                }
+                GradientStop {
+                    position: 1
+                    color: "#00000000"
+                }
+            }
             Button {
                 id: exit
-                x: 29
-                y: 162
-                width: 202
-                height: 100
+                anchors.fill: parent
                 text: qsTr("Exit")
                 font.bold: true
                 font.italic: true

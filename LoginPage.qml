@@ -9,10 +9,6 @@ Page {
     //Background
     Image {
         id: image
-        anchors.rightMargin: 0
-        anchors.bottomMargin: 0
-        anchors.leftMargin: 0
-        anchors.topMargin: 0
         source: "qrc:/Assets/Images/Login.jpg"
         anchors.fill: parent
 
@@ -45,8 +41,8 @@ Page {
             id: gameNameRec
             y: 20
             x: loginPage.width / 2 - width / 2
-            width: mystack.width * 0.2
-            height: mystack.height * 0.07
+            width: image.width * 0.2
+            height: image.height * 0.07
             color: "#00000000"
             border.color: "#7c6d43"
             border.width: 1
@@ -68,9 +64,9 @@ Page {
             placeholderText: "player 2 name"
             placeholderTextColor: "#7c6d43"
             y: 10
-            x: mystack.width - width - 15
-            width: mystack.width * 0.2
-            height: mystack.height * 0.06
+            x: image.width - width - 15
+            width: image.width * 0.2
+            height: image.height * 0.06
             text: ""
             horizontalAlignment: Text.AlignHCenter
             maximumLength: 20
@@ -90,17 +86,17 @@ Page {
     //login style
     Rectangle {
         id: logrec
-        x: mystack.width - width - 8
-        y: mystack.height - height - 8
-        width: mystack.width * 0.15
-        height: mystack.height * 0.07
+        x: image.width - width - 8
+        y: image.height - height - 8
+        width: image.width * 0.15
+        height: image.height * 0.07
         gradient: Gradient {
             GradientStop {
                 position: 0
                 color: "#00000000"
             }
             GradientStop {
-                position: 0.25
+                position: 0.175
                 color: "#000000"
             }
 
@@ -179,7 +175,7 @@ Page {
                 color: "#00000000"
             }
             GradientStop {
-                position: 0.25
+                position: 0.175
                 color: "#000000"
             }
 
