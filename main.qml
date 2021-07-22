@@ -7,7 +7,7 @@ ApplicationWindow {
     visible: true
     width: 900
     height: 800
-    title: qsTr("Advanced Chess")
+    title: persian.checked ? "شطرنج پیشرفته" : "Advanced Chess"
 
     header: ToolBar {
         id: toolbar
@@ -40,9 +40,14 @@ ApplicationWindow {
             anchors.fill: parent
 
             Switch {
-                text: "Sound ON"
+                text: persian.checked ? "صدا" : "Sound"
                 id: soundOn
                 checked: true
+            }
+            Switch {
+                text: "پارسی"
+                id: persian
+                checked: false
             }
         }
     }

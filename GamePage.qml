@@ -4,7 +4,7 @@ import QtQuick.Controls 2.5
 Page {
     anchors.fill: parent
     id: gamePage
-    title: "Game Page"
+    title: persian.checked ? "صفحه ی بازی" : "Game Page"
     Image {
         anchors.fill: parent
         source: "qrc:/Assets/Images/Wood2.jpg"

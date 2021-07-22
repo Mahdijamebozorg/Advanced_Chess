@@ -18,8 +18,8 @@ private:
     int srcIndex = -1;
     int destIndex = -1;
     bool change = false;
+    bool _extraMove = false;
 
-    //    std::shared_ptr<GameManager> manager = GameManager::setGameManager("fdsfd");
     std::shared_ptr<GameManager> manager = GameManager::setGameManager(std::string("game"));
 
 public:
@@ -81,6 +81,8 @@ public slots:
     bool move(unsigned index);
 
     void undo();
+
+    bool extraMove();
 
 signals:
 

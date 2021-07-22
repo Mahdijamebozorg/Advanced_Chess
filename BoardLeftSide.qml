@@ -4,28 +4,25 @@ import QtQuick.Dialogs 1.2
 
 Item {
     id: left
+
     Dialog {
+        id: cancelAlert
+        title: persian.checked ? "آیا مطمعنید؟" : "Are you sure?"
         Text {
             id: alertCancelText
-            text: "Data will be lost"
+            text: persian.checked ? "اطلاعات بازی حذف خواهند شد" : "Game data will be lost"
         }
-        id: cancelAlert
-        width: 150
-        height: 100
-        title: "Are you sure?"
         standardButtons: Dialog.Ok | Dialog.Cancel
         onAccepted: mystack.pop()
         onRejected: cancelalert.close()
     }
     Dialog {
+        id: restartAlert
+        title: persian.checked ? "آیا مطمعنید؟" : "Are you sure?"
         Text {
             id: alertRestartText
-            text: "Data will be lost"
+            text: persian.checked ? "اطلاعات بازی حذف خواهند شد" : "Game data will be lost"
         }
-        id: restartAlert
-        width: 150
-        height: 100
-        title: "Are you sure?"
         standardButtons: Dialog.Ok | Dialog.Cancel
         onAccepted: {
             mystack.replace("GamePage.qml")
@@ -59,7 +56,7 @@ Item {
                     spacing: 20
                     Text {
                         id: gameNameText
-                        text: "Game name:"
+                        text: persian.checked ? "نام بازی" : "Game name"
                         font.bold: true
                         color: "#aa882a"
                         anchors.horizontalCenter: gamenamecol.horizontalCenter
@@ -104,7 +101,7 @@ Item {
                                 mystack.replace("GamePage.qml")
                             }
                             Text {
-                                text: "Undo"
+                                text: persian.checked ? "بازگشت" : "Undo"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
                             }
@@ -129,7 +126,7 @@ Item {
                             anchors.fill: parent
                             flat: true
                             Text {
-                                text: "Restart"
+                                text: persian.checked ? "شروع مجدد" : "Restart"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
                             }
@@ -156,7 +153,7 @@ Item {
                                 cancelAlert.open()
                             }
                             Text {
-                                text: "Cancel"
+                                text: persian.checked ? "انصراف" : "Cancel"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
                             }

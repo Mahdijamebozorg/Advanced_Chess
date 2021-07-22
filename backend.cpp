@@ -254,7 +254,7 @@ bool BackEnd::move(unsigned index)
     qDebug() << "to: " << index;
     qDebug() << "to: " << indexToIJ(index);
 
-    //unchoose and
+    //unchoose
     if (cellState(index) == SELECTED)
         return false;
 
@@ -273,6 +273,7 @@ bool BackEnd::move(unsigned index)
             return false;
         }
 
+    //if can't go
     if (cellState(index) == UNAVAILABLE) {
         return false;
     }
@@ -289,9 +290,13 @@ bool BackEnd::move(unsigned index)
 
     qDebug() << "moved from" << indexToIJ(srcIndex) << " to " << indexToIJ(destIndex);
 
-    manager->changeTurn();
+    if (!_extraMove)
+        manager->changeTurn();
+
+    _extraMove = false;
 
     previewsSrc = srcIndex;
+
     return true;
 }
 
@@ -300,4 +305,27 @@ bool BackEnd::move(unsigned index)
 void BackEnd::undo()
 {
     manager->undo();
+}
+
+//__________________________________________________________________________ extraMove
+bool BackEnd::extraMove()
+{
+    //turn user 1
+    if (manager->getTurn() == GameManager::USER1)
+        if (manager->getUser1()->getPosetiveScore() >= 30) {
+            _extraMove = true;
+            manager->getUser1()->operator-=(30);
+            return true;
+
+        } else
+            return false;
+
+    //turn user 2
+    else if (manager->getUser2()->getPosetiveScore() >= 30) {
+        _extraMove = true;
+        manager->getUser2()->operator-=(30);
+        return true;
+
+    } else
+        return false;
 }

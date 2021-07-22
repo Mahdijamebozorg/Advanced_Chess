@@ -33,8 +33,8 @@ Item {
                     Image {
                         anchors.centerIn: parent
                         source: bknd.getP1OutsIcon(index)
+                        width: bottomCell.width * 0.78
                         height: bottomCell.height * 0.8
-                        width: bottomCell.width * 0.8
                     }
                 }
             }

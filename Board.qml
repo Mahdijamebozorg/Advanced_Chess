@@ -35,8 +35,9 @@ Item {
 
                 width: src.width / 8
                 height: src.height / 8
-                border.width: bknd.isMoved(index) ? 3 : 0.5
-                border.color: bknd.isMoved(index) ? "#d0f06d" : "black"
+                border.width: bknd.isMoved(index) ? 3.4 : 0.5
+
+                border.color: bknd.isMoved(index) ? "#42e7ac" : "black"
                 color: "#00000000"
                 Button {
                     id: srcCell
@@ -114,9 +115,10 @@ Item {
                             cellRec.color = "#00000000"
 
                             cellRec.border.color = bknd.isMoved(
-                                        index) ? "#d0f06d" : "balck"
+                                        index) ? "#42e7ac" : "balck"
 
-                            cellRec.border.width = bknd.isMoved(index) ? 3 : 0.5
+                            cellRec.border.width = bknd.isMoved(
+                                        index) ? 3.4 : 0.5
                         }
                     }
                 }
@@ -130,8 +132,11 @@ Item {
             }
         }
 
+        //for setting colors
         Rectangle {
-            color: "#62d487"
+            color: "#42e7ac"
+            width: 0
+            height: 0
         }
         //new grid buttons for destination
         GridView {

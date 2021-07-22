@@ -2,7 +2,7 @@ import QtQuick 2.9
 import QtQuick.Controls 2.5
 
 Page {
-    title: "Wellcome"
+    title: persian.checked ? "خوش آمدید" : "Wellcome"
     id: mainPage
     anchors.fill: mystack
     Image {
@@ -43,7 +43,7 @@ Page {
             Button {
                 id: start
                 anchors.fill: parent
-                text: qsTr("Start")
+                text: persian.checked ? "شروع" : "Start"
                 font.bold: true
                 font.italic: true
                 font.pointSize: 13
@@ -84,7 +84,7 @@ Page {
             Button {
                 id: exit
                 anchors.fill: parent
-                text: qsTr("Exit")
+                text: persian.checked ? "خروج" : "Exit"
                 font.bold: true
                 font.italic: true
                 font.pointSize: 13

@@ -1,6 +1,17 @@
 import QtQuick 2.9
+import QtQuick.Controls 2.5
+import QtQuick.Dialogs 1.2
 
 Item {
+    Dialog {
+        id: scoreError
+        title: persian.checked ? "خطا" : "Error"
+        Text {
+            id: scoreErrorText
+            text: persian.checked ? "امتیاز کافی ندارید!" : "Not enough scores!"
+        }
+    }
+
     Rectangle {
         anchors.fill: parent
         color: "white"
@@ -13,17 +24,19 @@ Item {
 
             Text {
                 id: scoresSideText
-                text: "Scores:"
+                text: persian.checked ? "امتیاز ها" : "Scores:"
                 font.pixelSize: 20
                 font.bold: true
                 color: "#aa882a"
                 anchors.top: rightSide.top
-                anchors.topMargin: 30
+                anchors.topMargin: 10
                 anchors.horizontalCenter: rightSide.horizontalCenter
             }
             Column {
                 id: scoreCol
-                anchors.centerIn: parent
+                anchors.top: scoresSideText.bottom
+                anchors.topMargin: 20
+                anchors.horizontalCenter: rightSide.horizontalCenter
                 spacing: 20
 
                 //_________________________________________________________________________________ P2 score
@@ -56,7 +69,7 @@ Item {
                         }
                         Text {
                             id: p2PositiveScoreText
-                            text: "Positive score:"
+                            text: persian.checked ? "امتیاز مثبت" : "Positive score:"
                             font.bold: true
                             font.pixelSize: 15
                             color: "#aa882a"
@@ -71,7 +84,7 @@ Item {
 
                         Text {
                             id: p2NegativeScoreText
-                            text: "Negative score:"
+                            text: persian.checked ? "امتیاز منفی" : "Negative score:"
                             font.bold: true
                             font.pixelSize: 15
                             color: "#aa882a"
@@ -117,7 +130,7 @@ Item {
                         }
                         Text {
                             id: p1PositiveScoreText
-                            text: "Positive score:"
+                            text: persian.checked ? "امتیاز مثبت" : "Positive score:"
                             font.bold: true
                             font.pixelSize: 15
                             color: "#aa882a"
@@ -132,7 +145,7 @@ Item {
 
                         Text {
                             id: p1NegativeScoreText
-                            text: "Negative score:"
+                            text: persian.checked ? "امتیاز منفی" : "Negative score:"
                             font.bold: true
                             font.pixelSize: 15
                             color: "#aa882a"
@@ -143,6 +156,62 @@ Item {
                             text: bknd.getP1_NScore()
                             color: "#e2d29d"
                             anchors.horizontalCenter: score1Col.horizontalCenter
+                        }
+                    }
+                }
+                //extra move
+                Rectangle {
+                    id: extraMoveRec
+                    color: "#00000000"
+                    border.color: "#7c6d43"
+                    width: rightSide.width - 50
+                    height: rightSide.height * 0.06
+                    anchors.horizontalCenter: scoreCol.horizontalCenter
+                    Image {
+                        anchors.centerIn: parent
+                        width: extraMoveRec.width - 2
+                        height: extraMoveRec.height - 2
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        Button {
+                            id: extraMove
+                            anchors.fill: parent
+                            flat: true
+                            onClicked: if (!bknd.extraMove())
+                                           scoreError.open()
+
+                            Text {
+                                text: persian.checked ? "حرکت اضافه" : "Extra Move"
+                                color: "#aa882a"
+                                anchors.centerIn: parent
+                            }
+                        }
+                    }
+                }
+                //Random move
+                Rectangle {
+                    id: randomMoveRec
+                    color: "#00000000"
+                    border.color: "#7c6d43"
+                    width: rightSide.width - 50
+                    height: rightSide.height * 0.06
+                    anchors.horizontalCenter: scoreCol.horizontalCenter
+                    Image {
+                        anchors.centerIn: parent
+                        width: randomMoveRec.width - 2
+                        height: randomMoveRec.height - 2
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        Button {
+                            id: randomMove
+                            anchors.fill: parent
+                            flat: true
+                            onClicked: {
+
+                            }
+                            Text {
+                                text: persian.checked ? "حرکت تصادفی" : "Random Move"
+                                color: "#aa882a"
+                                anchors.centerIn: parent
+                            }
                         }
                     }
                 }

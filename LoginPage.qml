@@ -20,7 +20,7 @@ Page {
             width: mystack.width * 0.2
             height: mystack.height * 0.06
             clip: true
-            placeholderText: "player 1 name"
+            placeholderText: persian.checked ? "یازیکن ۱" : "player 1 name"
             placeholderTextColor: "#7c6d43"
             text: ""
             horizontalAlignment: Text.AlignHCenter
@@ -32,7 +32,7 @@ Page {
             anchors.horizontalCenter: player1.horizontalCenter
             anchors.top: player1.bottom
             height: 20
-            text: white2.checked ? "Black" : "White"
+            text: white2.checked ? persian.checked ? "سیاه" : "Black" : persian.checked ? "سفید" : "White"
             font.pixelSize: 12
         }
 
@@ -50,7 +50,7 @@ Page {
                 id: gameName
                 horizontalAlignment: Text.AlignHCenter
                 anchors.centerIn: parent
-                placeholderText: "Game name"
+                placeholderText: persian.checked ? "نام بازی" : "Game name"
                 placeholderTextColor: "#7c6d43"
                 text: ""
                 width: gameNameRec.width * 0.8
@@ -61,7 +61,7 @@ Page {
         //P2 Name
         TextField {
             id: player2
-            placeholderText: "player 2 name"
+            placeholderText: persian.checked ? "بازیکن ۲" : "player 2 name"
             placeholderTextColor: "#7c6d43"
             y: 10
             x: image.width - width - 15
@@ -77,7 +77,7 @@ Page {
             anchors.horizontalCenter: player2.horizontalCenter
             anchors.top: player2.bottom
             height: 20
-            text: white1.checked ? "Black" : "White"
+            text: white1.checked ? persian.checked ? "سیاه" : "Black" : persian.checked ? "سفید" : "White"
             font.pixelSize: 12
             checked: true
         }
@@ -92,7 +92,7 @@ Page {
         height: image.height * 0.07
         gradient: Gradient {
             GradientStop {
-                position: 0
+                position: 0.1
                 color: "#00000000"
             }
             GradientStop {
@@ -110,7 +110,7 @@ Page {
                 color: "#000000"
             }
             GradientStop {
-                position: 1
+                position: 95
                 color: "#00000000"
             }
         }
@@ -120,7 +120,7 @@ Page {
             id: login
             flat: true
             anchors.fill: parent
-            text: qsTr("Login")
+            text: persian.checked ? "ورود" : "Login"
             font.bold: true
             font.italic: true
             font.pointSize: 13
@@ -199,7 +199,7 @@ Page {
             flat: true
             id: back
             anchors.fill: parent
-            text: "Back"
+            text: persian.checked ? "بازگشت" : "Back"
             font.bold: true
             font.italic: true
             font.pointSize: 13
