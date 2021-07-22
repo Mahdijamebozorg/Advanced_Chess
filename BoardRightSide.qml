@@ -44,7 +44,7 @@ Item {
                     id: scores2Rec
                     color: "#00000000"
                     border.color: "#7c6d43"
-                    width: rightSide.width - 2
+                    width: rightSide.width - 10
                     height: rightSide.height / 3
                     anchors.horizontalCenter: scoreCol.horizontalCenter
                     Column {
@@ -52,18 +52,24 @@ Item {
                         anchors.centerIn: parent
                         spacing: 15
                         Rectangle {
+                            id: p2Rec
                             anchors.horizontalCenter: score2Col.horizontalCenter
                             border.color: "#7c6d43"
                             border.width: 1
-                            width: 100
+                            width: 160
                             height: 40
                             color: "#00000000"
                             Text {
                                 id: p2
                                 text: bknd.getP2Name()
-                                font.bold: true
+                                textFormat: Text.StyledText
+                                fontSizeMode: Text.Fit
+                                minimumPixelSize: 3
                                 font.pixelSize: 18
+                                font.bold: true
                                 color: "#e2d29d"
+                                width: p2Rec.width - 5
+                                horizontalAlignment: Text.AlignHCenter
                                 anchors.centerIn: parent
                             }
                         }
@@ -104,7 +110,7 @@ Item {
                     id: scores1Rec
                     color: "#00000000"
                     border.color: "#7c6d43"
-                    width: rightSide.width - 2
+                    width: rightSide.width - 10
                     height: rightSide.height / 3
                     anchors.horizontalCenter: scoreCol.horizontalCenter
 
@@ -113,18 +119,24 @@ Item {
                         anchors.centerIn: parent
                         spacing: 15
                         Rectangle {
+                            id: p1Rec
                             anchors.horizontalCenter: score1Col.horizontalCenter
                             border.color: "#7c6d43"
                             border.width: 1
-                            width: 100
+                            width: 160
                             height: 40
                             color: "#00000000"
                             Text {
                                 id: p1
                                 text: bknd.getP1Name()
-                                font.bold: true
+                                textFormat: Text.StyledText
+                                fontSizeMode: Text.Fit
+                                minimumPixelSize: 3
                                 font.pixelSize: 18
+                                font.bold: true
                                 color: "#e2d29d"
+                                width: p1Rec.width - 5
+                                horizontalAlignment: Text.AlignHCenter
                                 anchors.centerIn: parent
                             }
                         }

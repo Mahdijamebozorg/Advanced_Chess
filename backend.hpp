@@ -25,9 +25,9 @@ private:
 public:
     std::pair<std::vector<Chessman::Index>, std::vector<Chessman::Index>> srcState;
 
-    enum ChooseState { EMPTY, UNACCESSABLE, OK };
+    enum SrcCellState { EMPTY, UNACCESSABLE, OK };
 
-    enum CellState { UNAVAILABLE, CANGO, CANHIT, SELECTED };
+    enum DestCellState { UNAVAILABLE, CANGO, CANHIT, SELECTED };
 
 public slots:
 

@@ -6,8 +6,8 @@ Item {
         anchors.fill: parent
         color: "white"
         Image {
-            width: board.width - 2
-            height: 128
+            width: parent.width - 2
+            height: parent.height - 2
             id: wood3
             anchors.centerIn: parent
             source: "qrc:/Assets/Images/Wood5.jpg"

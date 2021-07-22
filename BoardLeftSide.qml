@@ -44,7 +44,7 @@ Item {
                 id: gameNameRec
                 color: "#00000000"
                 border.color: "#7c6d43"
-                width: leftSide.width - 2
+                width: leftSide.width - 10
                 height: leftSide.height * 0.15
                 anchors.top: leftSide.top
                 anchors.topMargin: 10

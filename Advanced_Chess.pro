@@ -16,7 +16,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         backend.cpp \
         main.cpp \
-        src/AccessGame.cpp \
         src/Bishop.cpp \
         src/Cell.cpp \
         src/ChessBoard.cpp \
@@ -45,7 +44,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
-    Header/AccessGame.hpp \
     Header/Bishop.hpp \
     Header/Cell.hpp \
     Header/ChessBoard.hpp \

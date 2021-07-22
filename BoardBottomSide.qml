@@ -6,8 +6,8 @@ Item {
         anchors.fill: parent
         color: "white"
         Image {
-            width: board.width - 2
-            height: 128
+            width: parent.width - 2
+            height: parent.height - 2
             id: wood4
             anchors.centerIn: parent
             source: "qrc:/Assets/Images/Wood5.jpg"
@@ -33,7 +33,7 @@ Item {
                     Image {
                         anchors.centerIn: parent
                         source: bknd.getP1OutsIcon(index)
-                        width: bottomCell.width * 0.78
+                        width: bottomCell.width * 0.8
                         height: bottomCell.height * 0.8
                     }
                 }

@@ -43,7 +43,7 @@ Page {
             anchors.bottom: board.top
             anchors.bottomMargin: 8
             width: board.width
-            height: 130
+            height: 150
             x: (gamePage.width - board.width) / 2 + board.width / 2 - width / 2
         }
 
@@ -53,7 +53,7 @@ Page {
             anchors.top: board.bottom
             anchors.topMargin: 8
             width: board.width
-            height: 130
+            height: 150
             x: (gamePage.width - board.width) / 2 + board.width / 2 - width / 2
         }
     }

@@ -5,8 +5,8 @@ import QtQuick.Controls 2.5
 ApplicationWindow {
     id: window
     visible: true
-    width: 900
-    height: 800
+    width: 950
+    height: 850
     title: persian.checked ? "شطرنج پیشرفته" : "Advanced Chess"
 
     header: ToolBar {

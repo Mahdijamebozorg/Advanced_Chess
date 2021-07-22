@@ -163,7 +163,7 @@ bool BackEnd::canHit(unsigned index, std::vector<std::pair<unsigned int, unsigne
 
 unsigned BackEnd::cellState(unsigned index)
 {
-    if (index == srcIndex)
+    if (index == (unsigned) srcIndex)
         return SELECTED;
 
     if (canHit(index, srcState.second))
@@ -197,7 +197,7 @@ unsigned BackEnd::getDestIndex()
 bool BackEnd::isMoved(unsigned index)
 {
     if (srcIndex != -1 && destIndex != -1)
-        if (index == previewsSrc || index == destIndex)
+        if (index == (unsigned) previewsSrc || index == (unsigned) destIndex)
             return true;
 
     return false;
@@ -207,7 +207,7 @@ bool BackEnd::isMoved(unsigned index)
 
 bool BackEnd::unchoosePiece(unsigned index)
 {
-    if (index == srcIndex) {
+    if (index == (unsigned) srcIndex) {
         if (!change) //____________unchoose will clear colored cells and we don't want!
             emit unchoosen();
         change = false;
@@ -222,7 +222,7 @@ bool BackEnd::unchoosePiece(unsigned index)
 
 QString BackEnd::getP1OutsIcon(unsigned index)
 {
-    auto outs = manager->getUser1()->getAccessGame().getChessmansOut();
+    auto outs = manager->getUser1()->getChessmansOut();
 
     if (index + 1 > outs.size() || outs.size() == 0)
         return "";
@@ -235,7 +235,7 @@ QString BackEnd::getP1OutsIcon(unsigned index)
 
 QString BackEnd::getP2OutsIcon(unsigned index)
 {
-    auto outs = manager->getUser2()->getAccessGame().getChessmansOut();
+    auto outs = manager->getUser2()->getChessmansOut();
 
     if (index + 1 > outs.size() || outs.size() == 0)
         return "";
@@ -304,7 +304,10 @@ bool BackEnd::move(unsigned index)
 
 void BackEnd::undo()
 {
-    manager->undo();
+    auto back = manager->undo();
+    previewsSrc = IJToIndex(back.first);
+    destIndex = IJToIndex(back.second);
+    emit unchoosen();
 }
 
 //__________________________________________________________________________ extraMove

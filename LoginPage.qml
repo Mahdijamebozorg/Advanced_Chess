@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.5
+import QtQuick.Window 2.3
 
 Page {
     id: loginPage
@@ -17,14 +18,14 @@ Page {
             id: player1
             y: 10
             x: 15
-            width: mystack.width * 0.2
+            width: mystack.width * 0.28
             height: mystack.height * 0.06
             clip: true
             placeholderText: persian.checked ? "یازیکن ۱" : "player 1 name"
             placeholderTextColor: "#7c6d43"
             text: ""
             horizontalAlignment: Text.AlignHCenter
-            maximumLength: 20
+            maximumLength: 17
         }
         //color
         RadioButton {
@@ -41,7 +42,7 @@ Page {
             id: gameNameRec
             y: 20
             x: loginPage.width / 2 - width / 2
-            width: image.width * 0.2
+            width: image.width * 0.25
             height: image.height * 0.07
             color: "#00000000"
             border.color: "#7c6d43"
@@ -54,7 +55,7 @@ Page {
                 placeholderTextColor: "#7c6d43"
                 text: ""
                 width: gameNameRec.width * 0.8
-                maximumLength: 19
+                maximumLength: 12
             }
         }
 
@@ -65,11 +66,11 @@ Page {
             placeholderTextColor: "#7c6d43"
             y: 10
             x: image.width - width - 15
-            width: image.width * 0.2
+            width: image.width * 0.28
             height: image.height * 0.06
             text: ""
             horizontalAlignment: Text.AlignHCenter
-            maximumLength: 20
+            maximumLength: 17
         }
         //color
         RadioButton {
@@ -155,8 +156,8 @@ Page {
                     bknd.setGameName(gameName.text)
                     bknd.startGame()
                     mystack.push("GamePage.qml")
-                    window.width = 1200
-                    window.height = 1000
+                    window.width = Screen.width
+                    window.height = Screen.height
                 }
             }
         }

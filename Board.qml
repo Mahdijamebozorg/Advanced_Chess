@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.2
 Item {
     Dialog {
         id: wrongChoose
-        title: "Error"
+        title: persian.checked ? "خطا" : "Error"
         Text {
             id: errText
             text: "An error!"
@@ -53,13 +53,14 @@ Item {
 
                             //unaccessable
                         case 1:
-                            errText.text = "Can't move this color now!"
+                            errText.text = persian.checked ? "نوبت این رنگ نیست!" : "It's not turn of this color!"
                             wrongChoose.open()
                             break
 
                             //empty
                         case 0:
-                            errText.text = "This tile is empty!"
+                            errText.text
+                                    = persian.checked ? "این خانه خالی است!" : "This tile is empty!"
                             wrongChoose.open()
                             break
                         }
@@ -163,7 +164,8 @@ Item {
                     } else {
                         //if piece can't go there and it's not its current square
                         if (!bknd.unchoosePiece(index)) {
-                            errText.text = "Can't move there!"
+                            errText.text
+                                    = persian.checked ? "نمیتوان به آنجا رفت!" : "Can't move there!"
                             wrongChoose.open()
                         }
                     }
