@@ -12,8 +12,6 @@ Item {
         }
     }
     id: board
-    width: 600
-    height: 600
     Image {
         id: boardImage
         anchors.fill: parent
@@ -24,8 +22,8 @@ Item {
             interactive: false
             id: src
             anchors.centerIn: boardImage
-            width: boardImage.width - 60
-            height: boardImage.height - 58
+            width: boardImage.width - boardImage.width * 0.096
+            height: boardImage.height - boardImage.height * 0.097
             cellWidth: width / 8
             cellHeight: height / 8
             model: 64

@@ -146,15 +146,19 @@ Page {
                     ok = false
                 } //if ok
                 else if (ok) {
+                    bknd.setGame(gameName.text)
                     if (white1.checked) {
                         bknd.setP1(player1.text)
                         bknd.setP2(player2.text)
                     } else {
+
                         bknd.setP1(player2.text)
                         bknd.setP2(player1.text)
                     }
-                    bknd.setGameName(gameName.text)
                     bknd.startGame()
+                    player1.clear()
+                    player2.clear()
+                    gameName.clear()
                     mystack.push("GamePage.qml")
                     window.width = Screen.width
                     window.height = Screen.height

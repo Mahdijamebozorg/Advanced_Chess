@@ -25,19 +25,25 @@ Item {
             Text {
                 id: scoresSideText
                 text: persian.checked ? "امتیاز ها" : "Scores:"
+                textFormat: Text.StyledText
+                fontSizeMode: Text.Fit
+                minimumPixelSize: 3
                 font.pixelSize: 20
                 font.bold: true
                 color: "#aa882a"
                 anchors.top: rightSide.top
+                height: rightSide.height * 0.04
+                width: rightSide.width * 0.8
                 anchors.topMargin: 10
                 anchors.horizontalCenter: rightSide.horizontalCenter
+                horizontalAlignment: Text.AlignHCenter
             }
             Column {
                 id: scoreCol
                 anchors.top: scoresSideText.bottom
                 anchors.topMargin: 20
                 anchors.horizontalCenter: rightSide.horizontalCenter
-                spacing: 20
+                spacing: rightSide.height * 0.04
 
                 //_________________________________________________________________________________ P2 score
                 Rectangle {
@@ -45,31 +51,35 @@ Item {
                     color: "#00000000"
                     border.color: "#7c6d43"
                     width: rightSide.width - 10
-                    height: rightSide.height / 3
+                    height: rightSide.height * 0.3
                     anchors.horizontalCenter: scoreCol.horizontalCenter
                     Column {
                         id: score2Col
-                        anchors.centerIn: parent
-                        spacing: 15
+                        anchors.horizontalCenter: scores2Rec.horizontalCenter
+                        anchors.top: scores2Rec.top
+                        anchors.topMargin: scores2Rec.height * 0.05
+                        spacing: scores2Rec.height * 0.01
                         Rectangle {
                             id: p2Rec
                             anchors.horizontalCenter: score2Col.horizontalCenter
                             border.color: "#7c6d43"
                             border.width: 1
-                            width: 160
-                            height: 40
+                            width: scores2Rec.width * 0.6
+                            height: scores2Rec.height * 0.22
                             color: "#00000000"
                             Text {
                                 id: p2
                                 text: bknd.getP2Name()
+                                width: p2Rec.width - 2
+                                height: p2Rec.height - 2
                                 textFormat: Text.StyledText
                                 fontSizeMode: Text.Fit
-                                minimumPixelSize: 3
+                                minimumPixelSize: 2
                                 font.pixelSize: 18
                                 font.bold: true
                                 color: "#e2d29d"
-                                width: p2Rec.width - 5
                                 horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
                                 anchors.centerIn: parent
                             }
                         }
@@ -77,6 +87,12 @@ Item {
                             id: p2PositiveScoreText
                             text: persian.checked ? "امتیاز مثبت" : "Positive score:"
                             font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            width: scores2Rec.width * 0.6
+                            height: scores2Rec.height * 0.18
+                            textFormat: Text.StyledText
+                            fontSizeMode: Text.Fit
+                            minimumPixelSize: 2
                             font.pixelSize: 15
                             color: "#aa882a"
                             anchors.horizontalCenter: score2Col.horizontalCenter
@@ -84,6 +100,13 @@ Item {
                         Text {
                             id: p2PositiveScore
                             text: bknd.getP2_PScore()
+                            textFormat: Text.StyledText
+                            fontSizeMode: Text.Fit
+                            minimumPixelSize: 2
+                            font.pixelSize: 15
+                            horizontalAlignment: Text.AlignHCenter
+                            height: scores2Rec.height * 0.18
+                            width: scores2Rec.width * 0.6
                             color: "#e2d29d"
                             anchors.horizontalCenter: score2Col.horizontalCenter
                         }
@@ -91,13 +114,26 @@ Item {
                         Text {
                             id: p2NegativeScoreText
                             text: persian.checked ? "امتیاز منفی" : "Negative score:"
+                            horizontalAlignment: Text.AlignHCenter
+                            height: scores2Rec.height * 0.18
+                            width: scores2Rec.width * 0.6
                             font.bold: true
+                            textFormat: Text.StyledText
+                            fontSizeMode: Text.Fit
+                            minimumPixelSize: 2
                             font.pixelSize: 15
                             color: "#aa882a"
                             anchors.horizontalCenter: score2Col.horizontalCenter
                         }
                         Text {
                             id: p2NegativeScore
+                            horizontalAlignment: Text.AlignHCenter
+                            height: scores2Rec.height * 0.18
+                            width: scores2Rec.width * 0.6
+                            textFormat: Text.StyledText
+                            fontSizeMode: Text.Fit
+                            minimumPixelSize: 2
+                            font.pixelSize: 15
                             text: bknd.getP2_NScore()
                             color: "#e2d29d"
                             anchors.horizontalCenter: score2Col.horizontalCenter
@@ -111,32 +147,36 @@ Item {
                     color: "#00000000"
                     border.color: "#7c6d43"
                     width: rightSide.width - 10
-                    height: rightSide.height / 3
+                    height: rightSide.height * 0.3
                     anchors.horizontalCenter: scoreCol.horizontalCenter
 
                     Column {
                         id: score1Col
-                        anchors.centerIn: parent
-                        spacing: 15
+                        anchors.horizontalCenter: scores1Rec.horizontalCenter
+                        anchors.top: scores1Rec.top
+                        anchors.topMargin: scores1Rec.height * 0.05
+                        spacing: scores1Rec.height * 0.01
                         Rectangle {
                             id: p1Rec
                             anchors.horizontalCenter: score1Col.horizontalCenter
                             border.color: "#7c6d43"
                             border.width: 1
-                            width: 160
-                            height: 40
+                            width: scores1Rec.width * 0.6
+                            height: scores1Rec.height * 0.22
                             color: "#00000000"
                             Text {
                                 id: p1
                                 text: bknd.getP1Name()
+                                width: p1Rec.width - 2
+                                height: p1Rec.height - 2
                                 textFormat: Text.StyledText
                                 fontSizeMode: Text.Fit
-                                minimumPixelSize: 3
+                                minimumPixelSize: 2
                                 font.pixelSize: 18
                                 font.bold: true
                                 color: "#e2d29d"
-                                width: p1Rec.width - 5
                                 horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
                                 anchors.centerIn: parent
                             }
                         }
@@ -144,6 +184,12 @@ Item {
                             id: p1PositiveScoreText
                             text: persian.checked ? "امتیاز مثبت" : "Positive score:"
                             font.bold: true
+                            horizontalAlignment: Text.AlignHCenter
+                            width: scores1Rec.width * 0.6
+                            height: scores1Rec.height * 0.18
+                            textFormat: Text.StyledText
+                            fontSizeMode: Text.Fit
+                            minimumPixelSize: 2
                             font.pixelSize: 15
                             color: "#aa882a"
                             anchors.horizontalCenter: score1Col.horizontalCenter
@@ -151,6 +197,13 @@ Item {
                         Text {
                             id: p1PositiveScore
                             text: bknd.getP1_PScore()
+                            textFormat: Text.StyledText
+                            fontSizeMode: Text.Fit
+                            minimumPixelSize: 2
+                            font.pixelSize: 15
+                            horizontalAlignment: Text.AlignHCenter
+                            height: scores1Rec.height * 0.18
+                            width: scores1Rec.width * 0.6
                             color: "#e2d29d"
                             anchors.horizontalCenter: score1Col.horizontalCenter
                         }
@@ -158,7 +211,13 @@ Item {
                         Text {
                             id: p1NegativeScoreText
                             text: persian.checked ? "امتیاز منفی" : "Negative score:"
+                            horizontalAlignment: Text.AlignHCenter
+                            height: scores1Rec.height * 0.18
+                            width: scores1Rec.width * 0.6
                             font.bold: true
+                            textFormat: Text.StyledText
+                            fontSizeMode: Text.Fit
+                            minimumPixelSize: 2
                             font.pixelSize: 15
                             color: "#aa882a"
                             anchors.horizontalCenter: score1Col.horizontalCenter
@@ -166,6 +225,13 @@ Item {
                         Text {
                             id: p1NegativeScore
                             text: bknd.getP1_NScore()
+                            horizontalAlignment: Text.AlignHCenter
+                            height: scores1Rec.height * 0.18
+                            width: scores1Rec.width * 0.6
+                            textFormat: Text.StyledText
+                            fontSizeMode: Text.Fit
+                            minimumPixelSize: 2
+                            font.pixelSize: 15
                             color: "#e2d29d"
                             anchors.horizontalCenter: score1Col.horizontalCenter
                         }
@@ -195,6 +261,14 @@ Item {
                                 text: persian.checked ? "حرکت اضافه" : "Extra Move"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
+                                textFormat: Text.StyledText
+                                fontSizeMode: Text.Fit
+                                minimumPixelSize: 3
+                                font.pixelSize: 17
+                                height: extraMove.height * 0.9
+                                width: extraMove.width * 0.9
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                     }
@@ -223,6 +297,14 @@ Item {
                                 text: persian.checked ? "حرکت تصادفی" : "Random Move"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
+                                textFormat: Text.StyledText
+                                fontSizeMode: Text.Fit
+                                minimumPixelSize: 3
+                                font.pixelSize: 17
+                                height: randomMove.height * 0.9
+                                width: randomMove.width * 0.9
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                     }

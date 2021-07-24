@@ -13,7 +13,12 @@ Item {
             text: persian.checked ? "اطلاعات بازی حذف خواهند شد" : "Game data will be lost"
         }
         standardButtons: Dialog.Ok | Dialog.Cancel
-        onAccepted: mystack.pop()
+        onAccepted: {
+            bknd.endGame()
+            mystack.pop()
+            window.width = 950
+            window.height = 850
+        }
         onRejected: cancelalert.close()
     }
     Dialog {
@@ -25,6 +30,7 @@ Item {
         }
         standardButtons: Dialog.Ok | Dialog.Cancel
         onAccepted: {
+            bknd.restartGame()
             mystack.replace("GamePage.qml")
         }
         onRejected: restartAlert.close()
@@ -53,13 +59,23 @@ Item {
                 Column {
                     id: gamenamecol
                     anchors.centerIn: parent
-                    spacing: 20
+                    width: gameNameRec.width
+                    height: gameNameRec.height * 0.9
+                    spacing: gamenamecol.height * 0.1
                     Text {
                         id: gameNameText
                         text: persian.checked ? "نام بازی" : "Game name"
                         font.bold: true
                         color: "#aa882a"
                         anchors.horizontalCenter: gamenamecol.horizontalCenter
+                        width: gamenamecol.width * 0.8
+                        height: gamenamecol.height * 0.45
+                        textFormat: Text.StyledText
+                        fontSizeMode: Text.Fit
+                        minimumPixelSize: 3
+                        font.pixelSize: 18
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                     }
 
                     Text {
@@ -67,6 +83,14 @@ Item {
                         text: bknd.getGameName()
                         color: "#e2d29d"
                         anchors.horizontalCenter: gamenamecol.horizontalCenter
+                        width: gamenamecol.width * 0.8
+                        height: gamenamecol.height * 0.45
+                        textFormat: Text.StyledText
+                        fontSizeMode: Text.Fit
+                        minimumPixelSize: 3
+                        font.pixelSize: 18
+                        horizontalAlignment: Text.AlignHCenter
+                        verticalAlignment: Text.AlignVCenter
                     }
                 }
             }
@@ -104,6 +128,14 @@ Item {
                                 text: persian.checked ? "بازگشت" : "Undo"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
+                                width: undoRec.width * 0.8
+                                height: undoRec.height * 0.9
+                                textFormat: Text.StyledText
+                                fontSizeMode: Text.Fit
+                                minimumPixelSize: 3
+                                font.pixelSize: 15
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                     }
@@ -136,6 +168,7 @@ Item {
                 }
                 //cancel
                 Rectangle {
+                    id: cancelRec
                     color: "#00000000"
                     border.color: "#7c6d43"
                     width: leftSide.width - 30
@@ -143,8 +176,8 @@ Item {
                     anchors.horizontalCenter: orderCol.horizontalCenter
                     Image {
                         anchors.centerIn: parent
-                        width: undoRec.width - 2
-                        height: undoRec.height - 2
+                        width: cancelRec.width - 2
+                        height: cancelRec.height - 2
                         source: "qrc:/Assets/Images/wood1.jpeg"
                         Button {
                             anchors.fill: parent
@@ -156,6 +189,14 @@ Item {
                                 text: persian.checked ? "انصراف" : "Cancel"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
+                                width: cancelRec.width * 0.8
+                                height: cancelRec.height * 0.9
+                                textFormat: Text.StyledText
+                                fontSizeMode: Text.Fit
+                                minimumPixelSize: 3
+                                font.pixelSize: 15
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
                             }
                         }
                     }

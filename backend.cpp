@@ -3,9 +3,38 @@
 
 using namespace std;
 
+//__________________________________________________________________________________________________ game
+//__________________________________________________________________________
+
+void BackEnd::setGame(QString gameName)
+{
+    //    manager = shared_ptr<GameManager>(GameManager::get(gameName.QString::toStdString()));
+    manager = GameManager::get(gameName.QString::toStdString());
+}
+
+//__________________________________________________________________________
+
 void BackEnd::startGame()
 {
+    qDebug() << " ##### before start game called ########";
     manager->startGame();
+    qDebug() << "******start game called*********";
+}
+
+//__________________________________________________________________________ restartGame
+
+void BackEnd::restartGame()
+{
+    manager->restartGame();
+}
+
+//__________________________________________________________________________ endGame
+
+void BackEnd::endGame()
+{
+    manager->endGame();
+    delete manager;
+    qDebug() << "manager reset";
 }
 
 //__________________________________________________________________________ i & j and index convertion
@@ -33,21 +62,14 @@ std::pair<unsigned, unsigned> indexToIJ(unsigned index)
 
 void BackEnd::setP1(QString P1Name)
 {
-    manager->setUser1(P1Name.QString::toStdString(), 0);
+    manager->setUser1(P1Name.QString::toStdString(), 0, 0);
 }
 
 //__________________________________________________________________________ setP2Name
 
 void BackEnd::setP2(QString P2Name)
 {
-    manager->setUser2(P2Name.QString::toStdString(), 0);
-}
-
-//__________________________________________________________________________ setGameName
-
-void BackEnd::setGameName(QString GameName)
-{
-    manager->setGameName(GameName.QString::toStdString());
+    manager->setUser2(P2Name.QString::toStdString(), 0, 0);
 }
 
 //__________________________________________________________________________ getGameName
@@ -73,7 +95,7 @@ unsigned BackEnd::getP1_PScore()
 
 //__________________________________________________________________________ get P1 Negative Score
 
-unsigned BackEnd::getP1_NScore()
+int BackEnd::getP1_NScore()
 {
     return manager->getUser1()->getNegativeScore();
 }
@@ -87,7 +109,7 @@ unsigned BackEnd::getP2_PScore()
 
 //__________________________________________________________________________ get P2 Negative Score
 
-unsigned BackEnd::getP2_NScore()
+int BackEnd::getP2_NScore()
 {
     return manager->getUser2()->getNegativeScore();
 }
@@ -260,7 +282,18 @@ bool BackEnd::move(unsigned index)
 
     //change choosen piece
     if (manager->getChessBoardGame()->getCell(indexToIJ(index)).isFull()
-        && manager->getChessBoardGame()->getCell(indexToIJ(srcIndex)).isFull())
+        && manager->getChessBoardGame()->getCell(indexToIJ(srcIndex)).isFull()) {
+        qDebug() << "src color: "
+                 << manager->getChessBoardGame()
+                        ->getCell(indexToIJ(index))
+                        .getChessPieces()
+                        ->getColor();
+        qDebug() << "dest color: "
+                 << manager->getChessBoardGame()
+                        ->getCell(indexToIJ(index))
+                        .getChessPieces()
+                        ->getColor();
+
         if (manager->getChessBoardGame()->getCell(indexToIJ(index)).getChessPieces()->getColor()
             == manager->getChessBoardGame()
                    ->getCell(indexToIJ(srcIndex))
@@ -272,6 +305,7 @@ bool BackEnd::move(unsigned index)
             choose(index);
             return false;
         }
+    }
 
     //if can't go
     if (cellState(index) == UNAVAILABLE) {
@@ -284,7 +318,12 @@ bool BackEnd::move(unsigned index)
         manager->movePiece(indexToIJ(srcIndex), indexToIJ(destIndex));
     }
 
-    catch (...) {
+    catch (FinalCellForPawn &s) {
+        qDebug() << s.what();
+        emit pawnPromotion();
+
+    } catch (exception &s) {
+        qDebug() << s.what();
         return false;
     }
 
@@ -331,4 +370,10 @@ bool BackEnd::extraMove()
 
     } else
         return false;
+}
+
+//__________________________________________________________________________ promote
+void BackEnd::promote(unsigned type)
+{
+    ///
 }

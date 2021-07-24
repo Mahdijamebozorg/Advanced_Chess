@@ -20,7 +20,7 @@ private:
     bool change = false;
     bool _extraMove = false;
 
-    std::shared_ptr<GameManager> manager = GameManager::setGameManager(std::string("game"));
+    GameManager *manager;
 
 public:
     std::pair<std::vector<Chessman::Index>, std::vector<Chessman::Index>> srcState;
@@ -31,14 +31,19 @@ public:
 
 public slots:
 
+    //________________________________________________________ game
+    void setGame(QString gameName);
+
     void startGame();
+
+    void restartGame();
+
+    void endGame();
 
     //________________________________________________________ users
     void setP1(QString P1Name);
 
     void setP2(QString P2Name);
-
-    void setGameName(QString GameName);
 
     QString getP1Name();
 
@@ -46,11 +51,11 @@ public slots:
 
     unsigned getP1_PScore();
 
-    unsigned getP1_NScore();
+    int getP1_NScore();
 
     unsigned getP2_PScore();
 
-    unsigned getP2_NScore();
+    int getP2_NScore();
 
     QString getGameName();
 
@@ -84,11 +89,15 @@ public slots:
 
     bool extraMove();
 
+    void promote(unsigned type);
+
 signals:
 
     void choosen();
 
     void unchoosen();
+
+    void pawnPromotion();
 };
 
 std::pair<unsigned, unsigned> indexToIJ(unsigned index);

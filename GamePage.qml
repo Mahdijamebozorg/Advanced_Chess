@@ -1,5 +1,6 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.5
+import QtQuick.Window 2.3
 
 Page {
     anchors.fill: parent
@@ -11,8 +12,8 @@ Page {
 
         Board {
             id: board
-            height: 600
-            width: 600
+            height: mystack.height * 0.55
+            width: mystack.height * 0.55
             x: gamePage.width / 2 - width / 2
             y: gamePage.height / 2 - height / 2
         }
@@ -20,21 +21,22 @@ Page {
         //orders
         BoardLeftSide {
             id: leftSide
-            y: (gamePage.height - board.height) / 2 + board.height / 2 - height / 2
             anchors.right: board.left
             anchors.rightMargin: 8
-            width: 200
+            width: mystack.width * 0.125
             height: board.height
+            y: (gamePage.height - board.height) / 2 + board.height / 2 - height / 2
         }
 
         //scores
         BoardRightSide {
             id: rightSide
-            y: (gamePage.height - board.height) / 2 + board.height / 2 - height / 2
             anchors.left: board.right
             anchors.leftMargin: 8
-            width: 200
+            anchors.right: gamePage.right
+            width: mystack.width * 0.125
             height: board.height
+            y: (gamePage.height - board.height) / 2 + board.height / 2 - height / 2
         }
 
         //P1 outs
@@ -43,7 +45,7 @@ Page {
             anchors.bottom: board.top
             anchors.bottomMargin: 8
             width: board.width
-            height: 150
+            height: mystack.height * 0.13
             x: (gamePage.width - board.width) / 2 + board.width / 2 - width / 2
         }
 
@@ -53,7 +55,7 @@ Page {
             anchors.top: board.bottom
             anchors.topMargin: 8
             width: board.width
-            height: 150
+            height: mystack.height * 0.13
             x: (gamePage.width - board.width) / 2 + board.width / 2 - width / 2
         }
     }
