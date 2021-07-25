@@ -8,8 +8,8 @@ using namespace std;
 
 void BackEnd::setGame(QString gameName)
 {
-    //    manager = shared_ptr<GameManager>(GameManager::get(gameName.QString::toStdString()));
-    manager = GameManager::get(gameName.QString::toStdString());
+    manager = unique_ptr<GameManager>(GameManager::get(gameName.QString::toStdString()));
+    //    manager = GameManager::get(gameName.QString::toStdString());
 }
 
 //__________________________________________________________________________
@@ -33,7 +33,7 @@ void BackEnd::restartGame()
 void BackEnd::endGame()
 {
     manager->endGame();
-    delete manager;
+    manager.reset(nullptr);
     qDebug() << "manager reset";
 }
 
@@ -90,7 +90,7 @@ QString BackEnd::getP2Name()
 
 unsigned BackEnd::getP1_PScore()
 {
-    return manager->getUser1()->getPosetiveScore();
+    return manager->getUser1()->getScore();
 }
 
 //__________________________________________________________________________ get P1 Negative Score
@@ -104,7 +104,7 @@ int BackEnd::getP1_NScore()
 
 unsigned BackEnd::getP2_PScore()
 {
-    return manager->getUser2()->getPosetiveScore();
+    return manager->getUser2()->getScore();
 }
 
 //__________________________________________________________________________ get P2 Negative Score
@@ -352,28 +352,46 @@ void BackEnd::undo()
 //__________________________________________________________________________ extraMove
 bool BackEnd::extraMove()
 {
-    //turn user 1
-    if (manager->getTurn() == GameManager::USER1)
-        if (manager->getUser1()->getPosetiveScore() >= 30) {
-            _extraMove = true;
-            manager->getUser1()->operator-=(30);
-            return true;
-
-        } else
-            return false;
-
-    //turn user 2
-    else if (manager->getUser2()->getPosetiveScore() >= 30) {
-        _extraMove = true;
-        manager->getUser2()->operator-=(30);
+    if (manager->ExtraMovements())
         return true;
+    return false;
+    //    //turn user 1
+    //    if (manager->getTurn() == GameManager::USER1)
+    //        if (manager->getUser1()->getScore() >= 30) {
+    //            _extraMove = true;
+    //            manager->getUser1()->operator-=(30);
+    //            return true;
 
+    //        } else
+    //            return false;
+
+    //    //turn user 2
+    //    else if (manager->getUser2()->getScore() >= 30) {
+    //        _extraMove = true;
+    //        manager->getUser2()->operator-=(30);
+    //        return true;
+
+    //    } else
+    //        return false;
+}
+
+//__________________________________________________________________________ random Move
+
+bool BackEnd::randomMove()
+{
+    pair<bool, pair<Chessman::Index, Chessman::Index>> temp = manager->randomMovements();
+
+    if (temp.first) {
+        previewsSrc = (int) IJToIndex(temp.second.first);
+        destIndex = (int) IJToIndex(temp.second.second);
+        manager->changeTurn();
+        return true;
     } else
         return false;
 }
 
 //__________________________________________________________________________ promote
-void BackEnd::promote(unsigned type)
+void BackEnd::promote(unsigned type, unsigned index)
 {
-    ///
+    manager->promote(indexToIJ(index), (Chessman::ChessType) type);
 }

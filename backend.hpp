@@ -20,7 +20,7 @@ private:
     bool change = false;
     bool _extraMove = false;
 
-    GameManager *manager;
+    std::unique_ptr<GameManager> manager;
 
 public:
     std::pair<std::vector<Chessman::Index>, std::vector<Chessman::Index>> srcState;
@@ -89,7 +89,9 @@ public slots:
 
     bool extraMove();
 
-    void promote(unsigned type);
+    bool randomMove();
+
+    void promote(unsigned type, unsigned index);
 
 signals:
 

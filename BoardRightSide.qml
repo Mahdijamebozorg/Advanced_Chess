@@ -291,7 +291,8 @@ Item {
                             anchors.fill: parent
                             flat: true
                             onClicked: {
-
+                                bknd.randomMove()
+                                mystack.replace("GamePage.qml")
                             }
                             Text {
                                 text: persian.checked ? "حرکت تصادفی" : "Random Move"
