@@ -41,7 +41,7 @@ Item {
             Column {
                 id: scoreCol
                 anchors.top: scoresSideText.bottom
-                anchors.topMargin: 20
+                anchors.topMargin: rightSide.height * 0.04
                 anchors.horizontalCenter: rightSide.horizontalCenter
                 spacing: rightSide.height * 0.04
 
@@ -53,12 +53,17 @@ Item {
                     width: rightSide.width - 10
                     height: rightSide.height * 0.3
                     anchors.horizontalCenter: scoreCol.horizontalCenter
+                    Image {
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        width: parent.width - 2
+                        height: parent.height - 2
+                        anchors.centerIn: parent
+                    }
                     Column {
                         id: score2Col
                         anchors.horizontalCenter: scores2Rec.horizontalCenter
                         anchors.top: scores2Rec.top
                         anchors.topMargin: scores2Rec.height * 0.05
-                        spacing: scores2Rec.height * 0.01
                         Rectangle {
                             id: p2Rec
                             anchors.horizontalCenter: score2Col.horizontalCenter
@@ -89,13 +94,14 @@ Item {
                             font.bold: true
                             horizontalAlignment: Text.AlignHCenter
                             width: scores2Rec.width * 0.6
-                            height: scores2Rec.height * 0.18
+                            height: scores2Rec.height * 0.19
                             textFormat: Text.StyledText
                             fontSizeMode: Text.Fit
                             minimumPixelSize: 2
                             font.pixelSize: 15
                             color: "#aa882a"
                             anchors.horizontalCenter: score2Col.horizontalCenter
+                            topPadding: scores2Rec.height * 0.05
                         }
                         Text {
                             id: p2PositiveScore
@@ -124,6 +130,7 @@ Item {
                             font.pixelSize: 15
                             color: "#aa882a"
                             anchors.horizontalCenter: score2Col.horizontalCenter
+                            topPadding: scores2Rec.height * 0.05
                         }
                         Text {
                             id: p2NegativeScore
@@ -149,13 +156,17 @@ Item {
                     width: rightSide.width - 10
                     height: rightSide.height * 0.3
                     anchors.horizontalCenter: scoreCol.horizontalCenter
-
+                    Image {
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        width: parent.width - 2
+                        height: parent.height - 2
+                        anchors.centerIn: parent
+                    }
                     Column {
                         id: score1Col
                         anchors.horizontalCenter: scores1Rec.horizontalCenter
                         anchors.top: scores1Rec.top
                         anchors.topMargin: scores1Rec.height * 0.05
-                        spacing: scores1Rec.height * 0.01
                         Rectangle {
                             id: p1Rec
                             anchors.horizontalCenter: score1Col.horizontalCenter
@@ -193,6 +204,7 @@ Item {
                             font.pixelSize: 15
                             color: "#aa882a"
                             anchors.horizontalCenter: score1Col.horizontalCenter
+                            topPadding: scores1Rec.height * 0.05
                         }
                         Text {
                             id: p1PositiveScore
@@ -221,6 +233,7 @@ Item {
                             font.pixelSize: 15
                             color: "#aa882a"
                             anchors.horizontalCenter: score1Col.horizontalCenter
+                            topPadding: scores1Rec.height * 0.05
                         }
                         Text {
                             id: p1NegativeScore
@@ -264,7 +277,7 @@ Item {
                                 textFormat: Text.StyledText
                                 fontSizeMode: Text.Fit
                                 minimumPixelSize: 3
-                                font.pixelSize: 17
+                                font.pixelSize: 15
                                 height: extraMove.height * 0.9
                                 width: extraMove.width * 0.9
                                 horizontalAlignment: Text.AlignHCenter
@@ -301,7 +314,7 @@ Item {
                                 textFormat: Text.StyledText
                                 fontSizeMode: Text.Fit
                                 minimumPixelSize: 3
-                                font.pixelSize: 17
+                                font.pixelSize: 15
                                 height: randomMove.height * 0.9
                                 width: randomMove.width * 0.9
                                 horizontalAlignment: Text.AlignHCenter

@@ -3,6 +3,7 @@ import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
 
 Item {
+    id: board
     Dialog {
         id: wrongChoose
         title: persian.checked ? "خطا" : "Error"
@@ -11,7 +12,170 @@ Item {
             text: "An error!"
         }
     }
-    id: board
+    Dialog {
+        id: promotion
+        title: persian.checked ? "ارتقا" : "Promotion"
+        width: boardImage.width * 0.4
+        height: boardImage.height * 0.4
+        contentItem: Rectangle {
+            id: promotionRec
+            border.color: "#7c6d43"
+            border.width: 2
+            anchors.centerIn: parent
+            Image {
+                id: name
+                source: "qrc:/Assets/Images/Wood2.jpg"
+                width: promotionRec.width - 2
+                height: promotionRec.height - 2
+                anchors.centerIn: promotionRec
+            }
+            Text {
+                id: promotionText
+                text: persian.checked ? "به کدام یک میخواهید ارتقا پیدا کنید؟" : "Which one you want promote to?"
+                color: "white"
+                textFormat: Text.StyledText
+                fontSizeMode: Text.Fit
+                minimumPixelSize: 5
+                font.pixelSize: 18
+                width: promotionRec.width * 0.9
+                height: promotionRec.height * 0.3
+                anchors.horizontalCenter: promotionRec.horizontalCenter
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+            Grid {
+                id: promotionGrid
+                height: promotionRec.height * 0.7
+                width: promotionRec.width * 0.9
+                anchors.top: promotionText.bottom
+                anchors.horizontalCenter: promotionRec.horizontalCenter
+                anchors.bottom: promotionRec.bottom
+                anchors.bottomMargin: height * 0.1
+                rows: 2
+                columns: 2
+                horizontalItemAlignment: Grid.AlignHCenter
+                verticalItemAlignment: Grid.AlignVCenter
+                columnSpacing: this.width * 0.1
+                rowSpacing: this.height * 0.1
+                Rectangle {
+                    id: queenRec
+                    color: "#00000000"
+                    border.color: "#7c6d43"
+                    width: promotionGrid.width * 0.45
+                    height: promotionGrid.height * 0.45
+                    Image {
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        width: parent.width - 2
+                        height: parent.height - 2
+                        anchors.centerIn: parent
+                    }
+                    Button {
+                        id: promoteToQueen
+                        flat: true
+                        icon.source: "qrc:/Assets/Icons/WQueen.png"
+                        icon.width: this.width * 0.9
+                        icon.height: this.height * 0.9
+                        icon.color: "#9c843c"
+                        width: queenRec.width - 2
+                        height: queenRec.height - 2
+                        onClicked: {
+                            bknd.promote(4)
+                            mystack.replace("GamePage.qml")
+                        }
+                    }
+                }
+                Rectangle {
+                    id: rookRec
+                    color: "#00000000"
+                    border.color: "#7c6d43"
+                    width: promotionGrid.width * 0.45
+                    height: promotionGrid.height * 0.45
+                    Image {
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        width: parent.width - 2
+                        height: parent.height - 2
+                        anchors.centerIn: parent
+                    }
+                    Button {
+                        id: promoteToRook
+                        flat: true
+                        icon.source: "qrc:/Assets/Icons/WRook.png"
+                        icon.width: this.width * 0.9
+                        icon.height: this.height * 0.9
+                        icon.color: "#9c843c"
+                        width: rookRec.width - 2
+                        height: rookRec.height - 2
+
+                        onClicked: {
+                            bknd.promote(3)
+                            mystack.replace("GamePage.qml")
+                        }
+                    }
+                }
+                Rectangle {
+                    id: bihopRec
+                    color: "#00000000"
+                    border.color: "#9c843c"
+                    width: promotionGrid.width * 0.45
+                    height: promotionGrid.height * 0.45
+                    Image {
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        width: parent.width - 2
+                        height: parent.height - 2
+                        anchors.centerIn: parent
+                    }
+                    Button {
+                        id: promoteToBishop
+                        flat: true
+                        icon.source: "qrc:/Assets/Icons/WBishop.png"
+                        icon.width: this.width * 0.9
+                        icon.height: this.height * 0.9
+                        icon.color: "#9c843c"
+                        width: bihopRec.width - 2
+                        height: bihopRec.height - 2
+                        onClicked: {
+                            bknd.promote(1)
+                            mystack.replace("GamePage.qml")
+                        }
+                    }
+                }
+                Rectangle {
+                    id: knightRec
+                    color: "#00000000"
+                    border.color: "#7c6d43"
+                    width: promotionGrid.width * 0.45
+                    height: promotionGrid.height * 0.45
+                    Image {
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        width: parent.width - 2
+                        height: parent.height - 2
+                        anchors.centerIn: parent
+                    }
+                    Button {
+                        id: promoteToKnight
+                        flat: true
+                        icon.source: "qrc:/Assets/Icons/WKnight.png"
+                        icon.width: this.width * 0.9
+                        icon.height: this.height * 0.9
+                        icon.color: "#9c843c"
+                        width: knightRec.width - 2
+                        height: knightRec.height - 2
+                        onClicked: {
+                            bknd.promote(2)
+                            mystack.replace("GamePage.qml")
+                        }
+                    }
+                }
+            }
+        }
+    }
+    //??
+    Connections {
+        target: bknd
+        onPromotion: {
+            promotion.open()
+        }
+    }
     Image {
         id: boardImage
         anchors.fill: parent
@@ -42,7 +206,7 @@ Item {
                     anchors.fill: parent
                     flat: true
                     onClicked: {
-
+                        promotion.open()
                         switch (bknd.choose(index)) {
                             //OK
                         case 2:
@@ -133,7 +297,8 @@ Item {
 
         //for setting colors
         Rectangle {
-            color: "#42e7ac"
+            id: colorTest
+            color: "#9c843c"
             width: 0
             height: 0
         }

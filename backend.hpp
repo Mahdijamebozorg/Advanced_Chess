@@ -91,7 +91,7 @@ public slots:
 
     bool randomMove();
 
-    void promote(unsigned type, unsigned index);
+    void promote(unsigned type);
 
 signals:
 
@@ -99,7 +99,7 @@ signals:
 
     void unchoosen();
 
-    void pawnPromotion();
+    void promotion();
 };
 
 std::pair<unsigned, unsigned> indexToIJ(unsigned index);

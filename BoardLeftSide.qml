@@ -55,13 +55,18 @@ Item {
                 anchors.top: leftSide.top
                 anchors.topMargin: 10
                 anchors.horizontalCenter: leftSide.horizontalCenter
-
+                Image {
+                    source: "qrc:/Assets/Images/wood1.jpeg"
+                    width: parent.width - 2
+                    height: parent.height - 2
+                    anchors.centerIn: parent
+                }
                 Column {
                     id: gamenamecol
                     anchors.centerIn: parent
                     width: gameNameRec.width
                     height: gameNameRec.height * 0.9
-                    spacing: gamenamecol.height * 0.1
+                    spacing: gamenamecol.height * 0.02
                     Text {
                         id: gameNameText
                         text: persian.checked ? "نام بازی" : "Game name"

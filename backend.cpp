@@ -229,10 +229,12 @@ bool BackEnd::isMoved(unsigned index)
 
 bool BackEnd::unchoosePiece(unsigned index)
 {
-    if (index == (unsigned) srcIndex) {
-        if (!change) //____________unchoose will clear colored cells and we don't want!
-            emit unchoosen();
+    if (change) { //____________unchoose will clear colored cells and we don't want this happen!
         change = false;
+        return true;
+    }
+    if (index == (unsigned) srcIndex) {
+        emit unchoosen();
         return true;
     }
 
@@ -320,7 +322,9 @@ bool BackEnd::move(unsigned index)
 
     catch (FinalCellForPawn &s) {
         qDebug() << s.what();
-        emit pawnPromotion();
+        emit promotion();
+        change = true;
+        return false;
 
     } catch (exception &s) {
         qDebug() << s.what();
@@ -391,7 +395,7 @@ bool BackEnd::randomMove()
 }
 
 //__________________________________________________________________________ promote
-void BackEnd::promote(unsigned type, unsigned index)
+void BackEnd::promote(unsigned type)
 {
-    manager->promote(indexToIJ(index), (Chessman::ChessType) type);
+    //    manager->promote(indexToIJ(destIndex), (Chessman::ChessType) type);
 }
