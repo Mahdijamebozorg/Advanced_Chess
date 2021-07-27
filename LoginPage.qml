@@ -6,7 +6,6 @@ Page {
     id: loginPage
     title: ""
     anchors.fill: parent
-
     //Background
     Image {
         id: image

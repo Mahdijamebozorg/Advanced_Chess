@@ -26,6 +26,9 @@ void BackEnd::startGame()
 void BackEnd::restartGame()
 {
     manager->restartGame();
+    previewsSrc = -1;
+    srcIndex = -1;
+    destIndex = -1;
 }
 
 //__________________________________________________________________________ endGame
@@ -324,6 +327,7 @@ bool BackEnd::move(unsigned index)
         qDebug() << s.what();
         emit promotion();
         change = true;
+        previewsSrc = srcIndex;
         return false;
 
     } catch (exception &s) {
@@ -335,8 +339,8 @@ bool BackEnd::move(unsigned index)
 
     if (!_extraMove)
         manager->changeTurn();
-
-    _extraMove = false;
+    else
+        _extraMove = false;
 
     previewsSrc = srcIndex;
 
@@ -356,8 +360,10 @@ void BackEnd::undo()
 //__________________________________________________________________________ extraMove
 bool BackEnd::extraMove()
 {
-    if (manager->ExtraMovements())
+    if (manager->extraMovements()) {
+        _extraMove = true;
         return true;
+    }
     return false;
     //    //turn user 1
     //    if (manager->getTurn() == GameManager::USER1)
@@ -397,5 +403,6 @@ bool BackEnd::randomMove()
 //__________________________________________________________________________ promote
 void BackEnd::promote(unsigned type)
 {
-    //    manager->promote(indexToIJ(destIndex), (Chessman::ChessType) type);
+    manager->promote(indexToIJ(destIndex), (Chessman::ChessType) type);
+    manager->changeTurn();
 }

@@ -1,12 +1,13 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.5
+import QtQuick.Window 2.3
 
 //import QtMultimedia 5.0
 ApplicationWindow {
     id: window
     visible: true
-    width: 950
-    height: 850
+    width: Screen.width * 0.5
+    height: Screen.height * 0.75
     title: persian.checked ? "شطرنج پیشرفته" : "Advanced Chess"
 
     header: ToolBar {

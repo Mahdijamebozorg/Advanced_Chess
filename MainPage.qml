@@ -10,12 +10,15 @@ Page {
         source: "qrc:/Assets/Images/Main.jpg"
         anchors.fill: parent
 
+        //start button style
         Rectangle {
-            id: rectangle
-            x: 29
-            y: 54
-            width: 202
-            height: 82
+            id: startRec
+            anchors.top: parent.top
+            anchors.topMargin: parent.height * 0.05
+            anchors.left: parent.left
+            anchors.leftMargin: parent.width * 0.05
+            width: parent.width * 0.2
+            height: parent.height * 0.1
             gradient: Gradient {
                 GradientStop {
                     position: 0
@@ -40,6 +43,8 @@ Page {
                     color: "#00000000"
                 }
             }
+
+            //start button
             Button {
                 id: start
                 anchors.fill: parent
@@ -51,12 +56,14 @@ Page {
             }
         }
 
+        //loging button style
         Rectangle {
-            id: rectangle1
-            x: 29
-            y: 175
-            width: 202
-            height: 82
+            id: exitRec
+            anchors.top: startRec.bottom
+            anchors.topMargin: image.height * 0.05
+            anchors.horizontalCenter: startRec.horizontalCenter
+            width: parent.width * 0.2
+            height: parent.height * 0.1
             gradient: Gradient {
                 GradientStop {
                     position: 0
@@ -81,6 +88,8 @@ Page {
                     color: "#00000000"
                 }
             }
+
+            //loging button
             Button {
                 id: exit
                 anchors.fill: parent

@@ -206,7 +206,6 @@ Item {
                     anchors.fill: parent
                     flat: true
                     onClicked: {
-                        promotion.open()
                         switch (bknd.choose(index)) {
                             //OK
                         case 2:
@@ -320,9 +319,9 @@ Item {
                 height: dest.height / 8
                 flat: true
                 onClicked: {
-
                     //if piece can go there
                     if (bknd.move(index)) {
+
                         mystack.replace("GamePage.qml")
                     } else {
                         //if piece can't go there and it's not its current square
