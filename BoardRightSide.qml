@@ -255,8 +255,8 @@ Item {
                     id: extraMoveRec
                     color: "#00000000"
                     border.color: "#7c6d43"
-                    width: rightSide.width - 50
-                    height: rightSide.height * 0.06
+                    width: rightSide.width * 0.8
+                    height: rightSide.height * 0.07
                     anchors.horizontalCenter: scoreCol.horizontalCenter
                     Image {
                         anchors.centerIn: parent
@@ -291,8 +291,8 @@ Item {
                     id: randomMoveRec
                     color: "#00000000"
                     border.color: "#7c6d43"
-                    width: rightSide.width - 50
-                    height: rightSide.height * 0.06
+                    width: rightSide.width * 0.8
+                    height: rightSide.height * 0.07
                     anchors.horizontalCenter: scoreCol.horizontalCenter
                     Image {
                         anchors.centerIn: parent
@@ -304,8 +304,8 @@ Item {
                             anchors.fill: parent
                             flat: true
                             onClicked: {
-                                bknd.randomMove()
-                                mystack.replace("GamePage.qml")
+                                if (bknd.randomMove())
+                                    mystack.replace("GamePage.qml")
                             }
                             Text {
                                 text: persian.checked ? "حرکت تصادفی" : "Random Move"

@@ -12,10 +12,10 @@ Page {
 
         Board {
             id: board
-            height: mystack.height * 0.55
-            width: mystack.height * 0.55
-            x: gamePage.width / 2 - width / 2
-            y: gamePage.height / 2 - height / 2
+            height: parent.height * 0.55
+            width: parent.height * 0.55
+            x: parent.width / 2 - width / 2
+            y: parent.height / 2 - height / 2
         }
 
         //orders
@@ -25,7 +25,7 @@ Page {
             anchors.rightMargin: 8
             width: mystack.width * 0.125
             height: board.height
-            y: (gamePage.height - board.height) / 2 + board.height / 2 - height / 2
+            anchors.verticalCenter: board.verticalCenter
         }
 
         //scores
@@ -36,7 +36,7 @@ Page {
             anchors.right: gamePage.right
             width: mystack.width * 0.125
             height: board.height
-            y: (gamePage.height - board.height) / 2 + board.height / 2 - height / 2
+            anchors.verticalCenter: board.verticalCenter
         }
 
         //P1 outs
@@ -46,7 +46,7 @@ Page {
             anchors.bottomMargin: 8
             width: board.width
             height: mystack.height * 0.13
-            x: (gamePage.width - board.width) / 2 + board.width / 2 - width / 2
+            anchors.horizontalCenter: board.horizontalCenter
         }
 
         //P2 outs
@@ -56,7 +56,7 @@ Page {
             anchors.topMargin: 8
             width: board.width
             height: mystack.height * 0.13
-            x: (gamePage.width - board.width) / 2 + board.width / 2 - width / 2
+            anchors.horizontalCenter: board.horizontalCenter
         }
     }
 }

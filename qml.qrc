@@ -28,5 +28,7 @@
         <file>Assets/Icons/WQueen.png</file>
         <file>Assets/Icons/WRook.png</file>
         <file>Assets/Images/wood1.jpeg</file>
+        <file>PromotionDialog.qml</file>
+        <file>EndOfGameDialog.qml</file>
     </qresource>
 </RCC>

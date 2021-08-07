@@ -51,7 +51,7 @@ Page {
                 text: persian.checked ? "شروع" : "Start"
                 font.bold: true
                 font.italic: true
-                font.pointSize: 13
+                font.pixelSize: this.height * 0.2
                 onClicked: mystack.push("LoginPage.qml")
             }
         }
@@ -96,7 +96,7 @@ Page {
                 text: persian.checked ? "خروج" : "Exit"
                 font.bold: true
                 font.italic: true
-                font.pointSize: 13
+                font.pixelSize: this.height * 0.2
                 onClicked: Qt.quit()
             }
         }

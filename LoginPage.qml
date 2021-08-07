@@ -24,7 +24,8 @@ Page {
             placeholderTextColor: "#7c6d43"
             text: ""
             horizontalAlignment: Text.AlignHCenter
-            maximumLength: 17
+            font.pixelSize: this.height * 0.3
+            maximumLength: 19
         }
         //color
         RadioButton {
@@ -54,7 +55,9 @@ Page {
                 placeholderTextColor: "#7c6d43"
                 text: ""
                 width: gameNameRec.width * 0.8
-                maximumLength: 12
+                height: parent.height * 0.8
+                font.pixelSize: this.height * 0.3
+                maximumLength: 14
             }
         }
 
@@ -67,9 +70,10 @@ Page {
             x: image.width - width - 15
             width: image.width * 0.28
             height: image.height * 0.06
+            font.pixelSize: this.height * 0.3
             text: ""
             horizontalAlignment: Text.AlignHCenter
-            maximumLength: 17
+            maximumLength: 19
         }
         //color
         RadioButton {
@@ -123,7 +127,7 @@ Page {
             text: persian.checked ? "ورود" : "Login"
             font.bold: true
             font.italic: true
-            font.pointSize: 13
+            font.pixelSize: logrec.height * 0.27
             onClicked: {
                 var ok = true
 
@@ -158,9 +162,8 @@ Page {
                     player1.clear()
                     player2.clear()
                     gameName.clear()
+                    fullScreen.checked = true
                     mystack.push("GamePage.qml")
-                    window.width = Screen.width
-                    window.height = Screen.height
                 }
             }
         }
@@ -206,7 +209,7 @@ Page {
             text: persian.checked ? "بازگشت" : "Back"
             font.bold: true
             font.italic: true
-            font.pointSize: 13
+            font.pixelSize: bkRec.height * 0.27
             onClicked: mystack.pop()
         }
     }

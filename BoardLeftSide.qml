@@ -1,6 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.5
 import QtQuick.Dialogs 1.2
+import QtQuick.Window 2.3
 
 Item {
     id: left
@@ -16,8 +17,9 @@ Item {
         onAccepted: {
             bknd.endGame()
             mystack.pop()
-            window.width = 950
-            window.height = 850
+            window.width = Screen.width * 0.5
+            window.height = Screen.height * 0.75
+            fullScreen.checked = false
         }
         onRejected: cancelalert.close()
     }
@@ -113,7 +115,7 @@ Item {
                     id: undoRec
                     color: "#00000000"
                     border.color: "#7c6d43"
-                    width: leftSide.width - 30
+                    width: leftSide.width * 0.8
                     height: leftSide.height * 0.07
                     anchors.horizontalCenter: orderCol.horizontalCenter
                     Image {
@@ -150,7 +152,7 @@ Item {
                 Rectangle {
                     color: "#00000000"
                     border.color: "#7c6d43"
-                    width: leftSide.width - 30
+                    width: leftSide.width * 0.8
                     height: leftSide.height * 0.07
                     anchors.horizontalCenter: orderCol.horizontalCenter
                     Image {
@@ -176,7 +178,7 @@ Item {
                     id: cancelRec
                     color: "#00000000"
                     border.color: "#7c6d43"
-                    width: leftSide.width - 30
+                    width: leftSide.width * 0.8
                     height: leftSide.height * 0.07
                     anchors.horizontalCenter: orderCol.horizontalCenter
                     Image {

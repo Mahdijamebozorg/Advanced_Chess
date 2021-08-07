@@ -20,7 +20,7 @@ private:
     bool change = false;
     bool _extraMove = false;
 
-    std::unique_ptr<GameManager> manager;
+    std::unique_ptr<GameManager> manager = std::unique_ptr<GameManager>(GameManager::get("game"));
 
 public:
     std::pair<std::vector<Chessman::Index>, std::vector<Chessman::Index>> srcState;
@@ -59,6 +59,8 @@ public slots:
 
     QString getGameName();
 
+    QString winnerUser();
+
     //________________________________________________________ board
     QString getIcon(unsigned index);
 
@@ -83,7 +85,7 @@ public slots:
 
     QString getP2OutsIcon(unsigned index);
 
-    bool move(unsigned index);
+    bool move(unsigned index) noexcept;
 
     void undo();
 
@@ -100,6 +102,8 @@ signals:
     void unchoosen();
 
     void promotion();
+
+    void endOfGame();
 };
 
 std::pair<unsigned, unsigned> indexToIJ(unsigned index);

@@ -8,7 +8,8 @@ using namespace std;
 
 void BackEnd::setGame(QString gameName)
 {
-    manager = unique_ptr<GameManager>(GameManager::get(gameName.QString::toStdString()));
+    //    manager = unique_ptr<GameManager>(GameManager::get(gameName.QString::toStdString()));
+    manager->setGameName(gameName.QString::toStdString());
     //    manager = GameManager::get(gameName.QString::toStdString());
 }
 
@@ -36,8 +37,10 @@ void BackEnd::restartGame()
 void BackEnd::endGame()
 {
     manager->endGame();
-    manager.reset(nullptr);
-    qDebug() << "manager reset";
+    previewsSrc = -1;
+    srcIndex = -1;
+    destIndex = -1;
+    qDebug() << "game ended";
 }
 
 //__________________________________________________________________________ i & j and index convertion
@@ -66,6 +69,7 @@ std::pair<unsigned, unsigned> indexToIJ(unsigned index)
 void BackEnd::setP1(QString P1Name)
 {
     manager->setUser1(P1Name.QString::toStdString(), 0, 0);
+    qDebug() << "user 1 setted";
 }
 
 //__________________________________________________________________________ setP2Name
@@ -73,6 +77,7 @@ void BackEnd::setP1(QString P1Name)
 void BackEnd::setP2(QString P2Name)
 {
     manager->setUser2(P2Name.QString::toStdString(), 0, 0);
+    qDebug() << "user 2 setted";
 }
 
 //__________________________________________________________________________ getGameName
@@ -122,6 +127,14 @@ int BackEnd::getP2_NScore()
 QString BackEnd::getGameName()
 {
     return QString::fromStdString(manager->getGameName());
+}
+
+//__________________________________________________________________________ Winner
+
+QString BackEnd::winnerUser()
+{
+    //    return QString::fromStdString(manager->getWinner()->getName);
+    return "";
 }
 
 //__________________________________________________________________________ getIcon
@@ -273,13 +286,13 @@ QString BackEnd::getP2OutsIcon(unsigned index)
 
 //__________________________________________________________________________ move
 
-bool BackEnd::move(unsigned index)
+bool BackEnd::move(unsigned index) noexcept
 {
-    qDebug() << "from: " << srcIndex;
-    qDebug() << "from: " << indexToIJ(srcIndex);
+    qDebug() << "src: " << srcIndex;
+    qDebug() << "src: " << indexToIJ(srcIndex);
 
-    qDebug() << "to: " << index;
-    qDebug() << "to: " << indexToIJ(index);
+    qDebug() << "dest: " << index;
+    qDebug() << "dest: " << indexToIJ(index);
 
     //unchoose
     if (cellState(index) == SELECTED)
@@ -330,7 +343,19 @@ bool BackEnd::move(unsigned index)
         previewsSrc = srcIndex;
         return false;
 
-    } catch (exception &s) {
+    }
+
+    catch (ImpossibleHitKing &s) {
+        qDebug() << s.what();
+        return false;
+    }
+
+    catch (EndOFGame &s) {
+        qDebug() << s.what();
+        emit endOfGame();
+    }
+
+    catch (exception &s) {
         qDebug() << s.what();
         return false;
     }
@@ -365,33 +390,29 @@ bool BackEnd::extraMove()
         return true;
     }
     return false;
-    //    //turn user 1
-    //    if (manager->getTurn() == GameManager::USER1)
-    //        if (manager->getUser1()->getScore() >= 30) {
-    //            _extraMove = true;
-    //            manager->getUser1()->operator-=(30);
-    //            return true;
-
-    //        } else
-    //            return false;
-
-    //    //turn user 2
-    //    else if (manager->getUser2()->getScore() >= 30) {
-    //        _extraMove = true;
-    //        manager->getUser2()->operator-=(30);
-    //        return true;
-
-    //    } else
-    //        return false;
 }
 
 //__________________________________________________________________________ random Move
 
 bool BackEnd::randomMove()
 {
-    pair<bool, pair<Chessman::Index, Chessman::Index>> temp = manager->randomMovements();
+    pair<bool, pair<Chessman::Index, Chessman::Index>> temp;
 
-    if (temp.first) {
+    try {
+        temp = manager->randomMovements();
+    }
+
+    catch (EndOFGame &s) {
+        qDebug() << s.what();
+        emit endOfGame();
+    }
+
+    catch (exception &s) {
+        qDebug() << s.what();
+        return false;
+    }
+
+    if (temp.first) { //if moved
         previewsSrc = (int) IJToIndex(temp.second.first);
         destIndex = (int) IJToIndex(temp.second.second);
         manager->changeTurn();
