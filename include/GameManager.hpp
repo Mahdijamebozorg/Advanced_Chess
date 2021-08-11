@@ -46,8 +46,8 @@ public:
   // Move and hit chessman
   void movePiece(Chessman::Index src,
                  Chessman::Index dest,
-                 bool move = false,  // if(move) order move to movements
-                 bool temp = false); //if is testing
+                 bool move = false,    // if(move) order move to movements
+                 bool isTemp = false); //if is testing
 
   // Convert order to string   // string order: "Chessman(ID) Xi Xi Chessman(ID) or N"
   std::string convertOrderToString(Chessman::Index src, Chessman::Index dest);
@@ -73,10 +73,12 @@ public:
 
   //
   void limit_cells_for_king_check(Chessman::Index &src,
-                                  std::vector<Chessman::Index> &,
-                                  std::vector<Chessman::Index> &);
+                                  std::vector<Chessman::Index> &canGo,
+                                  std::vector<Chessman::Index> &canHit);
   //
   bool isCheckmate();
+
+  GameUser getWinner() const;
 
   // Destructor
   ~GameManager();
@@ -97,7 +99,7 @@ public:
   GameName                game_name                               ;
   Movements               movements     = {}                      ;
   Enpasan                 enpasan       = std::make_pair(100, 100);
-
+  GameUser winner;
 };
 
 #endif /* end of include guard: GAMEMANAGER_H*/

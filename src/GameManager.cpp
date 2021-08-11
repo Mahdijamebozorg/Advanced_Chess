@@ -96,18 +96,9 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> GameManager::getCellState
   tempCellState.second.erase(unique(tempCellState.second.begin(), tempCellState.second.end()),
                              tempCellState.second.end());
 
-  //___________________________________________ limit checkeable moves
-  qDebug() << "can go before limitaion";
-  qDebug() << tempCellState.first;
-  qDebug() << "can hit before limitaion";
-  qDebug() << tempCellState.second;
+  //___________________________________________ limit checkable moves
 
   limit_cells_for_king_check(index, tempCellState.first, tempCellState.second);
-
-  qDebug() << "can go after limitaion";
-  qDebug() << tempCellState.first;
-  qDebug() << "can hit before limitaion";
-  qDebug() << tempCellState.second;
 
   return tempCellState;
 }
@@ -116,10 +107,8 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> GameManager::getCellState
 
 void GameManager::movePiece(Chessman::Index src, Chessman::Index dest, bool in_undo, bool isTemp)
 {
+    qDebug() << "turn: " << turn;
     if (src != dest) {
-        if (!isTemp && isCheckmate())
-            throw Checkmate("Checkmate!");
-
         if (chess_board->getCell(dest).isFull())
             if (chess_board->getCell(dest).getChessPieces()->getChessType() == Chessman::KING)
                 throw ImpossibleHitKing("King Could'nt be hited");
@@ -373,25 +362,34 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 
   size_t pos = temp.find(" ");
   Chessman::Index src  = convertIndexStringToIndexInt(temp.substr(pos + 1, 2));
-  Chessman::Index dest = convertIndexStringToIndexInt(temp.substr(pos + 3 , 2));
-  this->movePiece(dest, src, true);
+  Chessman::Index dest = convertIndexStringToIndexInt(temp.substr(pos + 3, 2));
 
-  if(temp.back() != 'N')
-  {
-    shared_ptr<Chessman> temp_chessman;
-    if (turn == USER2)
-    {
-      temp_chessman = users[1]->getChessman(temp.substr(pos + 5), false);
-      users[1]->backChessmanInGame(temp.substr(pos + 5));
-    }
-    else
-    {
-      temp_chessman = users[0]->getChessman(temp.substr(pos + 5), false);
-      users[0]->backChessmanInGame(temp.substr(pos + 5));
-    }
+  if (isTemp) {
+      try {
+          this->movePiece(dest, src, true, true);
+      } catch (KingIsChecked) {
+          //noting
+      }
+  } else {
+      try {
+          this->movePiece(dest, src, true, false);
+      } catch (KingIsChecked) {
+          //noting
+      }
+  }
 
-    this->chess_board->getCell(dest).setChessPieces(temp_chessman);
-    chess_board->addChessmanIndex(temp_chessman->getColor(), dest);
+  if (temp.back() != 'N') {
+      shared_ptr<Chessman> temp_chessman;
+      if (turn == USER2) {
+          temp_chessman = users[1]->getChessman(temp.substr(pos + 5), false);
+          users[1]->backChessmanInGame(temp.substr(pos + 5));
+      } else {
+          temp_chessman = users[0]->getChessman(temp.substr(pos + 5), false);
+          users[0]->backChessmanInGame(temp.substr(pos + 5));
+      }
+
+      this->chess_board->getCell(dest).setChessPieces(temp_chessman);
+      chess_board->addChessmanIndex(temp_chessman->getColor(), dest);
   }
 
   this->changeTurn();
@@ -581,26 +579,37 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
     canHit.clear();
     copy(tempCango.begin(), tempCango.end(), back_inserter(canGo));
     copy(tempCanHit.begin(), tempCanHit.end(), back_inserter(canHit));
-    qDebug() << tempCango;
-    qDebug() << tempCanHit;
 }
 
 //________________________________________________________________________________________________________
 
 bool GameManager::isCheckmate()
 {
-    Turn tempTurn = (turn == USER1 ? USER1 : USER2);
+    qDebug() << "is checkmate called";
     if (!isKingChecked())
         return false;
 
     //search in all user chessmen
-    vector<shared_ptr<Chessman>> temp = users[tempTurn]->getChessmansIn();
+    vector<shared_ptr<Chessman>> temp = users[turn]->getChessmansIn();
     for (unsigned i = 0; i < temp.size(); i++) {
         //if at the least one piece still can move
-        if (this->getCellState(this->chess_board->getIndex(temp[i]->getID())).first.size() != 0)
+        qDebug() << "turn: " << turn;
+        qDebug() << QString::fromStdString(temp[i]->getIcon());
+        if (this->getCellState(this->chess_board->getIndex(temp[i]->getID())).first.size() != 0) {
+            qDebug() << this->getCellState(this->chess_board->getIndex(temp[i]->getID()))
+                            .first.size();
             return false;
+        }
     }
+    qDebug() << "checkmate!";
     return true;
+}
+
+//________________________________________________________________________________________________________
+
+GameManager::GameUser GameManager::getWinner() const
+{
+    return winner;
 }
 
 //________________________________________________________________________________________________________
