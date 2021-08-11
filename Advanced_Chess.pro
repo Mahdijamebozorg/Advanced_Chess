@@ -43,20 +43,32 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-HEADERS += \
-    Header/Bishop.hpp \
-    Header/Cell.hpp \
-    Header/ChessBoard.hpp \
-    Header/Chessman.hpp \
-    Header/Exceptions.hpp \
-    Header/GameManager.hpp \
-    Header/King.hpp \
-    Header/Knight.hpp \
-    Header/Pawn.hpp \
-    Header/Queen.hpp \
-    Header/Rook.hpp \
-    Header/User.hpp \
-    backend.hpp
+includeS += \
+    include/Bishop.hpp \
+    include/Cell.hpp \
+    include/ChessBoard.hpp \
+    include/Chessman.hpp \
+    include/Exceptions.hpp \
+    include/GameManager.hpp \
+    include/King.hpp \
+    include/Knight.hpp \
+    include/Pawn.hpp \
+    include/Queen.hpp \
+    include/Rook.hpp \
+    include/User.hpp \
+    backend.hpp \
+    include/Bishop.hpp \
+    include/Cell.hpp \
+    include/ChessBoard.hpp \
+    include/Chessman.hpp \
+    include/Exceptions.hpp \
+    include/GameManager.hpp \
+    include/King.hpp \
+    include/Knight.hpp \
+    include/Pawn.hpp \
+    include/Queen.hpp \
+    include/Rook.hpp \
+    include/User.hpp
 
 DISTFILES += \
     Images/Black/BBishop.png \
@@ -66,3 +78,18 @@ DISTFILES += \
     Images/Black/BQueen.png \
     Images/Black/BRook.png \
     Images/login.jpg
+
+HEADERS += \
+    backend.hpp \
+    include/Bishop.hpp \
+    include/Cell.hpp \
+    include/ChessBoard.hpp \
+    include/Chessman.hpp \
+    include/Exceptions.hpp \
+    include/GameManager.hpp \
+    include/King.hpp \
+    include/Knight.hpp \
+    include/Pawn.hpp \
+    include/Queen.hpp \
+    include/Rook.hpp \
+    include/User.hpp

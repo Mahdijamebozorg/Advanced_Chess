@@ -1,7 +1,7 @@
 #ifndef BACKEND_HPP
 #define BACKEND_HPP
 
-#include <Header/GameManager.hpp>
+#include <include/GameManager.hpp>
 #include <vector>
 #include <QDebug>
 #include <QObject>
@@ -17,8 +17,10 @@ private:
     int previewsSrc = -1;
     int srcIndex = -1;
     int destIndex = -1;
-    bool change = false;
+    bool _change = false;
     bool _extraMove = false;
+    bool _touchedPiece = false;
+    void touchedPiece(GameManager::Turn);
 
     std::unique_ptr<GameManager> manager = std::unique_ptr<GameManager>(GameManager::get("game"));
 
@@ -49,11 +51,11 @@ public slots:
 
     QString getP2Name();
 
-    unsigned getP1_PScore();
+    int getP1_PScore();
 
     int getP1_NScore();
 
-    unsigned getP2_PScore();
+    int getP2_PScore();
 
     int getP2_NScore();
 
@@ -65,10 +67,6 @@ public slots:
     QString getIcon(unsigned index);
 
     unsigned cellState(unsigned index);
-
-    unsigned getSrcIndex();
-
-    unsigned getDestIndex();
 
     bool isMoved(unsigned index);
 
@@ -95,6 +93,12 @@ public slots:
 
     void promote(unsigned type);
 
+    bool isKingChecked();
+
+    bool isKingCheckmate();
+
+    bool stalemate();
+
 signals:
 
     void choosen();
@@ -102,8 +106,6 @@ signals:
     void unchoosen();
 
     void promotion();
-
-    void endOfGame();
 };
 
 std::pair<unsigned, unsigned> indexToIJ(unsigned index);

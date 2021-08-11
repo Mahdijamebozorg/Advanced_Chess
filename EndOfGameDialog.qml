@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.2
 
 Dialog {
     id: endOfGame
-    title: persian.checked ? "پایان بازی" : "End game"
+    title: persian.checked ? "پایان بازی!" : "End of Game!"
     height: parent.height * 0.17
     width: parent.width * 0.3
 
@@ -25,7 +25,8 @@ Dialog {
 
         Text {
             id: endGameText
-            text: persian.checked ? "برنده: " + "ali" : "Winner: " + "ali"
+            text: persian.checked ? "برنده: " + bknd.winnerUser(
+                                        ) : "Winner: " + bknd.winnerUser()
             color: "white"
             anchors.horizontalCenter: parent.horizontalCenter
             horizontalAlignment: Text.AlignHCenter
@@ -57,7 +58,7 @@ Dialog {
             }
             Button {
                 id: dialogEndGameButton
-                text: persian.checked ? "پایان بازی" : "End game"
+                text: persian.checked ? "اتمام بازی" : "End game"
                 width: parent.width * 0.3
                 height: parent.height
                 font.pixelSize: this.height * 0.15

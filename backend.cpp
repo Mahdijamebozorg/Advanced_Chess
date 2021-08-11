@@ -1,5 +1,5 @@
 #include "backend.hpp"
-#include "Header/Exceptions.hpp"
+#include "include/Exceptions.hpp"
 
 using namespace std;
 
@@ -96,7 +96,7 @@ QString BackEnd::getP2Name()
 
 //__________________________________________________________________________ get P1 Positive Score
 
-unsigned BackEnd::getP1_PScore()
+int BackEnd::getP1_PScore()
 {
     return manager->getUser1()->getScore();
 }
@@ -110,7 +110,7 @@ int BackEnd::getP1_NScore()
 
 //__________________________________________________________________________ get P2 Positive Score
 
-unsigned BackEnd::getP2_PScore()
+int BackEnd::getP2_PScore()
 {
     return manager->getUser2()->getScore();
 }
@@ -133,8 +133,7 @@ QString BackEnd::getGameName()
 
 QString BackEnd::winnerUser()
 {
-    //    return QString::fromStdString(manager->getWinner()->getName);
-    return "";
+    return QString::fromStdString(manager->getWinner()->getName());
 }
 
 //__________________________________________________________________________ getIcon
@@ -165,9 +164,6 @@ unsigned BackEnd::choose(unsigned index)
         qDebug() << s.what();
         return UNACCESSABLE;
     }
-
-    qDebug() << "canGo" << srcState.first;
-    qDebug() << "canHit" << srcState.second;
 
     srcIndex = index;
     emit choosen();
@@ -214,22 +210,6 @@ unsigned BackEnd::cellState(unsigned index)
         return UNAVAILABLE;
 }
 
-//__________________________________________________________________________ getSrcIndex
-
-unsigned BackEnd::getSrcIndex()
-{
-    qDebug() << "src";
-    return srcIndex;
-}
-
-//__________________________________________________________________________ getDestIndex
-
-unsigned BackEnd::getDestIndex()
-{
-    qDebug() << "dest";
-    return destIndex;
-}
-
 //__________________________________________________________________________ isMoved
 
 bool BackEnd::isMoved(unsigned index)
@@ -245,8 +225,8 @@ bool BackEnd::isMoved(unsigned index)
 
 bool BackEnd::unchoosePiece(unsigned index)
 {
-    if (change) { //____________unchoose will clear colored cells and we don't want this happen!
-        change = false;
+    if (_change) { //____________ on changing piece no error should be opened
+        _change = false;
         return true;
     }
     if (index == (unsigned) srcIndex) {
@@ -277,10 +257,11 @@ QString BackEnd::getP2OutsIcon(unsigned index)
 {
     auto outs = manager->getUser2()->getChessmansOut();
 
-    if (index + 1 > outs.size() || outs.size() == 0)
-        return "";
-    else {
+    //if index is in outs length
+    if (index < outs.size())
         return QString::fromStdString(outs[index]->getIcon());
+    else {
+        return "";
     }
 }
 
@@ -295,30 +276,38 @@ bool BackEnd::move(unsigned index) noexcept
     qDebug() << "dest: " << indexToIJ(index);
 
     //unchoose
-    if (cellState(index) == SELECTED)
+    if (cellState(index) == SELECTED) {
+        //if user have chosen a moveable piece for first time in this turn
+        if (!_touchedPiece)
+            //if piece is moveable
+            if (!srcState.first.empty()) {
+                _touchedPiece = true;
+                this->touchedPiece(manager->getTurn());
+            }
         return false;
+    }
 
-    //change choosen piece
+    //___________________________change choosen piece
+
+    //if cell is full
     if (manager->getChessBoardGame()->getCell(indexToIJ(index)).isFull()
         && manager->getChessBoardGame()->getCell(indexToIJ(srcIndex)).isFull()) {
-        qDebug() << "src color: "
-                 << manager->getChessBoardGame()
-                        ->getCell(indexToIJ(index))
-                        .getChessPieces()
-                        ->getColor();
-        qDebug() << "dest color: "
-                 << manager->getChessBoardGame()
-                        ->getCell(indexToIJ(index))
-                        .getChessPieces()
-                        ->getColor();
-
+        //if colors are the same
         if (manager->getChessBoardGame()->getCell(indexToIJ(index)).getChessPieces()->getColor()
             == manager->getChessBoardGame()
                    ->getCell(indexToIJ(srcIndex))
                    .getChessPieces()
                    ->getColor()) {
-            qDebug() << "change";
-            change = true;
+            _change = true;
+
+            //if user have chosen a moveable piece for first time in this turn
+            if (!_touchedPiece)
+                //if piece is moveable
+                if (!srcState.first.empty()) {
+                    _touchedPiece = true;
+                    this->touchedPiece(manager->getTurn());
+                }
+
             emit unchoosen();
             choose(index);
             return false;
@@ -330,19 +319,9 @@ bool BackEnd::move(unsigned index) noexcept
         return false;
     }
 
-    destIndex = index;
-
     try {
+        destIndex = index;
         manager->movePiece(indexToIJ(srcIndex), indexToIJ(destIndex));
-    }
-
-    catch (FinalCellForPawn &s) {
-        qDebug() << s.what();
-        emit promotion();
-        change = true;
-        previewsSrc = srcIndex;
-        return false;
-
     }
 
     catch (ImpossibleHitKing &s) {
@@ -350,15 +329,20 @@ bool BackEnd::move(unsigned index) noexcept
         return false;
     }
 
-    catch (EndOFGame &s) {
+    catch (FinalCellForPawn &s) {
         qDebug() << s.what();
-        emit endOfGame();
+        emit promotion();
+        _change = true;
+        previewsSrc = srcIndex;
+        return false;
     }
 
     catch (exception &s) {
         qDebug() << s.what();
         return false;
     }
+
+    previewsSrc = srcIndex;
 
     qDebug() << "moved from" << indexToIJ(srcIndex) << " to " << indexToIJ(destIndex);
 
@@ -367,7 +351,8 @@ bool BackEnd::move(unsigned index) noexcept
     else
         _extraMove = false;
 
-    previewsSrc = srcIndex;
+    //Turn changed
+    _touchedPiece = false;
 
     return true;
 }
@@ -379,6 +364,7 @@ void BackEnd::undo()
     auto back = manager->undo();
     previewsSrc = IJToIndex(back.first);
     destIndex = IJToIndex(back.second);
+
     emit unchoosen();
 }
 
@@ -402,11 +388,6 @@ bool BackEnd::randomMove()
         temp = manager->randomMovements();
     }
 
-    catch (EndOFGame &s) {
-        qDebug() << s.what();
-        emit endOfGame();
-    }
-
     catch (exception &s) {
         qDebug() << s.what();
         return false;
@@ -426,4 +407,38 @@ void BackEnd::promote(unsigned type)
 {
     manager->promote(indexToIJ(destIndex), (Chessman::ChessType) type);
     manager->changeTurn();
+}
+
+//__________________________________________________________________________ is King Checked
+
+bool BackEnd::isKingChecked()
+{
+    return manager->isKingChecked();
+}
+
+//__________________________________________________________________________ is King Checkmate
+
+bool BackEnd::isKingCheckmate()
+{
+    return manager->isCheckmate();
+}
+
+//__________________________________________________________________________ stalemate
+
+bool BackEnd::stalemate()
+{
+    //    return manager->isStalemate();
+    return false;
+}
+
+//__________________________________________________________________________ touched piece
+void BackEnd::touchedPiece(GameManager::Turn turn)
+{
+    if (turn == GameManager::USER1) {
+        manager->getUser1()->incNegativeScore(5);
+        qDebug() << "@@@@@@@@@@@@@@@@@@ user1 N score inc";
+    } else {
+        manager->getUser2()->incNegativeScore(5);
+        qDebug() << "@@@@@@@@@@@@@@@@@@ user2 N score inc";
+    }
 }

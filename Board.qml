@@ -31,11 +31,6 @@ Item {
     EndOfGameDialog {
         id: endOfGame
     }
-    //End of game control
-    Connections {
-        target: bknd
-        onEndOFGame: endOfGame.open()
-    }
 
     //Board image
     Image {
@@ -77,7 +72,8 @@ Item {
                         switch (bknd.choose(index)) {
                             //OK
                         case 2:
-                            //Used "Connections" to prevent crowdness
+                            //highlight canGo and canHit
+                            //Used "Connections" to prevent of crowdness here
                             break
 
                             //Unaccessable
@@ -104,6 +100,7 @@ Item {
                             srcCell.visible = false
                             dest.visible = true
 
+                            //get destination cells state
                             switch (bknd.cellState(index)) {
 
                                 //is selected
@@ -132,7 +129,7 @@ Item {
 
                                 //unavailable
                             case 0:
-                                //can set a color for unavailabe squares
+                                //Can set a color for unavailabe cells
                             }
                         }
                     }
@@ -145,6 +142,7 @@ Item {
                             dest.visible = false
                             cellRec.color = "#00000000"
 
+                            //heighlight passed cells
                             cellRec.border.color = bknd.isMoved(
                                         index) ? "#42e7ac" : "balck"
 
@@ -154,7 +152,7 @@ Item {
                     }
                 }
 
-                //Chessmen
+                //Chessmen icons
                 Image {
                     id: chessmanIcon
                     source: bknd.getIcon(index)
@@ -188,16 +186,25 @@ Item {
                 flat: true
                 onClicked: {
                     //if piece can go there
-                    if (bknd.move(index))
+                    if (bknd.move(index)) {
                         mystack.replace("GamePage.qml")
-                    else //if piece can't go there and it's not its current square
-                        if (!bknd.unchoosePiece(index)) {
-                            errText.text
-                                    = persian.checked ? "نمیتوان به آنجا رفت!" : "Can't move there!"
-                            wrongChoose.open()
-                        }
+                    } //if piece can't go to dest and dest is not its current cell
+                    else if (!bknd.unchoosePiece(index)) {
+                        errText.text
+                                = persian.checked ? "نمیتوان به آنجا رفت!" : "Can't move there!"
+                        wrongChoose.open()
+                    }
                 }
             }
+        }
+    }
+    Component.onCompleted: {
+        if (bknd.stalemate() || bknd.isKingCheckmate())
+            endOfGame.open()
+        else if (bknd.isKingChecked()) {
+            errText.text = persian.checked ? "شما کیش شدید!" : "You're checked!"
+            wrongChoose.title = persian.checked ? "کیش!" : "Checked!"
+            wrongChoose.open()
         }
     }
 }

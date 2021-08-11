@@ -13,6 +13,8 @@ Dialog {
         border.color: "#7c6d43"
         border.width: 2
         anchors.centerIn: parent
+
+        //background
         Image {
             id: name
             source: "qrc:/Assets/Images/Wood2.jpg"
@@ -34,6 +36,8 @@ Dialog {
             verticalAlignment: Text.AlignVCenter
             horizontalAlignment: Text.AlignHCenter
         }
+
+        //promotion Grid
         Grid {
             id: promotionGrid
             height: parent.height * 0.7
@@ -48,6 +52,8 @@ Dialog {
             verticalItemAlignment: Grid.AlignVCenter
             columnSpacing: this.width * 0.1
             rowSpacing: this.height * 0.1
+
+            //promote To Queen
             Rectangle {
                 id: queenRec
                 color: "#00000000"
@@ -75,6 +81,8 @@ Dialog {
                     }
                 }
             }
+
+            //promote To Rook
             Rectangle {
                 id: rookRec
                 color: "#00000000"
@@ -103,6 +111,8 @@ Dialog {
                     }
                 }
             }
+
+            //promote To Bishop
             Rectangle {
                 id: bihopRec
                 color: "#00000000"
@@ -130,6 +140,8 @@ Dialog {
                     }
                 }
             }
+
+            //promote To Knight
             Rectangle {
                 id: knightRec
                 color: "#00000000"

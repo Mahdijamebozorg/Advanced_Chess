@@ -2,6 +2,7 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Window 2.3
 import QtMultimedia 5.9
+import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     id: window
@@ -69,6 +70,14 @@ ApplicationWindow {
         id: mystack
         initialItem: "MainPage.qml"
         anchors.fill: parent
+    }
+
+    Dialog {
+        id: checked
+        title: persian.checked ? "کیش" : "Checked!"
+        Text {
+            text: persian.checkable ? "شما کیش شدید!" : "you're checked!"
+        }
     }
 
     Audio {
