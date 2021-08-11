@@ -1,12 +1,12 @@
-#include "../Header/User.hpp"
+#include "../include/User.hpp"
 
-#include "../Header/Bishop.hpp"
-#include "../Header/ChessBoard.hpp"
-#include "../Header/King.hpp"
-#include "../Header/Knight.hpp"
-#include "../Header/Pawn.hpp"
-#include "../Header/Queen.hpp"
-#include "../Header/Rook.hpp"
+#include "../include/Bishop.hpp"
+#include "../include/ChessBoard.hpp"
+#include "../include/King.hpp"
+#include "../include/Knight.hpp"
+#include "../include/Pawn.hpp"
+#include "../include/Queen.hpp"
+#include "../include/Rook.hpp"
 
 #include <stdexcept>
 #include <QDebug>

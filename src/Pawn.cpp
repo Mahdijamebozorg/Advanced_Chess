@@ -1,4 +1,4 @@
-#include "../Header/Pawn.hpp"
+#include "../include/Pawn.hpp"
 
 #include <vector>
 #include <stdexcept>

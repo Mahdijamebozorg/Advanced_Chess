@@ -1,4 +1,4 @@
-#include "../Header/Bishop.hpp"
+#include "../include/Bishop.hpp"
 
 #include <vector>
 #include <stdexcept>

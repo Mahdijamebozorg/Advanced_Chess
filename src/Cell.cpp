@@ -1,4 +1,4 @@
-#include "../Header/Cell.hpp"
+#include "../include/Cell.hpp"
 
 using namespace std;
 

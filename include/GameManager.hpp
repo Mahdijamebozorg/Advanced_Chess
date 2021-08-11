@@ -41,10 +41,13 @@ public:
   void notAllowEnpasan();
 
   // CanGo functions
-  std::pair<std::vector<Chessman::Index>, std::vector<Chessman::Index>> getCellState(Chessman::Index) const;
+  std::pair<std::vector<Chessman::Index>, std::vector<Chessman::Index>> getCellState(Chessman::Index);
 
   // Move and hit chessman
-  void movePiece(Chessman::Index src, Chessman::Index dest, bool move = false); // if(move) order move to movements
+  void movePiece(Chessman::Index src,
+                 Chessman::Index dest,
+                 bool move = false,  // if(move) order move to movements
+                 bool temp = false); //if is testing
 
   // Convert order to string   // string order: "Chessman(ID) Xi Xi Chessman(ID) or N"
   std::string convertOrderToString(Chessman::Index src, Chessman::Index dest);
@@ -54,7 +57,7 @@ public:
   std::pair<Chessman::Index, Chessman::Index> getLastMove(                                  )      ;
 
   // Undo
-  std::pair<Chessman::Index, Chessman::Index> undo();
+  std::pair<Chessman::Index, Chessman::Index> undo(bool isTemp = false);
 
   // Start, End and Restart Game Functions
   void startGame();
@@ -67,6 +70,13 @@ public:
 
   // checked kish user
   bool isKingChecked();
+
+  //
+  void limit_cells_for_king_check(Chessman::Index &src,
+                                  std::vector<Chessman::Index> &,
+                                  std::vector<Chessman::Index> &);
+  //
+  bool isCheckmate();
 
   // Destructor
   ~GameManager();

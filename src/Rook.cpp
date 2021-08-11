@@ -1,4 +1,4 @@
-#include "../Header/Rook.hpp"
+#include "../include/Rook.hpp"
 
 #include <vector>
 #include <stdexcept>

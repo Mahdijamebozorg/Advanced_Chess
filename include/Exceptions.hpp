@@ -38,4 +38,20 @@ public:
   {}
 };
 
+class KingIsChecked : public std::logic_error
+{
+public:
+    KingIsChecked(std::string msg = "ImpossibleHitKing")
+        : logic_error(msg)
+    {}
+};
+
+class Checkmate : public std::logic_error
+{
+public:
+    Checkmate(std::string msg = "ImpossibleHitKing")
+        : logic_error(msg)
+    {}
+};
+
 #endif // EXCEPTIONS_HPP

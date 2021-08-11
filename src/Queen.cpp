@@ -1,4 +1,4 @@
-#include "../Header/Queen.hpp"
+#include "../include/Queen.hpp"
 
 #include <vector>
 #include <stdexcept>

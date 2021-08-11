@@ -1,4 +1,4 @@
-#include "../Header/King.hpp"
+#include "../include/King.hpp"
 
 #include <vector>
 #include <stdexcept>

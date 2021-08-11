@@ -1,8 +1,8 @@
-#include "../Header/ChessBoard.hpp"
+#include "../include/ChessBoard.hpp"
 
 #include <stdexcept>
-#include "../Header/King.hpp"
-#include "../Header/Rook.hpp"
+#include "../include/King.hpp"
+#include "../include/Rook.hpp"
 
 #include <QDebug>
 
@@ -385,34 +385,35 @@ void ChessBoard::removeChessmanIndex(Chessman::Index index)
   throw invalid_argument("This Cell is empty.");
 }
 
-pair<bool, Chessman::Index> ChessBoard::isChecked(Chessman::Index index, Chessman::Color color)  // color is enemy chessmans color
+pair<bool, Chessman::Index> ChessBoard::isChecked(
+    Chessman::Index userKingIndex, Chessman::Color userColor) // color is enemy chessmans color
 {
-  if(color == Chessman::WHITE)
-  {
-    for(auto &item: white_chessmans)
-    {
-      auto temp_go = this->getCanGo(item, false).first;
-      for(auto &item2: temp_go)
-      {
-        if(item2 == index)
-          return make_pair(true, index);
-      }
+    //if white Chessmen are checking black king
+    if (userColor == Chessman::BLACK) {
+        for (auto &item : white_chessmans) {
+            auto temp_go = this->getCanGo(item, false).second;
+            for (auto &item2 : temp_go) {
+                if (item2 == userKingIndex) {
+                    qDebug() << "white Chessmen are checking black king";
+                    return make_pair(true, userKingIndex);
+                }
+            }
+        }
     }
-  }
-  else
-  {
-    for(auto &item: black_chessmans)
-    {
-      auto temp_go = this->getCanGo(item, false).first;
-      for(auto &item2: temp_go)
-      {
-        if(item2 == index)
-          return make_pair(true, index);
-      }
+    //if black Chessmen are checking white king
+    else {
+        for (auto &item : black_chessmans) {
+            auto temp_go = this->getCanGo(item, false).second;
+            for (auto &item2 : temp_go) {
+                if (item2 == userKingIndex) {
+                    qDebug() << "black Chessmen are checking white king";
+                    return make_pair(true, userKingIndex);
+                }
+            }
+        }
     }
-  }
 
-  return make_pair(false, make_pair(100, 100));
+    return make_pair(false, make_pair(100, 100));
 }
 
 void ChessBoard::addChessmanIndex(Chessman::Color color, Chessman::Index index)
