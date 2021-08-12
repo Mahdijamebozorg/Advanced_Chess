@@ -583,26 +583,21 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
 
 //________________________________________________________________________________________________________
 
-bool GameManager::isCheckmate()
+GameManager::GameStatus GameManager::analayzeGameStatus()
 {
-    qDebug() << "is checkmate called";
-    if (!isKingChecked())
-        return false;
-
     //search in all user chessmen
     vector<shared_ptr<Chessman>> temp = users[turn]->getChessmansIn();
     for (unsigned i = 0; i < temp.size(); i++) {
-        //if at the least one piece still can move
-        qDebug() << "turn: " << turn;
-        qDebug() << QString::fromStdString(temp[i]->getIcon());
         if (this->getCellState(this->chess_board->getIndex(temp[i]->getID())).first.size() != 0) {
             qDebug() << this->getCellState(this->chess_board->getIndex(temp[i]->getID()))
                             .first.size();
-            return false;
+
+            //if at the least one piece still can move
+            return isKingChecked() ? GameStatus::CHECKED : GameStatus::NORMAL;
         }
     }
-    qDebug() << "checkmate!";
-    return true;
+    //if no piece can move
+    return isKingChecked() ? GameStatus::CHECKMATE : GameStatus::STALEMATE;
 }
 
 //________________________________________________________________________________________________________

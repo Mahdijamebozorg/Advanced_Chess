@@ -19,6 +19,7 @@ public:
 
   // declare enum
   enum Turn {USER1, USER2};
+  enum GameStatus { NORMAL, CHECKED, STALEMATE, CHECKMATE };
 
   // static set and get pointer to this calss functions for Singeleto Pattern
   static GameManager*& get(GameName name);
@@ -76,7 +77,7 @@ public:
                                   std::vector<Chessman::Index> &canGo,
                                   std::vector<Chessman::Index> &canHit);
   //
-  bool isCheckmate();
+  GameStatus analayzeGameStatus();
 
   GameUser getWinner() const;
 
