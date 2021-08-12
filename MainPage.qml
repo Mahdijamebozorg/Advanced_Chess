@@ -5,10 +5,12 @@ Page {
     title: persian.checked ? "خوش آمدید" : "Wellcome"
     id: mainPage
     anchors.fill: mystack
-    Image {
+    background: Image {
         id: image
         source: "qrc:/Assets/Images/Main.jpg"
-        anchors.fill: parent
+    }
+
+    children: [
 
         //start button style
         Rectangle {
@@ -54,8 +56,7 @@ Page {
                 font.pixelSize: this.height * 0.2
                 onClicked: mystack.push("LoginPage.qml")
             }
-        }
-
+        },
         //loging button style
         Rectangle {
             id: exitRec
@@ -100,7 +101,7 @@ Page {
                 onClicked: Qt.quit()
             }
         }
-    }
+    ]
 }
 
 /*##^##

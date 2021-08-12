@@ -106,8 +106,8 @@ Item {
             Column {
                 id: orderCol
                 anchors.bottom: leftSide.bottom
-                anchors.bottomMargin: 15
-                anchors.horizontalCenter: leftSide.horizontalCenter
+                anchors.bottomMargin: parent.height * 0.05
+                anchors.horizontalCenter: parent.horizontalCenter
                 spacing: 20
 
                 //undo

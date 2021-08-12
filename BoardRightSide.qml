@@ -4,11 +4,11 @@ import QtQuick.Dialogs 1.2
 
 Item {
     Dialog {
-        id: scoreError
-        title: persian.checked ? "خطا" : "Error"
+        id: extraMoveDialog
+        title: persian.checked ? "حرکت اضافه" : "Extra Move"
         Text {
-            id: scoreErrorText
-            text: persian.checked ? "امتیاز کافی ندارید!" : "Not enough scores!"
+            id: extraMoveText
+            text: ""
         }
     }
 
@@ -267,8 +267,13 @@ Item {
                             id: extraMove
                             anchors.fill: parent
                             flat: true
-                            onClicked: if (!bknd.extraMove())
-                                           scoreError.open()
+                            onClicked: if (bknd.extraMove()) {
+                                           extraMoveText.text = persian.checked ? "یک حرکت اضافه گرفتید" : "You got one extra move!"
+                                           extraMoveDialog.open()
+                                       } else {
+                                           extraMoveText.text = persian.checked ? "امتیاز کافی ندارید!" : "Not enough scores!"
+                                           extraMoveDialog.open()
+                                       }
 
                             Text {
                                 text: persian.checked ? "حرکت اضافه" : "Extra Move"

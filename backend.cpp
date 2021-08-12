@@ -8,9 +8,7 @@ using namespace std;
 
 void BackEnd::setGame(QString gameName)
 {
-    //    manager = unique_ptr<GameManager>(GameManager::get(gameName.QString::toStdString()));
     manager->setGameName(gameName.QString::toStdString());
-    //    manager = GameManager::get(gameName.QString::toStdString());
 }
 
 //__________________________________________________________________________
@@ -68,7 +66,7 @@ std::pair<unsigned, unsigned> indexToIJ(unsigned index)
 
 void BackEnd::setP1(QString P1Name)
 {
-    manager->setUser1(P1Name.QString::toStdString(), 0, 0);
+    manager->setUser1(P1Name.QString::toStdString(), 100, 0);
     qDebug() << "user 1 setted";
 }
 
@@ -131,9 +129,9 @@ QString BackEnd::getGameName()
 
 //__________________________________________________________________________ Winner
 
-QString BackEnd::winnerUser()
+unsigned BackEnd::winner()
 {
-    return QString::fromStdString(manager->getWinner()->getName());
+    return manager->getWinnerIndex();
 }
 
 //__________________________________________________________________________ getIcon
@@ -200,7 +198,7 @@ unsigned BackEnd::cellState(unsigned index)
     if (index == (unsigned) srcIndex)
         return SELECTED;
 
-    if (canHit(index, srcState.second))
+    else if (canHit(index, srcState.second))
         return CANHIT;
 
     else if (canGo(index, srcState.first))
@@ -279,12 +277,12 @@ bool BackEnd::move(unsigned index) noexcept
     if (cellState(index) == SELECTED) {
         //if user have chosen a moveable piece for first time in this turn
         if (!_touchedPiece)
-            //if piece is moveable
-            if (!srcState.first.empty()) {
-                _touchedPiece = true;
-                this->touchedPiece(manager->getTurn());
-            }
-        return false;
+            //            //if piece is moveable
+            //            if (!srcState.first.empty()) {
+            //                _touchedPiece = true;
+            //                this->touchedPiece(manager->getTurn());
+            //            }
+            return false;
     }
 
     //___________________________change choosen piece
@@ -300,13 +298,13 @@ bool BackEnd::move(unsigned index) noexcept
                    ->getColor()) {
             _change = true;
 
-            //if user have chosen a moveable piece for first time in this turn
-            if (!_touchedPiece)
-                //if piece is moveable
-                if (!srcState.first.empty()) {
-                    _touchedPiece = true;
-                    this->touchedPiece(manager->getTurn());
-                }
+            //            //if user have chosen a moveable piece for first time in this turn
+            //            if (!_touchedPiece)
+            //                //if piece is moveable
+            //                if (!srcState.first.empty()) {
+            //                    _touchedPiece = true;
+            //                    this->touchedPiece(manager->getTurn());
+            //                }
 
             emit unchoosen();
             choose(index);
@@ -409,36 +407,20 @@ void BackEnd::promote(unsigned type)
     manager->changeTurn();
 }
 
-//__________________________________________________________________________ is King Checked
+//__________________________________________________________________________  game status
 
-bool BackEnd::isKingChecked()
+unsigned BackEnd::gameStatus()
 {
-    return manager->isKingChecked();
+    //0->NORMAL  1->CHECKED  2->STALEMATE  3->CHECKMATE
+    return manager->analayzeGameStatus();
 }
 
-//__________________________________________________________________________ is King Checkmate
-
-bool BackEnd::isKingCheckmate()
-{
-    return manager->isCheckmate();
-}
-
-//__________________________________________________________________________ stalemate
-
-bool BackEnd::stalemate()
-{
-    //    return manager->isStalemate();
-    return false;
-}
-
-//__________________________________________________________________________ touched piece
-void BackEnd::touchedPiece(GameManager::Turn turn)
-{
-    if (turn == GameManager::USER1) {
-        manager->getUser1()->incNegativeScore(5);
-        qDebug() << "@@@@@@@@@@@@@@@@@@ user1 N score inc";
-    } else {
-        manager->getUser2()->incNegativeScore(5);
-        qDebug() << "@@@@@@@@@@@@@@@@@@ user2 N score inc";
-    }
-}
+////__________________________________________________________________________ touched piece
+//void BackEnd::touchedPiece(GameManager::Turn turn)
+//{
+//    if (turn == GameManager::USER1) {
+//        manager->getUser1()->incNegativeScore(5);
+//    } else {
+//        manager->getUser2()->incNegativeScore(5);
+//    }
+//}

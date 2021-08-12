@@ -6,6 +6,7 @@ Item {
         anchors.fill: parent
         color: "white"
         Image {
+            //to show a small border around
             width: parent.width - 2
             height: parent.height - 2
             id: wood4
@@ -16,8 +17,8 @@ Item {
                 interactive: false
                 id: bottomGrid
                 anchors.centerIn: parent
-                width: parent.width - 20
-                height: parent.height - 20
+                width: parent.width * 0.98
+                height: parent.height * 0.90
                 model: 16
                 cellHeight: bottomGrid.height / 2
                 cellWidth: bottomGrid.width / 8

@@ -16,8 +16,8 @@ Item {
                 interactive: false
                 id: topGrid
                 anchors.centerIn: parent
-                width: parent.width - 20
-                height: parent.height - 20
+                width: parent.width * 0.98
+                height: parent.height * 0.90
                 model: 16
                 cellHeight: topGrid.height / 2
                 cellWidth: topGrid.width / 8

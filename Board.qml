@@ -10,9 +10,11 @@ Item {
         id: wrongChoose
         title: persian.checked ? "خطا" : "Error"
         Text {
+            anchors.horizontalCenter: parent.horizontalCenter
             id: errText
             text: "An error!"
         }
+        standardButtons: Dialog.Close
     }
 
     //Promotion dialog
@@ -52,7 +54,7 @@ Item {
             cellHeight: height / 8
             model: 64
 
-            //content
+            //Content
             delegate: Rectangle {
                 id: cellRec
 
@@ -63,7 +65,7 @@ Item {
                 border.color: bknd.isMoved(index) ? "#42e7ac" : "black"
                 color: "#00000000"
 
-                //cells
+                //Cells
                 Button {
                     id: srcCell
                     anchors.fill: parent
@@ -91,19 +93,19 @@ Item {
                         }
                     }
 
-                    //highlight canGo and canHit cells on choose
+                    //Highlight canGo and canHit cells on choose
                     Connections {
                         target: bknd
                         onChoosen: {
 
-                            //shows dest choose buttons
+                            //Shows dest choose buttons
                             srcCell.visible = false
                             dest.visible = true
 
-                            //get destination cells state
+                            //Get destination cells state
                             switch (bknd.cellState(index)) {
 
-                                //is selected
+                                //Is selected
                             case 3:
 
                                 cellRec.color = "#bca972"
@@ -111,7 +113,7 @@ Item {
                                 cellRec.border.width = 0.5
                                 break
 
-                                //can hit
+                                //Can hit
                             case 2:
 
                                 cellRec.color = "#811717"
@@ -119,7 +121,7 @@ Item {
                                 cellRec.border.width = 0.5
                                 break
 
-                                //can go
+                                //Can go
                             case 1:
 
                                 cellRec.color = "#a4883d"
@@ -127,14 +129,14 @@ Item {
                                 cellRec.border.width = 0.5
                                 break
 
-                                //unavailable
+                                //Unavailable
                             case 0:
                                 //Can set a color for unavailabe cells
                             }
                         }
                     }
 
-                    //unchoose the piece
+                    //Unchoose the piece
                     Connections {
                         target: bknd
                         onUnchoosen: {
@@ -142,7 +144,7 @@ Item {
                             dest.visible = false
                             cellRec.color = "#00000000"
 
-                            //heighlight passed cells
+                            //Heighlight passed cells
                             cellRec.border.color = bknd.isMoved(
                                         index) ? "#42e7ac" : "balck"
 
@@ -163,32 +165,32 @@ Item {
             }
         }
 
-        //new grid buttons for move destination
+        //New grid buttons for move destination
         GridView {
             id: dest
-            //not scrollable
+            //Not scrollable
             interactive: false
             visible: false
             anchors.centerIn: boardImage
 
-            //ignoring edge of board photo
+            //Ignoring edges of board photo
             width: boardImage.width - boardImage.width * 0.096
             height: boardImage.height - boardImage.height * 0.097
             cellWidth: this.width / 8
             cellHeight: this.height / 8
             model: 64
 
-            //content
+            //Content
             delegate: Button {
                 id: destCell
                 width: dest.width / 8
                 height: dest.height / 8
                 flat: true
                 onClicked: {
-                    //if piece can go there
-                    if (bknd.move(index)) {
+                    //If piece can go there
+                    if (bknd.move(index))
                         mystack.replace("GamePage.qml")
-                    } //if piece can't go to dest and dest is not its current cell
+                    //If piece can't go to dest and dest is not its current cell
                     else if (!bknd.unchoosePiece(index)) {
                         errText.text
                                 = persian.checked ? "نمیتوان به آنجا رفت!" : "Can't move there!"
@@ -199,12 +201,30 @@ Item {
         }
     }
     Component.onCompleted: {
-        if (bknd.stalemate() || bknd.isKingCheckmate())
-            endOfGame.open()
-        else if (bknd.isKingChecked()) {
+
+        switch (bknd.gameStatus()) {
+            ////NORMAL
+        case 0:
+            break
+
+            //CHECKED
+        case 1:
             errText.text = persian.checked ? "شما کیش شدید!" : "You're checked!"
-            wrongChoose.title = persian.checked ? "کیش!" : "Checked!"
+            wrongChoose.title = persian.checked ? "کیش" : "Checked"
             wrongChoose.open()
+            break
+
+            //STALEMATE
+        case 2:
+            endOfGame.title = persian.checked ? "پات" : "Stalemate"
+            endOfGame.open()
+            break
+
+            //CHECKMATE
+        case 3:
+            endOfGame.title = persian.checked ? "کیش و مات" : "Checkmate"
+            endOfGame.open()
+            break
         }
     }
 }

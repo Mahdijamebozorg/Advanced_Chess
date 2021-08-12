@@ -2,7 +2,6 @@ import QtQuick 2.12
 import QtQuick.Controls 2.5
 import QtQuick.Window 2.3
 import QtMultimedia 5.9
-import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     id: window

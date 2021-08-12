@@ -5,7 +5,7 @@ import QtQuick.Dialogs 1.2
 
 Dialog {
     id: endOfGame
-    title: persian.checked ? "پایان بازی!" : "End of Game!"
+    title: persian.checked ? "پایان بازی" : "End of Game"
     height: parent.height * 0.17
     width: parent.width * 0.3
 
@@ -18,27 +18,50 @@ Dialog {
         Image {
             id: name
             source: "qrc:/Assets/Images/Wood2.jpg"
-            width: parent.width
-            height: parent.height
+            width: parent.width - 2
+            height: parent.height - 2
             anchors.centerIn: parent
         }
 
-        Text {
-            id: endGameText
-            text: persian.checked ? "برنده: " + bknd.winnerUser(
-                                        ) : "Winner: " + bknd.winnerUser()
-            color: "white"
+        Rectangle {
+            width: parent.width * 0.6
+            height: parent.height * 0.35
             anchors.horizontalCenter: parent.horizontalCenter
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            width: parent.width * 0.8
-            height: parent.height * 0.4
-            font.pixelSize: this.height * 0.4
+            anchors.top: parent.top
+            anchors.topMargin: parent.height * 0.07
+            border.color: "#7c6d43"
+            color: "#00000000"
+            Text {
+                id: endGameText
+                text: ""
+                color: "white"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                height: parent.height - 2
+                width: parent.width - 2
+                font.pixelSize: this.width * 0.1
+                Component.onCompleted: {
+                    switch (bknd.winner()) {
+                    case 0:
+                        this.text = persian.checked ? "برنده: " + bknd.getP1Name(
+                                                          ) : "Winner: " + bknd.getP1Name()
+                        break
+                    case 1:
+                        this.text = persian.checked ? "برنده: " + bknd.getP2Name(
+                                                          ) : "Winner: " + bknd.getP2Name()
+                        break
+                    case 2:
+                        this.text = persian.checked ? "مساوی" : "Draw"
+                        endOfGame.title = persian.checked ? "مساوی" : "Draw"
+                        break
+                    }
+                }
+            }
         }
 
         Row {
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: parent.height * 0.1
+            anchors.bottomMargin: parent.height * 0.07
             anchors.horizontalCenter: parent.horizontalCenter
             spacing: this.width * 0.03
 
@@ -50,7 +73,7 @@ Dialog {
                 text: persian.checked ? "بازگشت" : "Undo"
                 width: parent.width * 0.3
                 height: parent.height
-                font.pixelSize: this.height * 0.15
+                font.pixelSize: this.width * 0.1
                 onClicked: {
                     bknd.undo()
                     mystack.replace("GamePage.qml")
@@ -61,7 +84,7 @@ Dialog {
                 text: persian.checked ? "اتمام بازی" : "End game"
                 width: parent.width * 0.3
                 height: parent.height
-                font.pixelSize: this.height * 0.15
+                font.pixelSize: this.width * 0.1
                 onClicked: {
                     endOfGame.close()
                     bknd.endGame()
@@ -76,7 +99,7 @@ Dialog {
                 text: persian.checked ? "شروع مجدد" : "Restart"
                 width: parent.width * 0.3
                 height: parent.height
-                font.pixelSize: this.height * 0.15
+                font.pixelSize: this.width * 0.1
                 onClicked: {
                     bknd.restartGame()
                     mystack.replace("GamePage.qml")

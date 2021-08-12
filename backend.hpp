@@ -42,6 +42,8 @@ public slots:
 
     void endGame();
 
+    unsigned gameStatus();
+
     //________________________________________________________ users
     void setP1(QString P1Name);
 
@@ -61,7 +63,7 @@ public slots:
 
     QString getGameName();
 
-    QString winnerUser();
+    unsigned winner();
 
     //________________________________________________________ board
     QString getIcon(unsigned index);
@@ -92,12 +94,6 @@ public slots:
     bool randomMove();
 
     void promote(unsigned type);
-
-    bool isKingChecked();
-
-    bool isKingCheckmate();
-
-    bool stalemate();
 
 signals:
 

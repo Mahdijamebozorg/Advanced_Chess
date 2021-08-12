@@ -7,10 +7,12 @@ Page {
     title: ""
     anchors.fill: parent
     //Background
-    Image {
+    background: Image {
         id: image
         source: "qrc:/Assets/Images/Login.jpg"
-        anchors.fill: parent
+    }
+
+    children: [
 
         //P1 Name
         TextField {
@@ -26,7 +28,8 @@ Page {
             horizontalAlignment: Text.AlignHCenter
             font.pixelSize: this.height * 0.3
             maximumLength: 19
-        }
+        },
+
         //color
         RadioButton {
             id: white1
@@ -35,7 +38,7 @@ Page {
             height: 20
             text: white2.checked ? persian.checked ? "سیاه" : "Black" : persian.checked ? "سفید" : "White"
             font.pixelSize: 12
-        }
+        },
 
         //Game Name
         Rectangle {
@@ -59,7 +62,7 @@ Page {
                 font.pixelSize: this.height * 0.3
                 maximumLength: 14
             }
-        }
+        },
 
         //P2 Name
         TextField {
@@ -74,7 +77,8 @@ Page {
             text: ""
             horizontalAlignment: Text.AlignHCenter
             maximumLength: 19
-        }
+        },
+
         //color
         RadioButton {
             id: white2
@@ -84,135 +88,135 @@ Page {
             text: white1.checked ? persian.checked ? "سیاه" : "Black" : persian.checked ? "سفید" : "White"
             font.pixelSize: 12
             checked: true
-        }
-    }
+        },
 
-    //login style
-    Rectangle {
-        id: logrec
-        x: image.width - width - 8
-        y: image.height - height - 8
-        width: image.width * 0.15
-        height: image.height * 0.07
-        gradient: Gradient {
-            GradientStop {
-                position: 0.1
-                color: "#00000000"
-            }
-            GradientStop {
-                position: 0.175
-                color: "#000000"
-            }
-
-            GradientStop {
-                position: 0.5
-                color: "#7c6d43"
-            }
-
-            GradientStop {
-                position: 0.85
-                color: "#000000"
-            }
-            GradientStop {
-                position: 95
-                color: "#00000000"
-            }
-        }
-
-        //login button
-        Button {
-            id: login
-            flat: true
-            anchors.fill: parent
-            text: persian.checked ? "ورود" : "Login"
-            font.bold: true
-            font.italic: true
-            font.pixelSize: logrec.height * 0.27
-            onClicked: {
-                var ok = true
-
-                //if player 1 name is empty
-                if (player1.text == "") {
-                    player1.placeholderTextColor = "red"
-                    ok = false
+        //login style
+        Rectangle {
+            id: logrec
+            x: image.width - width - 8
+            y: image.height - height - 8
+            width: image.width * 0.15
+            height: image.height * 0.07
+            gradient: Gradient {
+                GradientStop {
+                    position: 0.1
+                    color: "#00000000"
+                }
+                GradientStop {
+                    position: 0.175
+                    color: "#000000"
                 }
 
-                //if player 2 name is empty
-                if (player2.text == "") {
-                    player2.placeholderTextColor = "red"
-                    ok = false
+                GradientStop {
+                    position: 0.5
+                    color: "#7c6d43"
                 }
 
-                //if game name is empty
-                if (gameName.text == "") {
-                    gameName.placeholderTextColor = "red"
-                    ok = false
-                } //if ok
-                else if (ok) {
-                    bknd.setGame(gameName.text)
-                    if (white1.checked) {
-                        bknd.setP1(player1.text)
-                        bknd.setP2(player2.text)
-                    } else {
+                GradientStop {
+                    position: 0.85
+                    color: "#000000"
+                }
+                GradientStop {
+                    position: 95
+                    color: "#00000000"
+                }
+            }
 
-                        bknd.setP1(player2.text)
-                        bknd.setP2(player1.text)
+            //login button
+            Button {
+                id: login
+                flat: true
+                anchors.fill: parent
+                text: persian.checked ? "ورود" : "Login"
+                font.bold: true
+                font.italic: true
+                font.pixelSize: logrec.height * 0.27
+                onClicked: {
+                    var ok = true
+
+                    //if player 1 name is empty
+                    if (player1.text == "") {
+                        player1.placeholderTextColor = "red"
+                        ok = false
                     }
-                    bknd.startGame()
-                    player1.clear()
-                    player2.clear()
-                    gameName.clear()
-                    fullScreen.checked = true
-                    mystack.push("GamePage.qml")
+
+                    //if player 2 name is empty
+                    if (player2.text == "") {
+                        player2.placeholderTextColor = "red"
+                        ok = false
+                    }
+
+                    //if game name is empty
+                    if (gameName.text == "") {
+                        gameName.placeholderTextColor = "red"
+                        ok = false
+                    } //if ok
+                    else if (ok) {
+                        bknd.setGame(gameName.text)
+                        if (white1.checked) {
+                            bknd.setP1(player1.text)
+                            bknd.setP2(player2.text)
+                        } else {
+
+                            bknd.setP1(player2.text)
+                            bknd.setP2(player1.text)
+                        }
+                        bknd.startGame()
+                        player1.clear()
+                        player2.clear()
+                        gameName.clear()
+                        fullScreen.checked = true
+                        mystack.push("GamePage.qml")
+                    }
                 }
             }
-        }
-    }
+        },
 
-    //back style
-    Rectangle {
-        id: bkRec
-        x: 8
-        y: mystack.height - height - 8
-        width: mystack.width * 0.15
-        height: mystack.height * 0.08
-        gradient: Gradient {
+        //back style
+        Rectangle {
+            id: bkRec
+            x: 8
+            y: mystack.height - height - 8
+            width: mystack.width * 0.15
+            height: mystack.height * 0.08
+            gradient: Gradient {
+                GradientStop {
+                    position: 0
+                    color: "#00000000"
+                }
+                GradientStop {
+                    position: 0.175
+                    color: "#000000"
+                }
+
+                GradientStop {
+                    position: 0.5
+                    color: "#7c6d43"
+                }
+
+                GradientStop {
+                    position: 0.85
+                    color: "#000000"
+                }
+            }
             GradientStop {
-                position: 0
+                position: 1
                 color: "#00000000"
             }
-            GradientStop {
-                position: 0.175
-                color: "#000000"
-            }
 
-            GradientStop {
-                position: 0.5
-                color: "#7c6d43"
-            }
-
-            GradientStop {
-                position: 0.85
-                color: "#000000"
+            //back button
+            Button {
+                flat: true
+                id: back
+                anchors.fill: parent
+                text: persian.checked ? "بازگشت" : "Back"
+                font.bold: true
+                font.italic: true
+                font.pixelSize: bkRec.height * 0.27
+                onClicked: mystack.pop()
             }
         }
-        GradientStop {
-            position: 1
-            color: "#00000000"
-        }
-
-        //back button
-        Button {
-            flat: true
-            id: back
-            anchors.fill: parent
-            text: persian.checked ? "بازگشت" : "Back"
-            font.bold: true
-            font.italic: true
-            font.pixelSize: bkRec.height * 0.27
-            onClicked: mystack.pop()
-        }
-    }
+    ]
 }
 
 /*##^##
