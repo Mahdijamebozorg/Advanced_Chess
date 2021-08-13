@@ -9,5 +9,5 @@ using namespace std;
 void checkRange(Chessman::Index index)
 {
   if(index.first < 0 || index.first > 7 || index.second < 0 || index.second > 7)
-    throw invalid_argument("positon must between 0, 7");
+      throw out_of_range("positon must between 0, 7");
 }

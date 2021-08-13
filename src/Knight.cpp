@@ -45,30 +45,28 @@ list<Knight::Index> Knight::getCellsCanGo(Index index) const
   Index temp;
   list<Index> l;
 
-  for(int i = 0; i < 2; i++)
-  {
-    for(int j = -1; j <= 1; j += 2)
-    {
-      if(i == 0)
-        temp.second = index.second + j;
-      else
-        temp.first = index.first + j;
+  //0--> ending left/right  1--> ending down/up
+  for (int i = 0; i <= 1; i++) {
+      //
+      for (int j = -1; j <= 1; j += 2) {
+          if (i == 0)
+              temp.second = index.second + j;
+          else
+              temp.first = index.first + j;
 
-      for(int k = -2; k <= 2; k += 4)
-      {
-        if(i == 0)
-          temp.first = index.first + k;
-        else
-          temp.second = index.second + k;
+          //
+          for (int k = -2; k <= 2; k += 4) {
+              if (i == 0)
+                  temp.first = index.first + k;
+              else
+                  temp.second = index.second + k;
 
-        try
-        {
-          checkRange(temp);
-          l.push_back(temp);
-        }
-        catch(invalid_argument &w)
-        {}
-        }
+              try {
+                  checkRange(temp);
+                  l.push_back(temp);
+              } catch (out_of_range &w) {
+              }
+          }
       }
   }
 

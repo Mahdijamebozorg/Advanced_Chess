@@ -84,11 +84,9 @@ list<Queen::Index> Queen::getCellsCanGo(Index index) const
       try
       {
         checkRange(temp);
-      }
-      catch(invalid_argument& w)
-      {
-        in_range = false;
-        temp = Index(100, 100);
+      } catch (out_of_range &w) {
+          in_range = false;
+          temp = Index(100, 100);
       }
 
       l.push_back(temp);

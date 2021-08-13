@@ -34,7 +34,6 @@ public:
 
   // kish home
   std::pair<bool, Chessman::Index> isChecked    (Chessman::Index, Chessman::Color); // color is enemy chessmans color
-  std::vector<Chessman::Index>     getcheckedWay(Chessman::Index, Chessman::Index);
 
   // chessmans Index functions
   void changeIndex        (Chessman::Index src, Chessman::Index dest, bool hit);

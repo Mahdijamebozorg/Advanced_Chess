@@ -45,46 +45,47 @@ list<Pawn::Index> Pawn::getCellsCanGo(Index index) const
   pair<int, int> temp;
   list<Index> l;
 
-  if(index.first == 3 && getColor() == WHITE)// enpasan
-  {
-    l.push_back(make_pair(2, index.second - 1));
-    l.push_back(make_pair(2, index.second + 1));
-  }
-  else if(index.first == 4 && getColor() == BLACK) // enpasan
-  {
-    l.push_back(make_pair(5, index.second - 1));
-    l.push_back(make_pair(5, index.second + 1));
-  }
+  //En-passant move
 
-  if(getColor() == WHITE)
+  if (index.first == 3 && getColor() == WHITE) // En-passant
   {
-    temp.second = index.second;
-    temp.first  = index.first - 2;
-    try
-    {
-      checkRange(temp);
-      l.push_back(temp);
-    }
-    catch(...)
-    {}
-
-    temp.first = index.first - 1;
-  }
-  else
+      l.push_back(make_pair(2, index.second - 1));
+      l.push_back(make_pair(2, index.second + 1));
+  } else if (index.first == 4 && getColor() == BLACK) // En-passant
   {
-    temp.second = index.second;
-    temp.first  = index.first + 2;
-    try
-    {
-        checkRange(temp);
-        l.push_back(temp);
-    }
-    catch(...)
-    {}
-
-    temp.first = index.first + 1;
+      l.push_back(make_pair(5, index.second - 1));
+      l.push_back(make_pair(5, index.second + 1));
   }
 
+  //first move for white color
+
+  if (getColor() == WHITE) {
+      temp.second = index.second;
+      temp.first = index.first - 2;
+      try {
+          checkRange(temp);
+          l.push_back(temp);
+      } catch (...) {
+      }
+
+      temp.first = index.first - 1;
+  }
+
+  //first move for black color
+
+  else {
+      temp.second = index.second;
+      temp.first = index.first + 2;
+      try {
+          checkRange(temp);
+          l.push_back(temp);
+      } catch (...) {
+      }
+
+      temp.first = index.first + 1;
+  }
+
+  //pawn has 3 forward moves
   for(int i = -1; i <= 1; i++)
   {
     temp.second = index.second + i;

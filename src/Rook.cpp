@@ -70,11 +70,9 @@ list<Rook::Index> Rook::getCellsCanGo(Index index) const
       try
       {
         checkRange(temp);
-      }
-      catch(invalid_argument& w)
-      {
-        in_range = false;
-        temp = Index(100, 100);
+      } catch (out_of_range &w) {
+          in_range = false;
+          temp = Index(100, 100);
       }
 
       l.push_back(temp);
@@ -89,14 +87,14 @@ void Rook::setIcon(Icon icon)
   this->icon = icon;
 }
 
-void Rook::rookMoved()
-{
-  this->moved = true;
-}
-
 bool Rook::getMoved() const
 {
-  return moved;
+    return moved;
+}
+
+void Rook::rookMoved()
+{
+    this->moved = true;
 }
 
 void Rook::rookNotMoved()

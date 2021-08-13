@@ -48,34 +48,38 @@ list<Bishop::Index> Bishop::getCellsCanGo(Index index) const
   enum {UP_RIGHT, UP_LEFT, DOWN_RIGHT, DOWN_LEFT};
   // first North-East and so North-West and so South-East so South-West
   // delimeter is pair both is 100
+
+  //bishop has four directions to go
   for(int i = 0; i < 4; i++)
   {
     temp = index;
 
     bool in_range = true;
-    while(in_range)
-    { // 0:North-East 1:North-West 2:South-East 3:South-West
-      if(i == UP_RIGHT || i == UP_LEFT)
-        temp.first--;
-      else if(i == DOWN_RIGHT|| i == DOWN_LEFT)
-        temp.first++;
+    while (in_range) {
+        //up move
+        if (i == UP_RIGHT || i == UP_LEFT)
+            temp.first--;
 
-      if(i == UP_RIGHT || i == DOWN_RIGHT)
-        temp.second++;
-      else if(i == UP_LEFT|| i == DOWN_LEFT)
-        temp.second--;
+        //down move
+        else if (i == DOWN_RIGHT || i == DOWN_LEFT)
+            temp.first++;
 
-      try
-      {
-        checkRange(temp);
-      }
-      catch(invalid_argument &w)
-      {
-        in_range = false;
-        temp = Index(100, 100);
-      }
+        //right move
+        if (i == UP_RIGHT || i == DOWN_RIGHT)
+            temp.second++;
 
-      l.push_back(temp);
+        //left move
+        else if (i == UP_LEFT || i == DOWN_LEFT)
+            temp.second--;
+
+        try {
+            checkRange(temp);
+        } catch (out_of_range &w) {
+            in_range = false;
+            temp = Index(100, 100);
+        }
+
+        l.push_back(temp);
     }
   }
 

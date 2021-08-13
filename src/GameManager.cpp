@@ -18,7 +18,7 @@ using namespace std;
 
 GameManager *GameManager::game_manager = nullptr;
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ get
 
 GameManager *&GameManager::get(GameName name)
 {
@@ -28,14 +28,14 @@ GameManager *&GameManager::get(GameName name)
     return game_manager;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ GameManager
 
 GameManager::GameManager(GameName game_name)
 {
     setGameName(game_name);
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ Distructor
 
 GameManager::~GameManager()
 {
@@ -59,7 +59,7 @@ GameManager::~GameManager()
   chess_board = nullptr;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ startGame
 
 void GameManager::startGame()
 {
@@ -69,7 +69,7 @@ void GameManager::startGame()
   setChessBoardGame(ChessBoard::get(users[0], users[1]));
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ getCellState
 
 pair<vector<Chessman::Index>, vector<Chessman::Index>> GameManager::getCellState(
     Chessman::Index index)
@@ -106,7 +106,7 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> GameManager::getCellState
   return tempCellState;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ movePiece
 
 void GameManager::movePiece(Chessman::Index src, Chessman::Index dest, bool in_undo, bool isTemp)
 {
@@ -119,7 +119,6 @@ void GameManager::movePiece(Chessman::Index src, Chessman::Index dest, bool in_u
         if ((src.first == 1 && dest.first == 3) || (src.first == 6 && dest.first == 4)) {
             if (chess_board->getCell(src).getChessPieces()->getChessType() == Chessman::PAWN) {
                 this->allowEnpasan(dest);
-                qDebug() << "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBAllow en-passant";
             }
         } else {
             this->notAllowEnpasan();
@@ -178,8 +177,9 @@ void GameManager::movePiece(Chessman::Index src, Chessman::Index dest, bool in_u
         else if (temp_chess->getChessType() == Chessman::ROOK)
             dynamic_cast<Rook *>(temp_chess.get())->rookMoved();
 
-        //____________________________________________________ king rook move
+        //____________________________________________________ undo king rook move
         if (temp_chess->getChessType() == Chessman::KING && in_undo == true) {
+            qDebug() << "king rook undo";
             if (dest.second - src.second == 2) {
                 this->undo();
                 dynamic_cast<King *>(temp_chess.get())->kingNotMoved();
@@ -208,47 +208,49 @@ void GameManager::movePiece(Chessman::Index src, Chessman::Index dest, bool in_u
     }
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ setUser1
 
 void GameManager::setUser1(User::Name user1_name, User::Score user1_Pscore, User::Score user1_Nscore)
 {
     this->users[0] =  User::get(user1_name, User::Color::WHITE, user1_Pscore, user1_Nscore);
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ setUser2
 
 void GameManager::setUser2(User::Name user2_name, User::Score user2_Pscore, User::Score user2_Nscore)
 {
     this->users[1] = User::get(user2_name, User::Color::BLACK, user2_Pscore, user2_Nscore);
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ getUser1
 
 GameManager::GameUser GameManager::getUser1() const
 {
   return users[0];
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ getUser2
 
 GameManager::GameUser GameManager::getUser2() const
 {
   return users[1];
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ setChessBoardGame
 
 void GameManager::setChessBoardGame(const ChessBoardGame &chess_board)
 {
   this->chess_board = chess_board;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ getChessBoardGame
 
 GameManager::ChessBoardGame GameManager::getChessBoardGame() const
 {
   return chess_board;
 }
+
+//________________________________________________________________________________________________________  changeTurn
 
 void GameManager::changeTurn()
 {
@@ -258,33 +260,35 @@ void GameManager::changeTurn()
     setTurn(USER1);
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ setTurn
 
 void GameManager::setTurn(Turn turn)
 {
   this->turn = turn;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ getTurn
 
 GameManager::Turn GameManager::getTurn() const
 {
   return turn;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ setGameName
 
 void GameManager::setGameName(GameName game_name)
 {
   this->game_name = game_name;
 }
 
+//________________________________________________________________________________________________________  getGameName
+
 GameManager::GameName GameManager::getGameName() const
 {
   return game_name;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ convertOrderToString
 
 string GameManager::convertOrderToString(Chessman::Index src, Chessman::Index dest)
 {
@@ -306,7 +310,7 @@ string GameManager::convertOrderToString(Chessman::Index src, Chessman::Index de
   return temp;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ undo
 
 pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 {
@@ -318,8 +322,9 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 
     bool temp_enpasan = false;
     Chessman::Index temp_src;
-    if (temp.substr(0, 3) == "PRF") // promote
-    {
+
+    //________________________________ if a pawn has promoted
+    if (temp.substr(0, 3) == "PRF") {
         changeTurn();
         size_t pos = temp.find(" ");
         temp_src = convertIndexStringToIndexInt(temp.substr(pos + 1, 2));
@@ -337,8 +342,9 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         movements.pop();
 
         changeTurn();
-    } else if (temp.substr(0, 3) == "ENP") // Enpasan
-    {
+    }
+    //________________________________ if a pawn had en-passant
+    else if (temp.substr(0, 3) == "ENP") {
         temp_enpasan = true;
         temp_src = convertIndexStringToIndexInt(temp.substr(4, 2));
         Chessman::ID temp_id = temp.substr(6);
@@ -358,11 +364,13 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         movements.pop();
     }
 
+    //________________________________ return moved piece
     size_t pos = temp.find(" ");
     Chessman::Index src = convertIndexStringToIndexInt(temp.substr(pos + 1, 2));
     Chessman::Index dest = convertIndexStringToIndexInt(temp.substr(pos + 3, 2));
     this->movePiece(dest, src, true);
 
+    //________________________________ if hasn hit any chessmen
     if (temp.back() != 'N') {
         shared_ptr<Chessman> temp_chessman;
         if (turn == USER2) {
@@ -391,7 +399,7 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 
     return make_pair(src, dest);
 }
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ convertIndexStringToIndexInt
 
 Chessman::Index GameManager::convertIndexStringToIndexInt(string index) const
 {
@@ -404,7 +412,7 @@ Chessman::Index GameManager::convertIndexStringToIndexInt(string index) const
   throw invalid_argument("string must have 2 charachter and char #0 must between a, h");
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ getLastMove
 
 std::pair<Chessman::Index, Chessman::Index> GameManager::getLastMove()
 {
@@ -422,7 +430,7 @@ std::pair<Chessman::Index, Chessman::Index> GameManager::getLastMove()
   return make_pair(convertIndexStringToIndexInt(src), convertIndexStringToIndexInt(dest));
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ restartGame
 
 void GameManager::restartGame()
 {
@@ -448,7 +456,7 @@ void GameManager::restartGame()
   startGame();
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ endGame
 
 void GameManager::endGame()
 {
@@ -466,7 +474,7 @@ void GameManager::endGame()
     movements.pop();
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ randomMovements
 
 pair<bool, pair<Chessman::Index, Chessman::Index>> GameManager::randomMovements()
 {
@@ -495,7 +503,7 @@ pair<bool, pair<Chessman::Index, Chessman::Index>> GameManager::randomMovements(
   return make_pair(true, make_pair(temp_src, temp_dest));
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ extraMovements
 
 bool GameManager::extraMovements()
 {
@@ -514,7 +522,7 @@ bool GameManager::extraMovements()
   return false;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ isKingChecked
 
 bool GameManager::isKingChecked()
 {
@@ -526,7 +534,7 @@ bool GameManager::isKingChecked()
         .first;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ limit_cells_for_king_check
 
 void GameManager::limit_cells_for_king_check(Chessman::Index &src,
                                              std::vector<Chessman::Index> &canGo,
@@ -563,16 +571,16 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
     copy(tempCanHit.begin(), tempCanHit.end(), back_inserter(canHit));
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ analayzeGameStatus
+
+//game status will be analyzed after each move
 
 GameManager::GameStatus GameManager::analayzeGameStatus()
 {
     //search in all user chessmen
-    vector<shared_ptr<Chessman>> temp = users[turn]->getChessmansIn();
-    for (unsigned i = 0; i < temp.size(); i++) {
-        if (this->getCellState(this->chess_board->getIndex(temp[i]->getID())).first.size() != 0) {
-            qDebug() << this->getCellState(this->chess_board->getIndex(temp[i]->getID()))
-                            .first.size();
+    for (const auto &piece : users[turn]->getChessmansIn()) {
+        if (this->getCellState(this->chess_board->getIndex(piece->getID())).first.size() != 0) {
+            qDebug() << this->getCellState(this->chess_board->getIndex(piece->getID())).first.size();
 
             //if at the least one piece still can move
             return isKingChecked() ? GameStatus::CHECKED : GameStatus::NORMAL;
@@ -582,14 +590,14 @@ GameManager::GameStatus GameManager::analayzeGameStatus()
     return isKingChecked() ? GameStatus::CHECKMATE : GameStatus::STALEMATE;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ getWinnerIndex
 
 short unsigned GameManager::getWinnerIndex() const
 {
     return winnerIndex;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ promote
 
 void GameManager::promote(Chessman::Index index, Chessman::ChessType chess_type)
 {
@@ -643,14 +651,14 @@ void GameManager::promote(Chessman::Index index, Chessman::ChessType chess_type)
                  ((char)(97 + index.first)) + to_string(index.second));
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ allowEnpasan
 
 void GameManager::allowEnpasan(Enpasan enpasan)
 {
   this->enpasan = enpasan;
 }
 
-//________________________________________________________________________________________________________
+//________________________________________________________________________________________________________ notAllowEnpasan
 
 void GameManager::notAllowEnpasan()
 {

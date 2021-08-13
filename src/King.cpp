@@ -46,29 +46,34 @@ list<King::Index> King::getCellsCanGo(Index index) const
 
   list<Index> l;
 
-  if(moved == false) // if king not moved still this chessman can tow home moved for movements: KING-ROOK
+  if (moved == false) // if king not moved yet,can KING-ROOK
   {
-    l.push_back(make_pair(index.first, index.second + 2));
-    l.push_back(make_pair(index.first, index.second - 2));
+      l.push_back(make_pair(index.first, index.second + 2));
+      l.push_back(make_pair(index.first, index.second - 2));
   }
 
+  //(+)->up (-)->down
   for(int i = -1; i <= 1; i++)
   {
-    temp.first = index.first + i;
-    if(temp.first < 0 || temp.first > 7)
-      continue;
+      //up and down move
+      temp.first = index.first + i;
+      //check range
+      if (temp.first < 0 || temp.first > 7)
+          continue;
 
-    for(int j = -1; j <= 1; j++)
-    {
-      if(i == 0 && j == 0)
-        continue;
+      //(+)->right (-)->left
+      for (int j = -1; j <= 1; j++) {
+          //no move
+          if (i == 0 && j == 0)
+              continue;
 
-      temp.second = index.second + j;
-      if(temp.second < 0 || temp.second > 7)
-        continue;
+          //left and right move
+          temp.second = index.second + j;
+          if (temp.second < 0 || temp.second > 7)
+              continue;
 
-      l.push_back(temp);
-    }
+          l.push_back(temp);
+      }
   }
 
   return l;
