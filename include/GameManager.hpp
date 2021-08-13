@@ -79,7 +79,7 @@ public:
   //
   GameStatus analayzeGameStatus();
 
-  GameUser getWinner() const;
+  short unsigned getWinnerIndex() const;
 
   // Destructor
   ~GameManager();
@@ -100,7 +100,7 @@ public:
   GameName                game_name                               ;
   Movements               movements     = {}                      ;
   Enpasan                 enpasan       = std::make_pair(100, 100);
-  GameUser winner;
+  short unsigned winnerIndex = 2;
 };
 
 #endif /* end of include guard: GAMEMANAGER_H*/
