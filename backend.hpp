@@ -14,7 +14,7 @@ class BackEnd : public QObject
 
 private:
     //ChessBoard
-    int previewsSrc = -1;
+    int previewsSrc = -1; //for showing movements
     int srcIndex = -1;
     int destIndex = -1;
     bool _change = false;

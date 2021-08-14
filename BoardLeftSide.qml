@@ -135,12 +135,12 @@ Item {
                                 text: persian.checked ? "بازگشت" : "Undo"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
-                                width: undoRec.width * 0.8
-                                height: undoRec.height * 0.9
                                 textFormat: Text.StyledText
                                 fontSizeMode: Text.Fit
                                 minimumPixelSize: 3
                                 font.pixelSize: 15
+                                height: randomMove.height * 0.9
+                                width: randomMove.width * 0.9
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -168,6 +168,14 @@ Item {
                                 text: persian.checked ? "شروع مجدد" : "Restart"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
+                                textFormat: Text.StyledText
+                                fontSizeMode: Text.Fit
+                                minimumPixelSize: 3
+                                font.pixelSize: 15
+                                height: randomMove.height * 0.9
+                                width: randomMove.width * 0.9
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
                             }
                             onPressed: restartAlert.open()
                         }
@@ -196,12 +204,12 @@ Item {
                                 text: persian.checked ? "انصراف" : "Cancel"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
-                                width: cancelRec.width * 0.8
-                                height: cancelRec.height * 0.9
                                 textFormat: Text.StyledText
                                 fontSizeMode: Text.Fit
                                 minimumPixelSize: 3
                                 font.pixelSize: 15
+                                height: randomMove.height * 0.9
+                                width: randomMove.width * 0.9
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }

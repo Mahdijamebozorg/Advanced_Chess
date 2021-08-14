@@ -5,8 +5,8 @@ import QtQuick.Dialogs 1.2
 
 Dialog {
     id: endOfGame
-    title: persian.checked ? "پایان بازی" : "End of Game"
     height: parent.height * 0.17
+    title: persina.checked ? "پایان بازی" : "End of Game"
     width: parent.width * 0.3
 
     contentItem: Rectangle {
@@ -42,17 +42,22 @@ Dialog {
                 font.pixelSize: this.width * 0.1
                 Component.onCompleted: {
                     switch (bknd.winner()) {
+                        //user 1
                     case 0:
+                        endOfGame.title = persian.checked ? "کیش و مات" : "Checkmate"
                         this.text = persian.checked ? "برنده: " + bknd.getP1Name(
                                                           ) : "Winner: " + bknd.getP1Name()
                         break
+                        //user 2
                     case 1:
+                        endOfGame.title = persian.checked ? "کیش و مات" : "Checkmate"
                         this.text = persian.checked ? "برنده: " + bknd.getP2Name(
                                                           ) : "Winner: " + bknd.getP2Name()
                         break
+                        //draw
                     case 2:
+                        endOfGame.title = persian.checked ? "پات" : "Stalemate"
                         this.text = persian.checked ? "مساوی" : "Draw"
-                        endOfGame.title = persian.checked ? "مساوی" : "Draw"
                         break
                     }
                 }

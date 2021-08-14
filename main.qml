@@ -45,18 +45,18 @@ ApplicationWindow {
             anchors.fill: parent
 
             Switch {
-                text: persian.checked ? "صدا" : "Sound"
                 id: soundOn
+                text: persian.checked ? "صدا" : "Sound"
                 checked: true
             }
             Switch {
-                text: "پارسی"
                 id: persian
+                text: "پارسی"
                 checked: false
             }
             Switch {
-                text: persian.checked ? "تمام صفحه" : "FullScreen"
                 id: fullScreen
+                text: persian.checked ? "تمام صفحه" : "FullScreen"
                 checked: false
                 onCheckedChanged: {
                     this.checked ? window.showFullScreen() : window.showNormal()

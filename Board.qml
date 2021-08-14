@@ -216,13 +216,11 @@ Item {
 
             //STALEMATE
         case 2:
-            endOfGame.title = persian.checked ? "پات" : "Stalemate"
             endOfGame.open()
             break
 
             //CHECKMATE
         case 3:
-            endOfGame.title = persian.checked ? "کیش و مات" : "Checkmate"
             endOfGame.open()
             break
         }
