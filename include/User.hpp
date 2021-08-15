@@ -32,6 +32,7 @@ public:
   void  setNegativeScore(Score)      ;
   Score getNegativeScore(     ) const;
   Score incNegativeScore(Score)      ;
+  Score decNegativeScore(Score)      ;
 
   // initialize chessmans for start game
   void                      setChessmansIn (                     )      ;
@@ -69,8 +70,8 @@ public:
   // Normal Data member
   Name           name            ;
   Color          color           ;
-  Score          score           ;
-  Score          negative_score  ;
+  Score          score            = 0;
+  Score          negative_score   = 0;
   ChessmansIn    chessmans_in    ;
   ChessmansOut   chessmans_out   ;
   PawnsReachLast pawns_reach_last;

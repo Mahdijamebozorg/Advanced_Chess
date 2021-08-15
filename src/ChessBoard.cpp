@@ -106,51 +106,56 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> ChessBoard::getCanGo(Ches
 
       {
           //____________________________________________________ if En-passnat is allowed
-
           if (enpasan.first != 100 && enpasan.second != 100) {
               if (color == Chessman::WHITE) {
-                  if (list_cells.front().first == enpasan.first - 1
-                      && list_cells.front().second == enpasan.second)
+                  if ((list_cells.front().first == enpasan.first - 1) && (list_cells.front().second == enpasan.second)){
                       can_go.push_back(list_cells.front());
-                  else if ((++list_cells.begin())->first == enpasan.first - 1
-                           && (++list_cells.begin())->second == enpasan.second)
+                  }
+                  else if (((*(++list_cells.begin())).first == enpasan.first - 1) && ((*(++list_cells.begin())).second == enpasan.second)){
                       can_go.push_back(*(++list_cells.begin()));
+                  }
               } else {
-                  if (list_cells.front().first == enpasan.first + 1
-                      && list_cells.front().second == enpasan.second)
+                  if ((list_cells.front().first == enpasan.first + 1) && (list_cells.front().second == enpasan.second)) {
                       can_go.push_back(list_cells.front());
-                  else if ((++list_cells.begin())->first == enpasan.first + 1
-                           && (++list_cells.begin())->second == enpasan.second)
+                  }
+                  else if (((*(++list_cells.begin())).first == enpasan.first + 1) && ((*(++list_cells.begin())).second == enpasan.second)) {
                       can_go.push_back(*(++list_cells.begin()));
+                  }
               }
           }
 
           //--------------------- if En-passant is OK
           if (can_go.size() != 0)
+          {
               setEnpasan(index, can_go.front());
-
+          }
           list_cells.pop_front();
           list_cells.pop_front();
       }
-      if (!getCell(list_cells.front()).isFull()) {
-          //----------------------------- check first move for black pawn
-          if (color == Chessman::BLACK) {
+      //----------------------------- check first move for black pawn
+      if (color == Chessman::BLACK) {
+          if (index.first != 6) {
               if ((index.first != 1)
-                  || (getCell(make_pair(list_cells.front().first + 1, list_cells.front().second))
-                          .isFull())) {
-                  list_cells.pop_front();
-              }
-          }
-
-          //----------------------------- check first move for white pawn
-          else if (color == Chessman::WHITE) {
-              if ((index.first != 6)
                   || (getCell(make_pair(list_cells.front().first - 1, list_cells.front().second))
-                          .isFull())) {
+                          .isFull())
+                  || (getCell(list_cells.front()).isFull())) {
                   list_cells.pop_front();
               }
           }
       }
+
+      //----------------------------- check first move for white pawn
+      else if (color == Chessman::WHITE) {
+          if (index.first != 1) {
+              if ((index.first != 6)
+                  || (getCell(make_pair(list_cells.front().first + 1, list_cells.front().second))
+                          .isFull())
+                  || (getCell(list_cells.front()).isFull())) {
+                  list_cells.pop_front();
+              }
+          }
+      }
+
       for (auto &item : list_cells) {
           //-------------------- if there is a piece in canGo list
           if (getCell(item).isFull()) {
@@ -193,34 +198,29 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> ChessBoard::getCanGo(Ches
                               else
                                   temp.second--;
 
-                              if (temp.second == 7 || temp.second == 0) {
-                                  if (chess_board->getCell(temp).isFull())
+                              if(temp.second != 0 && temp.second != 7) {
+                                  //if there is a piece on the way
+                                  if(getCell(temp).isFull())
+                                      break;
 
-                                      //-----------------if rook is there
-                                      if (chess_board->getCell(temp).getChessPieces()->getChessType()
-                                          == Chessman::ROOK)
+                                  //if this cell is checked
+                                  if(isChecked(temp, color).first)
+                                      break;
+                              } else {
+                                  if(!getCell(temp).isFull())
+                                      break;
 
-                                          //-------------------------if rook is at first place
-                                          if (dynamic_cast<Rook *>(
-                                                  chess_board->getCell(temp).getChessPieces().get())
-                                                  ->getMoved()
-                                              == false) {
-                                              if (i == 0)
-                                                  can_go.push_back(list_cells.front()); // right
-                                              else
-                                                  can_go.push_back(*(++list_cells.begin())); // left
-                                          }
+                                  if(!(getCell(temp).getChessPieces()->getChessType() == Chessman::ROOK))
+                                     break;
 
-                                  break;
+                                  if(dynamic_cast<Rook*>(getCell(temp).getChessPieces().get())->getMoved())
+                                    break;
+
+                                  if (i == 0)
+                                      can_go.push_back(list_cells.front()); // right
+                                  else
+                                      can_go.push_back(*(++list_cells.begin())); // left
                               }
-
-                              //if there is a piece on the way
-                              if (chess_board->getCell(temp).isFull())
-                                  break;
-
-                              //if this cell is checked
-                              if (isChecked(temp, color).first)
-                                  break;
                           }
                       }
                   }
@@ -276,7 +276,6 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> ChessBoard::getCanGo(Ches
           }
       }
   }
-
   return make_pair(can_go, can_hit);
 }
 

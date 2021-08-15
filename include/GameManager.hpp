@@ -54,8 +54,7 @@ public:
   std::string convertOrderToString(Chessman::Index src, Chessman::Index dest);
 
   // convert Index string to index int
-  Chessman::Index                             convertIndexStringToIndexInt(std::string index) const;
-  std::pair<Chessman::Index, Chessman::Index> getLastMove(                                  )      ;
+  Chessman::Index convertIndexStringToIndexInt(std::string index) const;
 
   // Undo
   std::pair<Chessman::Index, Chessman::Index> undo(bool isTemp = false);
@@ -79,15 +78,24 @@ public:
   //
   GameStatus analayzeGameStatus();
 
-  short unsigned getWinnerIndex() const;
-
   // Destructor
   ~GameManager();
 
   // When Pawn reach to final cell
   void promote(Chessman::Index, Chessman::ChessType);
 
-  private:
+  // Score
+  User::Score calucateScoreMovePiece(Chessman::Index src, Chessman::Index dest);
+  void incScore(User::Score);
+  void deccScore(User::Score);
+  void incNegativeScore(User::Score);
+  void decNegativeScore(User::Score);
+
+  // Get Winner
+  int getWinner() const;
+
+
+private:
   // Construcotr is private for Singeleton Pattern
   GameManager(GameName          )         ;
   GameManager(const GameManager&) = delete; // Copy constructor
@@ -100,7 +108,6 @@ public:
   GameName                game_name                               ;
   Movements               movements     = {}                      ;
   Enpasan                 enpasan       = std::make_pair(100, 100);
-  short unsigned winnerIndex = 2;
 };
 
 #endif /* end of include guard: GAMEMANAGER_H*/

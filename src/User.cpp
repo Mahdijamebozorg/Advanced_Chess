@@ -237,3 +237,8 @@ shared_ptr<Chessman> User::removePawnsReach()
 
   return chessmans_in.back();
 }
+
+User::Score User::decNegativeScore(Score score)
+{
+    return this->negative_score -= score;
+}
