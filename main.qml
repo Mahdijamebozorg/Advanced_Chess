@@ -71,14 +71,6 @@ ApplicationWindow {
         anchors.fill: parent
     }
 
-    Dialog {
-        id: checked
-        title: persian.checked ? "کیش" : "Checked!"
-        Text {
-            text: persian.checkable ? "شما کیش شدید!" : "you're checked!"
-        }
-    }
-
     Audio {
         id: music
         autoLoad: true

@@ -15,9 +15,7 @@ void BackEnd::setGame(QString gameName)
 
 void BackEnd::startGame()
 {
-    qDebug() << " ##### before start game called ########";
     manager->startGame();
-    qDebug() << "******start game called*********";
 }
 
 //__________________________________________________________________________ restartGame
@@ -38,7 +36,6 @@ void BackEnd::endGame()
     previewsSrc = -1;
     srcIndex = -1;
     destIndex = -1;
-    qDebug() << "game ended";
 }
 
 //__________________________________________________________________________ i & j and index convertion
@@ -66,8 +63,7 @@ std::pair<unsigned, unsigned> indexToIJ(unsigned index)
 
 void BackEnd::setP1(QString P1Name)
 {
-    manager->setUser1(P1Name.QString::toStdString(), 100, 0);
-    qDebug() << "user 1 setted";
+    manager->setUser1(P1Name.QString::toStdString(), 0, 0);
 }
 
 //__________________________________________________________________________ setP2Name
@@ -75,7 +71,6 @@ void BackEnd::setP1(QString P1Name)
 void BackEnd::setP2(QString P2Name)
 {
     manager->setUser2(P2Name.QString::toStdString(), 0, 0);
-    qDebug() << "user 2 setted";
 }
 
 //__________________________________________________________________________ getGameName
@@ -131,9 +126,25 @@ QString BackEnd::getGameName()
 
 unsigned BackEnd::winner()
 {
-    return manager->getWinnerIndex();
+    return manager->getWinner();
 }
 
+//__________________________________________________________________________ random move
+
+bool BackEnd::checkRandomMove()
+{
+    if (manager->getTurn() == GameManager::USER1) {
+        if (manager->getUser1()->getNegativeScore() >= 15) {
+            manager->getUser1()->decNegativeScore(15);
+            this->randomMove();
+        }
+    } else {
+        if (manager->getUser2()->getNegativeScore() >= 15) {
+            manager->getUser2()->decNegativeScore(15);
+            this->randomMove();
+        }
+    }
+}
 //__________________________________________________________________________ getIcon
 
 QString BackEnd::getIcon(unsigned index)
@@ -145,8 +156,8 @@ QString BackEnd::getIcon(unsigned index)
 //__________________________________________________________________________ choose
 unsigned BackEnd::choose(unsigned index)
 {
-    qDebug() << "choosen: " << index;
-    qDebug() << "choosen: " << indexToIJ(index);
+    //    qDebug() << "choosen: " << index;
+    //    qDebug() << "choosen: " << indexToIJ(index);
 
     Chessman::Index src = indexToIJ(index);
     try {
@@ -267,11 +278,11 @@ QString BackEnd::getP2OutsIcon(unsigned index)
 
 bool BackEnd::move(unsigned index) noexcept
 {
-    qDebug() << "src: " << srcIndex;
-    qDebug() << "src: " << indexToIJ(srcIndex);
+    //    qDebug() << "src: " << srcIndex;
+    //    qDebug() << "src: " << indexToIJ(srcIndex);
 
-    qDebug() << "dest: " << index;
-    qDebug() << "dest: " << indexToIJ(index);
+    //    qDebug() << "dest: " << index;
+    //    qDebug() << "dest: " << indexToIJ(index);
 
     //unchoose
     if (cellState(index) == SELECTED) {
@@ -342,7 +353,7 @@ bool BackEnd::move(unsigned index) noexcept
 
     previewsSrc = srcIndex;
 
-    qDebug() << "moved from" << indexToIJ(srcIndex) << " to " << indexToIJ(destIndex);
+    //    qDebug() << "moved from" << indexToIJ(srcIndex) << " to " << indexToIJ(destIndex);
 
     if (!_extraMove)
         manager->changeTurn();

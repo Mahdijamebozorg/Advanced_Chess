@@ -4,7 +4,6 @@ import QtQuick.Controls 2.5
 Page {
     title: persian.checked ? "خوش آمدید" : "Wellcome"
     id: mainPage
-    anchors.fill: mystack
     background: Image {
         id: image
         source: "qrc:/Assets/Images/Main.jpg"

@@ -5,7 +5,6 @@ import QtQuick.Window 2.3
 Page {
     id: loginPage
     title: ""
-    anchors.fill: parent
     //Background
     background: Image {
         id: image

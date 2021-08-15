@@ -139,8 +139,8 @@ Item {
                                 fontSizeMode: Text.Fit
                                 minimumPixelSize: 3
                                 font.pixelSize: 15
-                                height: randomMove.height * 0.9
-                                width: randomMove.width * 0.9
+                                height: parent.height * 0.9
+                                width: parent.width * 0.9
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -172,8 +172,8 @@ Item {
                                 fontSizeMode: Text.Fit
                                 minimumPixelSize: 3
                                 font.pixelSize: 15
-                                height: randomMove.height * 0.9
-                                width: randomMove.width * 0.9
+                                height: parent.height * 0.9
+                                width: parent.width * 0.9
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }
@@ -208,8 +208,8 @@ Item {
                                 fontSizeMode: Text.Fit
                                 minimumPixelSize: 3
                                 font.pixelSize: 15
-                                height: randomMove.height * 0.9
-                                width: randomMove.width * 0.9
+                                height: parent.height * 0.9
+                                width: parent.width * 0.9
                                 horizontalAlignment: Text.AlignHCenter
                                 verticalAlignment: Text.AlignVCenter
                             }

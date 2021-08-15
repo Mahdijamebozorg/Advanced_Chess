@@ -5,8 +5,6 @@ import QtQuick.Window 2.3
 Page {
     id: gamePage
     title: persian.checked ? "صفحه ی بازی" : "Game Page"
-    anchors.fill: parent
-
     background: Image {
         source: "qrc:/Assets/Images/Wood2.jpg"
     }
@@ -34,7 +32,6 @@ Page {
         id: rightSide
         anchors.left: board.right
         anchors.leftMargin: 8
-        anchors.right: gamePage.right
         width: parent.width * 0.125
         height: board.height
         anchors.verticalCenter: board.verticalCenter

@@ -216,13 +216,13 @@ Item {
 
             //STALEMATE
         case 2:
-            endOfGame.open()
-            break
 
             //CHECKMATE
         case 3:
             endOfGame.open()
             break
         }
+        if (bknd.checkRandomMove())
+            mystack.replace("GamePage.qml")
     }
 }

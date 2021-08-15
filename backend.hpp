@@ -65,6 +65,8 @@ public slots:
 
     unsigned winner();
 
+    bool checkRandomMove();
+
     //________________________________________________________ board
     QString getIcon(unsigned index);
 
