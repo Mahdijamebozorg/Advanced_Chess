@@ -58,6 +58,7 @@ SOURCES       = backend.cpp \
 		src/Cell.cpp \
 		src/ChessBoard.cpp \
 		src/Chessman.cpp \
+		src/Filemanager.cpp \
 		src/GameManager.cpp \
 		src/King.cpp \
 		src/Knight.cpp \
@@ -72,6 +73,7 @@ OBJECTS       = backend.o \
 		Cell.o \
 		ChessBoard.o \
 		Chessman.o \
+		Filemanager.o \
 		GameManager.o \
 		King.o \
 		Knight.o \
@@ -282,18 +284,21 @@ DIST          = Images/Black/BBishop.png \
 		include/ChessBoard.hpp \
 		include/Chessman.hpp \
 		include/Exceptions.hpp \
+		include/Filemanager.hpp \
 		include/GameManager.hpp \
 		include/King.hpp \
 		include/Knight.hpp \
 		include/Pawn.hpp \
 		include/Queen.hpp \
 		include/Rook.hpp \
-		include/User.hpp backend.cpp \
+		include/User.hpp \
+		include/Filemanager.hpp backend.cpp \
 		main.cpp \
 		src/Bishop.cpp \
 		src/Cell.cpp \
 		src/ChessBoard.cpp \
 		src/Chessman.cpp \
+		src/Filemanager.cpp \
 		src/GameManager.cpp \
 		src/King.cpp \
 		src/Knight.cpp \
@@ -709,8 +714,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents backend.hpp include/Bishop.hpp include/Cell.hpp include/ChessBoard.hpp include/Chessman.hpp include/Exceptions.hpp include/GameManager.hpp include/King.hpp include/Knight.hpp include/Pawn.hpp include/Queen.hpp include/Rook.hpp include/User.hpp $(DISTDIR)/
-	$(COPY_FILE) --parents backend.cpp main.cpp src/Bishop.cpp src/Cell.cpp src/ChessBoard.cpp src/Chessman.cpp src/GameManager.cpp src/King.cpp src/Knight.cpp src/Pawn.cpp src/Queen.cpp src/Rook.cpp src/User.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents backend.hpp include/Bishop.hpp include/Cell.hpp include/ChessBoard.hpp include/Chessman.hpp include/Exceptions.hpp include/Filemanager.hpp include/GameManager.hpp include/King.hpp include/Knight.hpp include/Pawn.hpp include/Queen.hpp include/Rook.hpp include/User.hpp include/Filemanager.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents backend.cpp main.cpp src/Bishop.cpp src/Cell.cpp src/ChessBoard.cpp src/Chessman.cpp src/Filemanager.cpp src/GameManager.cpp src/King.cpp src/Knight.cpp src/Pawn.cpp src/Queen.cpp src/Rook.cpp src/User.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -769,8 +774,7 @@ qrc_qml.cpp: qml.qrc \
 		Assets/Images/Board.jpg \
 		Assets/Images/Login.jpg \
 		Assets/Images/wood1.jpeg \
-		Assets/Images/Wood2.jpg \
-		Assets/Musics/Johann_Johannsson_Flight_From_The_City_2021.mp3
+		Assets/Images/Wood2.jpg
 	/opt/Qt5.13.1/5.13.1/gcc_64/bin/rcc -name qml qml.qrc -o qrc_qml.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
@@ -788,6 +792,7 @@ moc_backend.cpp: backend.hpp \
 		include/Chessman.hpp \
 		include/ChessBoard.hpp \
 		include/Cell.hpp \
+		include/Filemanager.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
@@ -1264,6 +1269,7 @@ backend.o: backend.cpp backend.hpp \
 		include/Chessman.hpp \
 		include/ChessBoard.hpp \
 		include/Cell.hpp \
+		include/Filemanager.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
@@ -1725,6 +1731,7 @@ main.o: main.cpp backend.hpp \
 		include/Chessman.hpp \
 		include/ChessBoard.hpp \
 		include/Cell.hpp \
+		include/Filemanager.hpp \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
 		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
@@ -2264,11 +2271,79 @@ ChessBoard.o: src/ChessBoard.cpp include/ChessBoard.hpp \
 Chessman.o: src/Chessman.cpp include/Chessman.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Chessman.o src/Chessman.cpp
 
+Filemanager.o: src/Filemanager.cpp include/Filemanager.hpp \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/QDebug \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qdebug.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qalgorithms.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qglobal.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qconfig-bootstrapped.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qconfig.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qtcore-config.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qsystemdetection.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qprocessordetection.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qcompilerdetection.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qtypeinfo.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qsysinfo.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qlogging.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qflags.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qatomic.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qbasicatomic.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qatomic_bootstrap.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qgenericatomic.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qatomic_cxx11.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qatomic_msvc.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qglobalstatic.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qmutex.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qnumeric.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qversiontagging.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qhash.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qchar.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qiterator.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qlist.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qrefcount.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qarraydata.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qhashfunctions.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qstring.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qbytearray.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qnamespace.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qstringliteral.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qstringalgorithms.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qstringview.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qstringbuilder.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qpair.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qvector.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qpoint.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qbytearraylist.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qstringlist.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qregexp.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qstringmatcher.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qmap.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qtextstream.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qiodevice.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qobject.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qobjectdefs.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qobjectdefs_impl.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qcoreevent.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qscopedpointer.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qmetatype.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qvarlengtharray.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qcontainerfwd.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qobject_impl.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qlocale.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qvariant.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qshareddata.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qset.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qcontiguouscache.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qsharedpointer.h \
+		/opt/Qt5.13.1/5.13.1/gcc_64/include/QtCore/qsharedpointer_impl.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Filemanager.o src/Filemanager.cpp
+
 GameManager.o: src/GameManager.cpp include/GameManager.hpp \
 		include/User.hpp \
 		include/Chessman.hpp \
 		include/ChessBoard.hpp \
 		include/Cell.hpp \
+		include/Filemanager.hpp \
 		include/Bishop.hpp \
 		include/Exceptions.hpp \
 		include/King.hpp \

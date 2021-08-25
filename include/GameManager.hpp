@@ -4,6 +4,7 @@
 #include "User.hpp"
 
 #include "ChessBoard.hpp"
+#include "Filemanager.hpp"
 
 #include <stack>
 
@@ -24,6 +25,7 @@ public:
     static GameManager *&get(GameName name);
 
     //------------------------------------------------------------------------------------- game setup
+    void loadGame(std::string gameName);
     void startGame();
     void restartGame();
     void endGame();
@@ -107,6 +109,7 @@ private:
     GameName game_name;
     Movements movements = {};
     Enpasan enpasan = std::make_pair(100, 100);
+    FileManager fileManager;
 };
 
 #endif /* end of include guard: GAMEMANAGER_H*/

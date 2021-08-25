@@ -9,7 +9,7 @@ class Chessman
 public:
   // Type alias
   using ID        = std::string                                   ;
-  using Index     = std::pair<unsigned int, unsigned int>         ;
+  using Index = std::pair<unsigned int, unsigned int>;
   using Icon      = std::string                                   ;
 
   enum ChessType {PAWN, BISHOP, KNIGHT, ROOK, QUEEN, KING}; // for prevent from many dynamic_cast

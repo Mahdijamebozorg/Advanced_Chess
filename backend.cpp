@@ -501,4 +501,5 @@ void BackEnd::touchedPiece(GameManager::Turn turn)
     } else {
         manager->getUser2()->incNegativeScore(5);
     }
+    checkRandomMove();
 }

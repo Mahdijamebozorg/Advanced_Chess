@@ -20,6 +20,7 @@ SOURCES += \
         src/Cell.cpp \
         src/ChessBoard.cpp \
         src/Chessman.cpp \
+        src/Filemanager.cpp \
         src/Functions.cpp \
         src/GameManager.cpp \
         src/King.cpp \
@@ -27,7 +28,7 @@ SOURCES += \
         src/Pawn.cpp \
         src/Queen.cpp \
         src/Rook.cpp \
-        src/User.cpp
+        src/User.cpp \
 
 RESOURCES += \
     qml.qrc
@@ -86,10 +87,12 @@ HEADERS += \
     include/ChessBoard.hpp \
     include/Chessman.hpp \
     include/Exceptions.hpp \
+    include/Filemanager.hpp \
     include/GameManager.hpp \
     include/King.hpp \
     include/Knight.hpp \
     include/Pawn.hpp \
     include/Queen.hpp \
     include/Rook.hpp \
-    include/User.hpp
+    include/User.hpp \
+    include/filemanager.hpp

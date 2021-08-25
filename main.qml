@@ -71,40 +71,17 @@ ApplicationWindow {
         initialItem: "MainPage.qml"
         anchors.fill: parent
 
-        replaceEnter: Transition {
-            SequentialAnimation {
-                animations: [
-                    OpacityAnimator {
-                        from: 0
-                        to: 0
-                        duration: 400
-                    },
-                    OpacityAnimator {
-                        from: 1
-                        to: 1
-                        duration: 50
-                    }
-                ]
-            }
-        }
+        //opening page animation
+        replaceEnter: Transition {}
+        //exiting page animation
         replaceExit: Transition {
-            SequentialAnimation {
-                animations: [
-                    OpacityAnimator {
-                        from: 1
-                        to: 1
-                        duration: 400
-                    },
-                    OpacityAnimator {
-                        from: 0
-                        to: 0
-                        duration: 50
-                    }
-                ]
+            OpacityAnimator {
+                from: 1
+                to: 1
+                duration: 400
             }
         }
     }
-
     Audio {
         id: music
         autoLoad: true
