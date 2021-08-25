@@ -58,7 +58,7 @@ list<Pawn::Index> Pawn::getCellsCanGo(Index index) const
       temp.first = index.first - 1;
   }
 
-  //first move for black color
+  // first move for black color
 
   else {
       temp.second = index.second;

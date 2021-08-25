@@ -26,7 +26,6 @@ private:
   static size_t cnt        ;
          bool moved = false;
 
-  // set functinos
   virtual void setID();
 };
 

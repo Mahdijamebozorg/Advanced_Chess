@@ -56,7 +56,7 @@ list<King::Index> King::getCellsCanGo(Index index) const
   {
       //up and down move
       temp.first = index.first + i;
-      //check range
+      // check range
       if (temp.first < 0 || temp.first > 7)
           continue;
 

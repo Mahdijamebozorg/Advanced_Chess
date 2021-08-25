@@ -1,5 +1,4 @@
 #include "../include/GameManager.hpp"
-
 #include "../include/Bishop.hpp"
 #include "../include/Exceptions.hpp"
 #include "../include/King.hpp"
@@ -19,7 +18,7 @@ using namespace std;
 
 GameManager *GameManager::game_manager = nullptr;
 
-//________________________________________________________________________________________________________ get
+//_______________________________________________________________________________________________________ get
 
 GameManager *&GameManager::get(GameName name)
 {

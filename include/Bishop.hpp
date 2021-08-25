@@ -7,15 +7,14 @@ class Bishop : public Chessman
 
 {
 public:
-  // Constructor
-  Bishop(Color, Icon = "");
-  Bishop(const Bishop&   ); // Copy constructor
+    Bishop(Color, Icon = "");
+    Bishop(const Bishop &); // Copy constructor
 
-  // moves functinos
-  virtual std::list<Index> getCellsCanGo(Index) const;
+    // moves functinos
+    virtual std::list<Index> getCellsCanGo(Index) const;
 
-  // Set public functions
-  virtual void setIcon(Icon);
+    // Set public functions
+    virtual void setIcon(Icon);
 
 
 private:

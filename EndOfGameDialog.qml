@@ -5,8 +5,8 @@ import QtQuick.Dialogs 1.2
 
 Dialog {
     id: endOfGame
+    title: persian.checked ? "پایان بازی" : "End of Game"
     height: parent.height * 0.17
-    title: persina.checked ? "پایان بازی" : "End of Game"
     width: parent.width * 0.3
 
     contentItem: Rectangle {
@@ -41,24 +41,47 @@ Dialog {
                 width: parent.width - 2
                 font.pixelSize: this.width * 0.1
                 Component.onCompleted: {
-                    switch (bknd.winner()) {
-                        //user 1
-                    case 0:
-                        endOfGame.title = persian.checked ? "کیش و مات" : "Checkmate"
-                        this.text = persian.checked ? "برنده: " + bknd.getP1Name(
-                                                          ) : "Winner: " + bknd.getP1Name()
-                        break
-                        //user 2
-                    case 1:
-                        endOfGame.title = persian.checked ? "کیش و مات" : "Checkmate"
-                        this.text = persian.checked ? "برنده: " + bknd.getP2Name(
-                                                          ) : "Winner: " + bknd.getP2Name()
-                        break
-                        //draw
+
+                    bknd.cellState(0)
+                    //------------------------------------------------------------------ title
+                    switch (bknd.gameStatus()) {
                     case 2:
                         endOfGame.title = persian.checked ? "پات" : "Stalemate"
-                        this.text = persian.checked ? "مساوی" : "Draw"
                         break
+                    case 3:
+                        endOfGame.title = persian.checked ? "کیش و مات" : "Checkmate"
+                        break
+                    }
+
+                    //------------------------------------------------------------------ text
+                    // winner : user 1
+                    if (bknd.winner() === 0)
+                        this.text = persian.checked ? "برنده: " + bknd.getP1Name(
+                                                          ) : "Winner: " + bknd.getP1Name()
+
+                    // winner : user 2
+                    else if (bknd.winner() === 1)
+                        this.text = persian.checked ? "برنده: " + bknd.getP2Name(
+                                                          ) : "Winner: " + bknd.getP2Name()
+                    // draw
+                    else if (bknd.getCanceler() === 2 && bknd.winner() === 2)
+                        this.text = persian.checked ? "مساوی" : "Draw"
+                }
+                Connections {
+                    target: bknd
+                    onCancel: {
+                        endOfGame.title = persian.checked ? "تسلیم" : "Surrend"
+                        // winner : user 1
+                        if (bknd.getCanceler() === 1)
+                            endGameText.text
+                                    = persian.checked ? "برنده: " + bknd.getP1Name(
+                                                            ) : "Winner: " + bknd.getP1Name()
+
+                        // winner : user 2
+                        else if (bknd.getCanceler() === 0)
+                            endGameText.text
+                                    = persian.checked ? "برنده: " + bknd.getP2Name(
+                                                            ) : "Winner: " + bknd.getP2Name()
                     }
                 }
             }
@@ -91,12 +114,11 @@ Dialog {
                 height: parent.height
                 font.pixelSize: this.width * 0.1
                 onClicked: {
-                    endOfGame.close()
-                    bknd.endGame()
                     mystack.pop()
+                    bknd.endGame()
+                    endOfGame.close()
                     window.width = Screen.width * 0.5
                     window.height = Screen.height * 0.75
-                    fullScreen.checked = false
                 }
             }
             Button {

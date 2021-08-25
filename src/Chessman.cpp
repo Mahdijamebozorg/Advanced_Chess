@@ -1,5 +1,4 @@
 #include "../include/Chessman.hpp"
-
 #include <stdexcept>
 
 using namespace std;
@@ -16,8 +15,7 @@ Chessman::Chessman(const Chessman & chessman)
   setColor(chessman.getColor());
 }
 
-Chessman::~Chessman()
-{}
+Chessman::~Chessman() {}
 
 Chessman::ChessType Chessman::getChessType() const
 {

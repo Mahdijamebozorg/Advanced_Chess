@@ -16,7 +16,6 @@ public:
   // Static member functinos for Singeleton pattern
   static ChessBoard*& get(User*, User*);
 
-  // Destructor
   ~ChessBoard();
 
   // CanGo functions

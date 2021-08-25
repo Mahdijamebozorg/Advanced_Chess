@@ -6,7 +6,6 @@
 class Rook : public Chessman
 {
 public:
-  // Constructor
   Rook(Color, Icon = "");
   Rook(const Rook&     ); // Copy constructor
 

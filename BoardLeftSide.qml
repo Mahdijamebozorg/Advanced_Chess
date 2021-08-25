@@ -6,6 +6,10 @@ import QtQuick.Window 2.3
 Item {
     id: left
 
+    EndOfGameDialog {
+        id: endOfGame
+    }
+
     Dialog {
         id: cancelAlert
         title: persian.checked ? "آیا مطمعنید؟" : "Are you sure?"
@@ -15,13 +19,10 @@ Item {
         }
         standardButtons: Dialog.Ok | Dialog.Cancel
         onAccepted: {
-            bknd.endGame()
-            mystack.pop()
-            window.width = Screen.width * 0.5
-            window.height = Screen.height * 0.75
-            fullScreen.checked = false
+            bknd.setCanceler()
+            endOfGame.open()
         }
-        onRejected: cancelalert.close()
+        onRejected: cancelAlert.close()
     }
     Dialog {
         id: restartAlert
@@ -129,7 +130,7 @@ Item {
                             flat: true
                             onClicked: {
                                 bknd.undo()
-                                mystack.replace("GamePage.qml")
+                                //                                mystack.replace("GamePage.qml")
                             }
                             Text {
                                 text: persian.checked ? "بازگشت" : "Undo"

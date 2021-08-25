@@ -6,7 +6,6 @@
 class Knight : public Chessman
 {
 public:
-  // Constructor
   Knight(Color, Icon = "");
   Knight(const Knight&   ); // Copy constructor
 
@@ -16,8 +15,7 @@ public:
   // Set public functions
   virtual void setIcon(Icon);
 
-private:
-  // Data member
+  private:
   static size_t cnt;
 
   // set functinos

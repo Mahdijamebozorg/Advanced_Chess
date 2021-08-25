@@ -31,10 +31,16 @@ Item {
 
                     //outs icons
                     Image {
+                        id: image
                         anchors.centerIn: parent
                         source: bknd.getP2OutsIcon(index)
                         width: topCell.width * 0.78
                         height: topCell.height * 0.8
+                        NumberAnimation on opacity {
+                            duration: 600
+                            from: 0
+                            to: 1
+                        }
                     }
                 }
             }

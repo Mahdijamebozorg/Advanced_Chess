@@ -8,6 +8,7 @@ ApplicationWindow {
     visible: true
     width: Screen.width * 0.5
     height: Screen.height * 0.75
+    Component.onCompleted: window.showFullScreen()
     minimumHeight: 700
     minimumWidth: 700
     title: persian.checked ? "شطرنج پیشرفته" : "Advanced Chess"
@@ -57,7 +58,7 @@ ApplicationWindow {
             Switch {
                 id: fullScreen
                 text: persian.checked ? "تمام صفحه" : "FullScreen"
-                checked: false
+                checked: true
                 onCheckedChanged: {
                     this.checked ? window.showFullScreen() : window.showNormal()
                 }
@@ -69,6 +70,39 @@ ApplicationWindow {
         id: mystack
         initialItem: "MainPage.qml"
         anchors.fill: parent
+
+        replaceEnter: Transition {
+            SequentialAnimation {
+                animations: [
+                    OpacityAnimator {
+                        from: 0
+                        to: 0
+                        duration: 400
+                    },
+                    OpacityAnimator {
+                        from: 1
+                        to: 1
+                        duration: 50
+                    }
+                ]
+            }
+        }
+        replaceExit: Transition {
+            SequentialAnimation {
+                animations: [
+                    OpacityAnimator {
+                        from: 1
+                        to: 1
+                        duration: 400
+                    },
+                    OpacityAnimator {
+                        from: 0
+                        to: 0
+                        duration: 50
+                    }
+                ]
+            }
+        }
     }
 
     Audio {
@@ -79,6 +113,16 @@ ApplicationWindow {
             playbackMode: Playlist.Loop
             PlaylistItem {
                 source: "qrc:/Assets/Musics/Johann_Johannsson_Flight_From_The_City_2021.mp3"
+            }
+        }
+    }
+    Audio {
+        id: moveSound
+        autoLoad: true
+        autoPlay: false
+        playlist: Playlist {
+            PlaylistItem {
+                source: "qrc:/Assets/Sound_Effects/move.mp3"
             }
         }
     }

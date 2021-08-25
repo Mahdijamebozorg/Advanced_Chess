@@ -8,7 +8,6 @@
 class Cell
 {
 public:
-    // Type alias
     using ChessPieces = std::shared_ptr<Chessman>;
 
     enum Color { WHITE, BLACK };

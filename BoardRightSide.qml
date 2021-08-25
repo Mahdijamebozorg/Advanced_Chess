@@ -134,6 +134,7 @@ Item {
                         }
                         Text {
                             id: p2NegativeScore
+                            text: bknd.getP2_NScore()
                             horizontalAlignment: Text.AlignHCenter
                             height: scores2Rec.height * 0.18
                             width: scores2Rec.width * 0.6
@@ -141,7 +142,6 @@ Item {
                             fontSizeMode: Text.Fit
                             minimumPixelSize: 2
                             font.pixelSize: 15
-                            text: bknd.getP2_NScore()
                             color: "#e2d29d"
                             anchors.horizontalCenter: score2Col.horizontalCenter
                         }
@@ -309,8 +309,7 @@ Item {
                             anchors.fill: parent
                             flat: true
                             onClicked: {
-                                if (bknd.randomMove())
-                                    mystack.replace("GamePage.qml")
+                                bknd.randomMove()
                             }
                             Text {
                                 text: persian.checked ? "حرکت تصادفی" : "Random Move"

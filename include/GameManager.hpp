@@ -2,6 +2,7 @@
 #define GAMEMANAGER_H
 
 #include "User.hpp"
+
 #include "ChessBoard.hpp"
 
 #include <stack>

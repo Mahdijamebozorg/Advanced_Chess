@@ -20,7 +20,6 @@ public:
   // get and set functions for make Singleton pattern
   static User*& get(Name, Color, Score positive_score = 0, Score negative_score = 0);
 
-  // set and get functions
   void  setName         (Name )      ;
   Name  getName         (     ) const;
   void  setColor        (Color)      ;

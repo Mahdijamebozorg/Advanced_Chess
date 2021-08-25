@@ -12,7 +12,6 @@ Page {
     }
 
     children: [
-
         //P1 Name
         TextField {
             id: player1

@@ -5,6 +5,7 @@
 #include <vector>
 #include <QDebug>
 #include <QObject>
+#include <QPair>
 #include <QString>
 #include <QtQuick>
 
@@ -20,6 +21,8 @@ private:
     bool _change = false;
     bool _extraMove = false;
     bool _touchedPiece = false;
+    bool _moved = false;
+    short unsigned _canceler = 2;
     void touchedPiece(GameManager::Turn);
 
     std::unique_ptr<GameManager> manager = std::unique_ptr<GameManager>(GameManager::get("game"));
@@ -65,7 +68,11 @@ public slots:
 
     unsigned winner();
 
-    bool checkRandomMove();
+    void checkRandomMove();
+
+    void setCanceler();
+
+    unsigned getCanceler();
 
     //________________________________________________________ board
     QString getIcon(unsigned index);
@@ -74,7 +81,22 @@ public slots:
 
     bool isMoved(unsigned index);
 
+    unsigned getSrcI();
+
+    unsigned getSrcJ();
+
+    unsigned getDestI();
+
+    unsigned getDestJ();
+
+    unsigned getSrcIndex();
+
+    unsigned getDestIndex();
+
+    //    QString getHitPiece();
+
     //__________________________________________________________ movement
+
     bool canHit(unsigned index, std::vector<std::pair<unsigned int, unsigned int>> bkndcanGo);
 
     bool canGo(unsigned index, std::vector<std::pair<unsigned int, unsigned int>> bkndcanGo);
@@ -93,7 +115,7 @@ public slots:
 
     bool extraMove();
 
-    bool randomMove();
+    void randomMove();
 
     void promote(unsigned type);
 
@@ -101,9 +123,13 @@ signals:
 
     void choosen();
 
+    void moved();
+
     void unchoosen();
 
     void promotion();
+
+    void cancel();
 };
 
 std::pair<unsigned, unsigned> indexToIJ(unsigned index);

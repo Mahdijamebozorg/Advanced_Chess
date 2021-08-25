@@ -126,12 +126,13 @@ QString BackEnd::getGameName()
 
 unsigned BackEnd::winner()
 {
+    //    qDebug() << "winner: " << manager->getWinner();
     return manager->getWinner();
 }
 
 //__________________________________________________________________________ random move
 
-bool BackEnd::checkRandomMove()
+void BackEnd::checkRandomMove()
 {
     if (manager->getTurn() == GameManager::USER1) {
         if (manager->getUser1()->getNegativeScore() >= 15) {
@@ -145,6 +146,22 @@ bool BackEnd::checkRandomMove()
         }
     }
 }
+
+//__________________________________________________________________________ setCanceler
+
+void BackEnd::setCanceler()
+{
+    this->_canceler = manager->getTurn();
+    emit cancel();
+}
+
+//__________________________________________________________________________ getCanceler
+
+unsigned BackEnd::getCanceler()
+{
+    return this->_canceler;
+}
+
 //__________________________________________________________________________ getIcon
 
 QString BackEnd::getIcon(unsigned index)
@@ -223,12 +240,59 @@ unsigned BackEnd::cellState(unsigned index)
 
 bool BackEnd::isMoved(unsigned index)
 {
-    if (srcIndex != -1 && destIndex != -1)
-        if (index == (unsigned) previewsSrc || index == (unsigned) destIndex)
+    if (previewsSrc != -1 && destIndex != -1)
+        if (index == previewsSrc || index == destIndex)
             return true;
 
     return false;
 }
+
+//__________________________________________________________________________ getSrcI
+
+unsigned BackEnd::getSrcI()
+{
+    return indexToIJ(previewsSrc).first;
+}
+
+//__________________________________________________________________________ getSrcJ
+
+unsigned BackEnd::getSrcJ()
+{
+    return indexToIJ(previewsSrc).second;
+}
+
+//__________________________________________________________________________ getDestI
+
+unsigned BackEnd::getDestI()
+{
+    return indexToIJ(destIndex).first;
+}
+
+//__________________________________________________________________________ getDestJ
+
+unsigned BackEnd::getDestJ()
+{
+    return indexToIJ(destIndex).second;
+}
+
+//__________________________________________________________________________ getSrcIndex
+
+unsigned BackEnd::getSrcIndex()
+{
+    return this->previewsSrc;
+}
+
+//__________________________________________________________________________ getDestIndex
+
+unsigned BackEnd::getDestIndex()
+{
+    return this->destIndex;
+}
+
+//QString BackEnd::getHitPiece()
+//{
+//    return QString::fromStdString(manager->getHitPiece());
+//}
 
 //__________________________________________________________________________ unchoosePiece
 
@@ -288,12 +352,12 @@ bool BackEnd::move(unsigned index) noexcept
     if (cellState(index) == SELECTED) {
         //if user have chosen a moveable piece for first time in this turn
         if (!_touchedPiece)
-            //            //if piece is moveable
-            //            if (!srcState.first.empty()) {
-            //                _touchedPiece = true;
-            //                this->touchedPiece(manager->getTurn());
-            //            }
-            return false;
+            //if piece is moveable
+            if (!srcState.first.empty()) {
+                _touchedPiece = true;
+                this->touchedPiece(manager->getTurn());
+            }
+        return false;
     }
 
     //___________________________change choosen piece
@@ -309,13 +373,13 @@ bool BackEnd::move(unsigned index) noexcept
                    ->getColor()) {
             _change = true;
 
-            //            //if user have chosen a moveable piece for first time in this turn
-            //            if (!_touchedPiece)
-            //                //if piece is moveable
-            //                if (!srcState.first.empty()) {
-            //                    _touchedPiece = true;
-            //                    this->touchedPiece(manager->getTurn());
-            //                }
+            //if user have chosen a moveable piece for first time in this turn
+            if (!_touchedPiece)
+                //if piece is moveable
+                if (!srcState.first.empty()) {
+                    _touchedPiece = true;
+                    this->touchedPiece(manager->getTurn());
+                }
 
             emit unchoosen();
             choose(index);
@@ -330,7 +394,8 @@ bool BackEnd::move(unsigned index) noexcept
 
     try {
         destIndex = index;
-        manager->movePiece(indexToIJ(srcIndex), indexToIJ(destIndex));
+        manager->checkMove(indexToIJ(srcIndex), indexToIJ(destIndex));
+        manager->setMove(indexToIJ(srcIndex), indexToIJ(destIndex));
     }
 
     catch (ImpossibleHitKing &s) {
@@ -343,6 +408,7 @@ bool BackEnd::move(unsigned index) noexcept
         emit promotion();
         _change = true;
         previewsSrc = srcIndex;
+        manager->setMove(indexToIJ(srcIndex), indexToIJ(destIndex));
         return false;
     }
 
@@ -363,6 +429,9 @@ bool BackEnd::move(unsigned index) noexcept
     //Turn changed
     _touchedPiece = false;
 
+    //    emit unchoosen();
+    this->_moved = true;
+    emit moved();
     return true;
 }
 
@@ -374,7 +443,7 @@ void BackEnd::undo()
     previewsSrc = IJToIndex(back.first);
     destIndex = IJToIndex(back.second);
 
-    emit unchoosen();
+    emit moved();
 }
 
 //__________________________________________________________________________ extraMove
@@ -389,32 +458,30 @@ bool BackEnd::extraMove()
 
 //__________________________________________________________________________ random Move
 
-bool BackEnd::randomMove()
+void BackEnd::randomMove()
 {
-    pair<bool, pair<Chessman::Index, Chessman::Index>> temp;
+    pair<Chessman::Index, Chessman::Index> temp;
 
     try {
         temp = manager->randomMovements();
+
+        previewsSrc = (int) IJToIndex(temp.first);
+        destIndex = (int) IJToIndex(temp.second);
+
+        manager->changeTurn();
+        emit moved();
     }
 
     catch (exception &s) {
         qDebug() << s.what();
-        return false;
     }
-
-    if (temp.first) { //if moved
-        previewsSrc = (int) IJToIndex(temp.second.first);
-        destIndex = (int) IJToIndex(temp.second.second);
-        manager->changeTurn();
-        return true;
-    } else
-        return false;
 }
 
 //__________________________________________________________________________ promote
 void BackEnd::promote(unsigned type)
 {
     manager->promote(indexToIJ(destIndex), (Chessman::ChessType) type);
+    emit moved();
     manager->changeTurn();
 }
 
@@ -426,12 +493,12 @@ unsigned BackEnd::gameStatus()
     return manager->analayzeGameStatus();
 }
 
-////__________________________________________________________________________ touched piece
-//void BackEnd::touchedPiece(GameManager::Turn turn)
-//{
-//    if (turn == GameManager::USER1) {
-//        manager->getUser1()->incNegativeScore(5);
-//    } else {
-//        manager->getUser2()->incNegativeScore(5);
-//    }
-//}
+//__________________________________________________________________________ touched piece
+void BackEnd::touchedPiece(GameManager::Turn turn)
+{
+    if (turn == GameManager::USER1) {
+        manager->getUser1()->incNegativeScore(5);
+    } else {
+        manager->getUser2()->incNegativeScore(5);
+    }
+}

@@ -53,33 +53,32 @@ list<Queen::Index> Queen::getCellsCanGo(Index index) const
     bool in_range = true;
     while(in_range)
     {
-      if(i < 4) // if not cross move
-      {
-        // first right chessman push in list so left so up and so down delimeter
-        // delimeter is pair that first and second equal 100
-        if(i == RIGHT)  // 0:Right 1:Left 2:UP 3:Down
-          temp.second++;
-        else if(i == LEFT)
-          temp.second--;
-        else if(i == UP)
-          temp.first--;
-        else if(i == DOWN)
-          temp.first++;
-      }
-      else // if cross move
-      {
-        // first North-East and so North-West and so South-East so Douth-West
-        // delimeter is pair both is 100
-        if(i == UP_RIGHT || i == UP_LEFT) // 4:North-East 5:North-West 6:South-East 7:South-West
-          temp.first--;
-        else if( i == DOWN_RIGHT || i == DOWN_LEFT)
-          temp.first++;
+        if (i < 4) //if not cross move
+        {
+            // first right chessman push in list so left so up and so down delimeter
+            // delimeter is pair that first and second equal 100
+            if (i == RIGHT) // 0:Right 1:Left 2:UP 3:Down
+                temp.second++;
+            else if (i == LEFT)
+                temp.second--;
+            else if (i == UP)
+                temp.first--;
+            else if (i == DOWN)
+                temp.first++;
+        } else // if cross move
+        {
+            // first North-East and so North-West and so South-East so Douth-West
+            // delimeter is pair both is 100
+            if (i == UP_RIGHT || i == UP_LEFT) // 4:North-East 5:North-West 6:South-East 7:South-West
+                temp.first--;
+            else if (i == DOWN_RIGHT || i == DOWN_LEFT)
+                temp.first++;
 
-        if(i == UP_RIGHT || i == DOWN_RIGHT)
-          temp.second++;
-        else if( i == UP_LEFT || i == DOWN_LEFT)
-          temp.second--;
-      }
+            if (i == UP_RIGHT || i == DOWN_RIGHT)
+                temp.second++;
+            else if (i == UP_LEFT || i == DOWN_LEFT)
+                temp.second--;
+        }
 
       try
       {

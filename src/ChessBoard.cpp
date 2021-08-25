@@ -42,7 +42,7 @@ ChessBoard::~ChessBoard()
   }
 }
 
-//___________________________________________________________________________________________________ set cells in game start
+//__________________________________________________________________________________________________ set cells in game start
 
 // member functinos
 void ChessBoard::setCells(User::ChessmansIn white_chessman, User::ChessmansIn black_chessman)

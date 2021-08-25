@@ -5,7 +5,7 @@ using namespace std;
 Cell::Cell()
 {
   setChessPieces(nullptr);
-  setColor      (BLACK  );
+  setColor(BLACK);
 }
 
 Cell::Cell(Color color, const ChessPieces& chess_pieces)

@@ -36,6 +36,11 @@ Item {
                         source: bknd.getP1OutsIcon(index)
                         width: bottomCell.width * 0.8
                         height: bottomCell.height * 0.8
+                        NumberAnimation on opacity {
+                            duration: 600
+                            from: 0
+                            to: 1
+                        }
                     }
                 }
             }

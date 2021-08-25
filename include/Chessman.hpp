@@ -15,7 +15,6 @@ public:
   enum ChessType {PAWN, BISHOP, KNIGHT, ROOK, QUEEN, KING}; // for prevent from many dynamic_cast
   enum Color     {WHITE, BLACK}                           ;
 
-  // Constructor
   Chessman(Color           );
   Chessman(const Chessman &); // Copy constructor
 

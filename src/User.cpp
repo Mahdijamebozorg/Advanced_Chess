@@ -111,6 +111,7 @@ User::Score User::operator-=(Score score)
     return this->score -= score;
 }
 
+//set for start game
 void User::setChessmansIn()
 {
   chessmans_in.push_back(shared_ptr<Chessman>(new Rook  (color)));

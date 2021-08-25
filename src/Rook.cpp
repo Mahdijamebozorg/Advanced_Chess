@@ -39,43 +39,40 @@ void Rook::setID()
 
 list<Rook::Index> Rook::getCellsCanGo(Index index) const
 {
-  checkRange(index); // Checked range index
+    checkRange(index); //Checked range index
 
-  Index temp;
-  list<Index> l;
+    Index temp;
+    list<Index> l;
 
-  enum {RIGHT = 0, LEFT, UP, DOWN};
-  // first right chessman push in list so left so up and so down delimeter
-  // delimeter is pair that first and second equal 100
-  for(int i = 0; i < 4; i++)
-  {
-    temp = index;
+    enum { RIGHT = 0, LEFT, UP, DOWN };
+    // first right chessman push in list so left so up and so down delimeter
+    // delimeter is pair that first and second equal 100
+    for (int i = 0; i < 4; i++) {
+        temp = index;
 
-    bool in_range = true;
-    while(in_range)
-    {
-      if(i == RIGHT)
-        temp.second++;
+        bool in_range = true;
+        while (in_range) {
+            if (i == RIGHT)
+                temp.second++;
 
-      else if(i == LEFT)
-        temp.second--;
+            else if (i == LEFT)
+                temp.second--;
 
-      else if(i == UP)
-        temp.first--;
+            else if (i == UP)
+                temp.first--;
 
-      else if(i == DOWN)
-        temp.first++;
+            else if (i == DOWN)
+                temp.first++;
 
-      try
-      {
-        checkRange(temp);
-      } catch (out_of_range &w) {
-          in_range = false;
-          temp = Index(100, 100);
-      }
+            try {
+                checkRange(temp);
+            } catch (out_of_range &w) {
+                in_range = false;
+                temp = Index(100, 100);
+            }
 
-      l.push_back(temp);
-    }
+            l.push_back(temp);
+        }
   }
 
   return l;

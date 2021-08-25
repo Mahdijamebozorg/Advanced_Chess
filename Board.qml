@@ -61,7 +61,6 @@ Item {
                 width: src.width / 8
                 height: src.height / 8
                 border.width: bknd.isMoved(index) ? 3.4 : 0.5
-
                 border.color: bknd.isMoved(index) ? "#42e7ac" : "black"
                 color: "#00000000"
 
@@ -156,14 +155,79 @@ Item {
 
                 //Chessmen icons
                 Image {
+
                     id: chessmanIcon
                     source: bknd.getIcon(index)
-                    anchors.centerIn: parent
                     width: parent.width * 0.95
                     height: parent.height * 0.95
-                }
-            }
-        }
+
+                    //_____________________moving animations
+                    OpacityAnimator {
+                        id: destOpasity
+                        target: chessmanIcon
+                        duration: 400
+                        from: 1
+                        to: 0
+                    }
+                    ParallelAnimation {
+                        id: anim
+                        animations: [
+                            NumberAnimation {
+                                id: pieceXAnim
+                                target: chessmanIcon
+                                property: "x"
+                                from: chessmanIcon.x
+                                duration: 400
+                            },
+                            NumberAnimation {
+                                id: pieceYAnim
+                                target: chessmanIcon
+                                property: "y"
+                                from: chessmanIcon.y
+                                duration: 400
+                            }
+                        ]
+
+                        onStopped: {
+                            moveSound.play()
+                            mystack.replace("GamePage.qml")
+                        }
+                    }
+                    Connections {
+                        target: bknd
+                        onMoved: {
+
+                            //____________________________________________________ unchoose
+                            srcCell.visible = true
+                            dest.visible = false
+                            cellRec.color = "#00000000"
+
+                            //Heighlight passed cells
+                            cellRec.border.color = bknd.isMoved(
+                                        index) ? "#42e7ac" : "balck"
+
+                            cellRec.border.width = bknd.isMoved(
+                                        index) ? 3.4 : 0.5
+
+                            //___________________________________________________ animations
+                            if (bknd.getDestIndex() === index)
+                                destOpasity.start()
+
+                            //did not word
+                            //                            if (chessmanIcon.source === bknd.getHitPiece())
+                            //                                mystack.pop()
+                            if (bknd.getSrcIndex() === index) {
+                                pieceXAnim.to = (bknd.getDestJ() - bknd.getSrcJ(
+                                                     )) * cellRec.width
+                                pieceYAnim.to = (bknd.getDestI() - bknd.getSrcI(
+                                                     )) * cellRec.height
+                                anim.start()
+                            }
+                        }
+                    }
+                } //Image End
+            } //CellRec End
+        } //GridView End
 
         //New grid buttons for move destination
         GridView {
@@ -181,30 +245,34 @@ Item {
             model: 64
 
             //Content
-            delegate: Button {
-                id: destCell
+            delegate: Rectangle {
+                color: "#00000000"
                 width: dest.width / 8
                 height: dest.height / 8
-                flat: true
-                onClicked: {
-                    //If piece can go there
-                    if (bknd.move(index))
-                        mystack.replace("GamePage.qml")
-                    //If piece can't go to dest and dest is not its current cell
-                    else if (!bknd.unchoosePiece(index)) {
-                        errText.text
-                                = persian.checked ? "نمیتوان به آنجا رفت!" : "Can't move there!"
-                        wrongChoose.open()
+                Button {
+                    id: destCell
+                    anchors.fill: parent
+                    flat: true
+                    onClicked: {
+                        //If piece can go there
+                        if (bknd.move(index)) {
+
+                        } //If piece can't go to dest and dest is not its current cell
+                        else if (!bknd.unchoosePiece(index)) {
+                            errText.text
+                                    = persian.checked ? "نمیتوان به آنجا رفت!" : "Can't move there!"
+                            wrongChoose.open()
+                        }
                     }
                 }
             }
         }
     }
     Component.onCompleted: {
-
         switch (bknd.gameStatus()) {
             ////NORMAL
         case 0:
+            bknd.checkRandomMove()
             break
 
             //CHECKED
@@ -212,6 +280,7 @@ Item {
             errText.text = persian.checked ? "شما کیش شدید!" : "You're checked!"
             wrongChoose.title = persian.checked ? "کیش" : "Checked"
             wrongChoose.open()
+            bknd.checkRandomMove()
             break
 
             //STALEMATE
@@ -222,7 +291,5 @@ Item {
             endOfGame.open()
             break
         }
-        if (bknd.checkRandomMove())
-            mystack.replace("GamePage.qml")
     }
 }

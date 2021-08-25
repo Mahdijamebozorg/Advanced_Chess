@@ -6,7 +6,6 @@
 class Pawn : public Chessman
 {
 public:
-  // Constructor
   Pawn(Color, Icon = "");
   Pawn(const Pawn&     ); // Copy constructor
 

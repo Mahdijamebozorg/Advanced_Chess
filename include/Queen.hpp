@@ -6,7 +6,6 @@
 class Queen : public Chessman
 {
 public:
-  // Constructor
   Queen(Color, Icon = "");
   Queen(const Queen&    ); // Copy constructor
 
