@@ -16,7 +16,6 @@ public:
   // Set public functions
   virtual void setIcon(Icon);
 
-
 private:
   // Data member
   static size_t cnt;

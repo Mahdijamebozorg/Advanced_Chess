@@ -16,7 +16,6 @@ public:
     AccessDenied(std::string msg = "AccessDenied"):logic_error(msg)
     {}
 };
-
 class FinalCellForPawn : public std::logic_error
 {
 public:

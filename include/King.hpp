@@ -10,7 +10,6 @@ public:
   King(Color, Icon = "");
   King(const King&     ); // Copy constructor
 
-
   // moves functinos
   virtual std::list<Index> getCellsCanGo(Index) const;
 

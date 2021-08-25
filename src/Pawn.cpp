@@ -7,7 +7,6 @@ using namespace std;
 
 extern void checkRange(Chessman::Index);
 
-
 size_t Pawn::cnt = 1;
 
 Pawn::Pawn(Color color, Icon icon):Chessman(color)
@@ -44,18 +43,6 @@ list<Pawn::Index> Pawn::getCellsCanGo(Index index) const
 
   pair<int, int> temp;
   list<Index> l;
-
-  //En-passant move
-
-  if (index.first == 3 && getColor() == WHITE) // En-passant
-  {
-      l.push_back(make_pair(2, index.second - 1));
-      l.push_back(make_pair(2, index.second + 1));
-  } else if (index.first == 4 && getColor() == BLACK) // En-passant
-  {
-      l.push_back(make_pair(5, index.second - 1));
-      l.push_back(make_pair(5, index.second + 1));
-  }
 
   //first move for white color
 

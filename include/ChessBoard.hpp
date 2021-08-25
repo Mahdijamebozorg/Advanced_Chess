@@ -1,17 +1,16 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 
-#include <array>
-#include <vector>
-#include <memory>
-#include "User.hpp"
 #include "Cell.hpp"
+#include "User.hpp"
+#include <array>
+#include <memory>
+#include <vector>
 
 class User;
 class ChessBoard // This class used Singeleton pattern
 {
 public:
-  // Type alias
   using Cells  = std::array<std::array<Cell, 8>, 8>;
 
   // Static member functinos for Singeleton pattern

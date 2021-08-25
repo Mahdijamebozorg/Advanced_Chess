@@ -4,6 +4,7 @@
 #include "Chessman.hpp"
 
 class Bishop : public Chessman
+
 {
 public:
   // Constructor

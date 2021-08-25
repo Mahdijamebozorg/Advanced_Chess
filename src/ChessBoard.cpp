@@ -6,7 +6,6 @@
 
 #include <QDebug>
 
-
 using namespace std;
 
 extern void checkRange(Chessman::Index);
@@ -97,8 +96,9 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> ChessBoard::getCanGo(Ches
   vector<Chessman::Index> can_go ;
   vector<Chessman::Index> can_hit;
 
-  if(chess_type == Chessman::PAWN)
-  {
+  if (chess_type == Chessman::PAWN) {
+      list_cells.sort();
+      list_cells.erase(unique(list_cells.begin(), list_cells.end()), list_cells.end());
       //______________________________________________if this pawn can En-passant
 
       if ((index.first == 3 && getCell(index).getChessPieces()->getColor() == Chessman::WHITE)
@@ -106,40 +106,70 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> ChessBoard::getCanGo(Ches
 
       {
           //____________________________________________________ if En-passnat is allowed
-          if (enpasan.first != 100 && enpasan.second != 100) {
+          if (enpasan.first != 100 && enpasan.second != 100)
+
+          {
+              //-------------------------------------------- if white chessman in chosen
+
               if (color == Chessman::WHITE) {
-                  if ((list_cells.front().first == enpasan.first - 1) && (list_cells.front().second == enpasan.second)){
-                      can_go.push_back(list_cells.front());
+                  Chessman::Index ENP_left = *(++list_cells.begin());
+                  Chessman::Index ENP_right = list_cells.back();
+                  //----------------------- if piece is on left
+                  if ((ENP_left.first == enpasan.first - 1) && (ENP_left.second == enpasan.second))
+
+                  {
+                      can_go.push_back(ENP_left);
+                      can_hit.push_back(ENP_left);
+                      setEnpasan(index, ENP_left);
                   }
-                  else if (((*(++list_cells.begin())).first == enpasan.first - 1) && ((*(++list_cells.begin())).second == enpasan.second)){
-                      can_go.push_back(*(++list_cells.begin()));
+                  //----------------------- if piece is on right
+                  else if ((ENP_right.first == enpasan.first - 1)
+                           && (ENP_right.second == enpasan.second))
+
+                  {
+                      can_go.push_back(ENP_right);
+                      can_hit.push_back(ENP_right);
+                      setEnpasan(index, ENP_right);
                   }
-              } else {
-                  if ((list_cells.front().first == enpasan.first + 1) && (list_cells.front().second == enpasan.second)) {
-                      can_go.push_back(list_cells.front());
+              }
+
+              //-------------------------------------------- if black chessman in chosen
+
+              else {
+                  Chessman::Index ENP_left = list_cells.front();
+                  Chessman::Index ENP_right = *(--(--list_cells.end()));
+
+                  //----------------------- if piece is on left
+                  if ((ENP_left.first == enpasan.first + 1) && (ENP_left.second == enpasan.second))
+
+                  {
+                      can_go.push_back(ENP_left);
+                      can_hit.push_back(ENP_left);
+                      setEnpasan(index, ENP_left);
+
                   }
-                  else if (((*(++list_cells.begin())).first == enpasan.first + 1) && ((*(++list_cells.begin())).second == enpasan.second)) {
-                      can_go.push_back(*(++list_cells.begin()));
+
+                  //----------------------- if piece is on right
+                  else if ((ENP_right.first == enpasan.first + 1)
+                           && (ENP_right.second == enpasan.second))
+
+                  {
+                      can_go.push_back(ENP_right);
+                      can_hit.push_back(ENP_right);
+                      setEnpasan(index, ENP_right);
                   }
               }
           }
-
-          //--------------------- if En-passant is OK
-          if (can_go.size() != 0)
-          {
-              setEnpasan(index, can_go.front());
-          }
-          list_cells.pop_front();
-          list_cells.pop_front();
       }
       //----------------------------- check first move for black pawn
       if (color == Chessman::BLACK) {
           if (index.first != 6) {
               if ((index.first != 1)
-                  || (getCell(make_pair(list_cells.front().first - 1, list_cells.front().second))
+                  || (getCell(make_pair((*(--list_cells.end())).first - 1,
+                                        (*(--list_cells.end())).second))
                           .isFull())
-                  || (getCell(list_cells.front()).isFull())) {
-                  list_cells.pop_front();
+                  || (getCell((*(--list_cells.end()))).isFull())) {
+                  list_cells.erase(--list_cells.end());
               }
           }
       }
@@ -148,10 +178,10 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> ChessBoard::getCanGo(Ches
       else if (color == Chessman::WHITE) {
           if (index.first != 1) {
               if ((index.first != 6)
-                  || (getCell(make_pair(list_cells.front().first + 1, list_cells.front().second))
+                  || (getCell(make_pair(list_cells.begin()->first + 1, list_cells.begin()->second))
                           .isFull())
-                  || (getCell(list_cells.front()).isFull())) {
-                  list_cells.pop_front();
+                  || (getCell(*list_cells.begin()).isFull())) {
+                  list_cells.erase(list_cells.begin());
               }
           }
       }
@@ -280,6 +310,7 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> ChessBoard::getCanGo(Ches
 }
 
 //___________________________________________________________________________________________________ move
+//-------------// the first is normal hit , and second is en-passant hit
 
 pair<Chessman::ID, Chessman::ID> ChessBoard::moveChessman(Chessman::Index src, Chessman::Index dest)
 {
@@ -301,9 +332,11 @@ pair<Chessman::ID, Chessman::ID> ChessBoard::moveChessman(Chessman::Index src, C
     //------------------------------ allow En-passant move
     if (checkEnpasan(src, dest)) {
         if (getCell(dest).getChessPieces()->getColor() == Chessman::WHITE) {
+            //hit the chessman back of it
             temp.second = this->hitChessman(make_pair(dest.first + 1, dest.second));
             removeChessmanIndex(make_pair(dest.first + 1, dest.second));
         } else {
+            //hit the chessman back of it
             temp.second = this->hitChessman(make_pair(dest.first - 1, dest.second));
             removeChessmanIndex(make_pair(dest.first - 1, dest.second));
         }
@@ -437,7 +470,6 @@ pair<bool, Chessman::Index> ChessBoard::isChecked(
             auto temp_go = this->getCanGo(item, false).second;
             for (auto &item2 : temp_go) {
                 if (item2 == userKingIndex) {
-                    qDebug() << "white Chessmen are checking black king";
                     return make_pair(true, userKingIndex);
                 }
             }
@@ -449,7 +481,6 @@ pair<bool, Chessman::Index> ChessBoard::isChecked(
             auto temp_go = this->getCanGo(item, false).second;
             for (auto &item2 : temp_go) {
                 if (item2 == userKingIndex) {
-                    qDebug() << "black Chessmen are checking white king";
                     return make_pair(true, userKingIndex);
                 }
             }

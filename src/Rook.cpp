@@ -7,7 +7,6 @@ using namespace std;
 
 extern void checkRange(Chessman::Index);
 
-
 size_t Rook::cnt = 1;
 
 Rook::Rook(Color color, Icon icon):Chessman(color)

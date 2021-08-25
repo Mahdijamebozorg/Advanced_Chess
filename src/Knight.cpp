@@ -7,7 +7,6 @@ using namespace std;
 
 extern void checkRange(Chessman::Index);
 
-
 size_t Knight::cnt = 1;
 
 Knight::Knight(Color color, Icon icon):Chessman(color)

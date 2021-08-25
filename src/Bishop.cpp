@@ -11,6 +11,7 @@ extern void checkRange(Chessman::Index);
 size_t Bishop::cnt = 1;
 
 Bishop::Bishop(Color color, Icon icon):Chessman(color)
+
 {
   this->chess_type = BISHOP;
   setID  (    );

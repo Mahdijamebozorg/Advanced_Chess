@@ -2,7 +2,6 @@
 
 using namespace std;
 
-
 Cell::Cell()
 {
   setChessPieces(nullptr);

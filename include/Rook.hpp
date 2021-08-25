@@ -21,7 +21,6 @@ public:
   bool getMoved    () const;
   void rookNotMoved()      ;
 
-
 private:
   // Data member
   static size_t cnt        ;

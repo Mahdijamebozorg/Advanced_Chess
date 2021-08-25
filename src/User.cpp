@@ -179,7 +179,7 @@ void User::hitChessman(Chessman::ID id, bool chessman_pawn)
       if(chessman_pawn)
         pawns_reach_last.push_back(*it);
       else
-        chessmans_out.push_back(*it);
+          chessmans_out.push_back(*it);
 
       *it = nullptr;
       chessmans_in.erase(it);

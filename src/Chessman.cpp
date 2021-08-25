@@ -6,7 +6,6 @@ using namespace std;
 
 extern void checkRange(Chessman::Index);
 
-
 Chessman::Chessman(Color color)
 {
   setColor(color);

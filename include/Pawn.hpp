@@ -10,7 +10,6 @@ public:
   Pawn(Color, Icon = "");
   Pawn(const Pawn&     ); // Copy constructor
 
-
   // moves functinos
   virtual std::list<Index> getCellsCanGo(Index) const;
 

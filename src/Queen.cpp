@@ -4,8 +4,8 @@
 #include <stdexcept>
 
 using namespace std;
-extern void checkRange(Chessman::Index);
 
+extern void checkRange(Chessman::Index);
 
 size_t Queen::cnt = 1;
 

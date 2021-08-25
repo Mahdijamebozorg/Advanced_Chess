@@ -63,6 +63,7 @@ public:
   User(Name, Color, Score = 0, Score = 0);
 
   // Data member
+
   // for Singeleton pattern
   static std::array<User*, 2> users;
   static int                  cnt  ;

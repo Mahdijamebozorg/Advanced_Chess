@@ -1,8 +1,8 @@
 #ifndef CHESSMAN_H
 #define CHESSMAN_H
 
-#include <string>
 #include <list>
+#include <string>
 
 class Chessman
 {
@@ -12,7 +12,6 @@ public:
   using Index     = std::pair<unsigned int, unsigned int>         ;
   using Icon      = std::string                                   ;
 
-  // declare enum
   enum ChessType {PAWN, BISHOP, KNIGHT, ROOK, QUEEN, KING}; // for prevent from many dynamic_cast
   enum Color     {WHITE, BLACK}                           ;
 
