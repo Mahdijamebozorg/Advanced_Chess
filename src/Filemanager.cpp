@@ -8,7 +8,7 @@ using namespace std;
 //------------------------------------------------------------------------- reading game from file
 void FileManager::readFile(std::string fileName)
 {
-    this->game_Name = "SavedGames/" + fileName + ".txt";
+    this->game_Name = "./SavedGames/" + fileName;
     file.open(game_Name.c_str(), ios::in);
     if (!file)
         throw(runtime_error("can't open file"));
@@ -120,7 +120,7 @@ void FileManager::delete_Last_Move()
 //------------------------------------------------------------------------- setting new game
 void FileManager::set_Game_Name(std::string name)
 {
-    this->game_Name = "SavedGames/" + name + ".txt";
+    this->game_Name = "./SavedGames/" + name + ".txt";
     file.open(game_Name.c_str(), ios::out);
     if (!file)
         throw(runtime_error("can't open file in set game"));

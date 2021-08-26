@@ -746,6 +746,7 @@ qrc_qml.cpp: qml.qrc \
 		/opt/Qt5.13.1/5.13.1/gcc_64/bin/rcc \
 		BoardBottomSide.qml \
 		MainPage.qml \
+		LoadGameDialog.qml \
 		BoardTopSide.qml \
 		GamePage.qml \
 		BoardRightSide.qml \

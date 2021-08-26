@@ -22,6 +22,8 @@ private:
     bool _extraMove = false;
     bool _touchedPiece = false;
     bool _moved = false;
+    std::vector<std::string> _dirFiles;
+    std::vector<std::string> _filePlayersName;
     short unsigned _canceler = 2;
     void touchedPiece(GameManager::Turn);
 
@@ -44,6 +46,17 @@ public slots:
     void restartGame();
 
     void endGame();
+
+    //----------------------------files
+    void loadFiles(); //load txt files from "SavedGames" folder
+
+    QString getFileName(unsigned index);
+
+    QString getFilePlayersName(unsigned index);
+
+    bool loadGame(QString);
+
+    unsigned filesCount();
 
     unsigned gameStatus();
 

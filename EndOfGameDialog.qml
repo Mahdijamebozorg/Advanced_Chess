@@ -42,7 +42,6 @@ Dialog {
                 font.pixelSize: this.width * 0.1
                 Component.onCompleted: {
 
-                    bknd.cellState(0)
                     //------------------------------------------------------------------ title
                     switch (bknd.gameStatus()) {
                     case 2:

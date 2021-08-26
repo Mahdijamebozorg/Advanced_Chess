@@ -31,5 +31,6 @@
         <file>PromotionDialog.qml</file>
         <file>EndOfGameDialog.qml</file>
         <file>Assets/Sound_Effects/move.mp3</file>
+        <file>LoadGameDialog.qml</file>
     </qresource>
 </RCC>

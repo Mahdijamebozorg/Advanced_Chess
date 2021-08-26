@@ -1,5 +1,7 @@
 #include "backend.hpp"
 #include "include/Exceptions.hpp"
+#include <dirent.h>
+#include <fstream>
 
 using namespace std;
 
@@ -36,6 +38,66 @@ void BackEnd::endGame()
     previewsSrc = -1;
     srcIndex = -1;
     destIndex = -1;
+}
+
+//__________________________________________________________________________
+
+void BackEnd::loadFiles()
+{
+    _dirFiles.clear();
+    DIR *dir;
+    struct dirent *diread;
+    if ((dir = opendir("./SavedGames")) != nullptr) {
+        while ((diread = readdir(dir)) != nullptr) {
+            string temp = diread->d_name;
+            string suffix = temp.substr(temp.find('.'), temp.back());
+            if (suffix == ".txt") {
+                _dirFiles.push_back(temp);
+            }
+        }
+        closedir(dir);
+    } else {
+        perror("opendir");
+        throw("can't acces files");
+    }
+}
+
+//__________________________________________________________________________ get file
+
+QString BackEnd::getFileName(unsigned index)
+{
+    if (!_dirFiles.empty()) {
+        return QString::fromStdString(_dirFiles[index]);
+    }
+}
+
+//__________________________________________________________________________ getFilePlayersName
+//________________// read plyer info
+
+QString BackEnd::getFilePlayersName(unsigned index)
+{
+    fstream file;
+    file.open(("./SavedGames/" + _dirFiles[index]).c_str(), ios::in);
+    string temp1, temp2;
+    getline(file, temp1, '\n');
+    getline(file, temp2, '\n');
+    file.close();
+    return QString::fromStdString('(' + temp1 + "  vs  " + temp2 + ')');
+}
+
+//__________________________________________________________________________ load test
+
+bool BackEnd::loadGame(QString url)
+{
+    qDebug() << "loaded: " << url;
+    //    manager->loadGame(url);
+}
+
+//__________________________________________________________________________
+
+unsigned BackEnd::filesCount()
+{
+    return _dirFiles.size();
 }
 
 //__________________________________________________________________________ i & j and index convertion

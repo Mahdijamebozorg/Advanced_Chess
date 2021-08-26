@@ -22,8 +22,8 @@ QT_BEGIN_MOC_NAMESPACE
 QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_BackEnd_t {
-    QByteArrayData data[52];
-    char stringdata0[507];
+    QByteArrayData data[57];
+    char stringdata0[568];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,59 +44,66 @@ QT_MOC_LITERAL(8, 58, 8), // "gameName"
 QT_MOC_LITERAL(9, 67, 9), // "startGame"
 QT_MOC_LITERAL(10, 77, 11), // "restartGame"
 QT_MOC_LITERAL(11, 89, 7), // "endGame"
-QT_MOC_LITERAL(12, 97, 10), // "gameStatus"
-QT_MOC_LITERAL(13, 108, 5), // "setP1"
-QT_MOC_LITERAL(14, 114, 6), // "P1Name"
-QT_MOC_LITERAL(15, 121, 5), // "setP2"
-QT_MOC_LITERAL(16, 127, 6), // "P2Name"
-QT_MOC_LITERAL(17, 134, 9), // "getP1Name"
-QT_MOC_LITERAL(18, 144, 9), // "getP2Name"
-QT_MOC_LITERAL(19, 154, 12), // "getP1_PScore"
-QT_MOC_LITERAL(20, 167, 12), // "getP1_NScore"
-QT_MOC_LITERAL(21, 180, 12), // "getP2_PScore"
-QT_MOC_LITERAL(22, 193, 12), // "getP2_NScore"
-QT_MOC_LITERAL(23, 206, 11), // "getGameName"
-QT_MOC_LITERAL(24, 218, 6), // "winner"
-QT_MOC_LITERAL(25, 225, 15), // "checkRandomMove"
-QT_MOC_LITERAL(26, 241, 11), // "setCanceler"
-QT_MOC_LITERAL(27, 253, 11), // "getCanceler"
-QT_MOC_LITERAL(28, 265, 7), // "getIcon"
-QT_MOC_LITERAL(29, 273, 5), // "index"
-QT_MOC_LITERAL(30, 279, 9), // "cellState"
-QT_MOC_LITERAL(31, 289, 7), // "isMoved"
-QT_MOC_LITERAL(32, 297, 7), // "getSrcI"
-QT_MOC_LITERAL(33, 305, 7), // "getSrcJ"
-QT_MOC_LITERAL(34, 313, 8), // "getDestI"
-QT_MOC_LITERAL(35, 322, 8), // "getDestJ"
-QT_MOC_LITERAL(36, 331, 11), // "getSrcIndex"
-QT_MOC_LITERAL(37, 343, 12), // "getDestIndex"
-QT_MOC_LITERAL(38, 356, 6), // "canHit"
-QT_MOC_LITERAL(39, 363, 34), // "std::vector<std::pair<uint,ui..."
-QT_MOC_LITERAL(40, 398, 9), // "bkndcanGo"
-QT_MOC_LITERAL(41, 408, 5), // "canGo"
-QT_MOC_LITERAL(42, 414, 6), // "choose"
-QT_MOC_LITERAL(43, 421, 13), // "unchoosePiece"
-QT_MOC_LITERAL(44, 435, 13), // "getP1OutsIcon"
-QT_MOC_LITERAL(45, 449, 13), // "getP2OutsIcon"
-QT_MOC_LITERAL(46, 463, 4), // "move"
-QT_MOC_LITERAL(47, 468, 4), // "undo"
-QT_MOC_LITERAL(48, 473, 9), // "extraMove"
-QT_MOC_LITERAL(49, 483, 10), // "randomMove"
-QT_MOC_LITERAL(50, 494, 7), // "promote"
-QT_MOC_LITERAL(51, 502, 4) // "type"
+QT_MOC_LITERAL(12, 97, 9), // "loadFiles"
+QT_MOC_LITERAL(13, 107, 11), // "getFileName"
+QT_MOC_LITERAL(14, 119, 5), // "index"
+QT_MOC_LITERAL(15, 125, 18), // "getFilePlayersName"
+QT_MOC_LITERAL(16, 144, 8), // "loadGame"
+QT_MOC_LITERAL(17, 153, 10), // "filesCount"
+QT_MOC_LITERAL(18, 164, 10), // "gameStatus"
+QT_MOC_LITERAL(19, 175, 5), // "setP1"
+QT_MOC_LITERAL(20, 181, 6), // "P1Name"
+QT_MOC_LITERAL(21, 188, 5), // "setP2"
+QT_MOC_LITERAL(22, 194, 6), // "P2Name"
+QT_MOC_LITERAL(23, 201, 9), // "getP1Name"
+QT_MOC_LITERAL(24, 211, 9), // "getP2Name"
+QT_MOC_LITERAL(25, 221, 12), // "getP1_PScore"
+QT_MOC_LITERAL(26, 234, 12), // "getP1_NScore"
+QT_MOC_LITERAL(27, 247, 12), // "getP2_PScore"
+QT_MOC_LITERAL(28, 260, 12), // "getP2_NScore"
+QT_MOC_LITERAL(29, 273, 11), // "getGameName"
+QT_MOC_LITERAL(30, 285, 6), // "winner"
+QT_MOC_LITERAL(31, 292, 15), // "checkRandomMove"
+QT_MOC_LITERAL(32, 308, 11), // "setCanceler"
+QT_MOC_LITERAL(33, 320, 11), // "getCanceler"
+QT_MOC_LITERAL(34, 332, 7), // "getIcon"
+QT_MOC_LITERAL(35, 340, 9), // "cellState"
+QT_MOC_LITERAL(36, 350, 7), // "isMoved"
+QT_MOC_LITERAL(37, 358, 7), // "getSrcI"
+QT_MOC_LITERAL(38, 366, 7), // "getSrcJ"
+QT_MOC_LITERAL(39, 374, 8), // "getDestI"
+QT_MOC_LITERAL(40, 383, 8), // "getDestJ"
+QT_MOC_LITERAL(41, 392, 11), // "getSrcIndex"
+QT_MOC_LITERAL(42, 404, 12), // "getDestIndex"
+QT_MOC_LITERAL(43, 417, 6), // "canHit"
+QT_MOC_LITERAL(44, 424, 34), // "std::vector<std::pair<uint,ui..."
+QT_MOC_LITERAL(45, 459, 9), // "bkndcanGo"
+QT_MOC_LITERAL(46, 469, 5), // "canGo"
+QT_MOC_LITERAL(47, 475, 6), // "choose"
+QT_MOC_LITERAL(48, 482, 13), // "unchoosePiece"
+QT_MOC_LITERAL(49, 496, 13), // "getP1OutsIcon"
+QT_MOC_LITERAL(50, 510, 13), // "getP2OutsIcon"
+QT_MOC_LITERAL(51, 524, 4), // "move"
+QT_MOC_LITERAL(52, 529, 4), // "undo"
+QT_MOC_LITERAL(53, 534, 9), // "extraMove"
+QT_MOC_LITERAL(54, 544, 10), // "randomMove"
+QT_MOC_LITERAL(55, 555, 7), // "promote"
+QT_MOC_LITERAL(56, 563, 4) // "type"
 
     },
     "BackEnd\0choosen\0\0moved\0unchoosen\0"
     "promotion\0cancel\0setGame\0gameName\0"
-    "startGame\0restartGame\0endGame\0gameStatus\0"
-    "setP1\0P1Name\0setP2\0P2Name\0getP1Name\0"
-    "getP2Name\0getP1_PScore\0getP1_NScore\0"
-    "getP2_PScore\0getP2_NScore\0getGameName\0"
-    "winner\0checkRandomMove\0setCanceler\0"
-    "getCanceler\0getIcon\0index\0cellState\0"
-    "isMoved\0getSrcI\0getSrcJ\0getDestI\0"
-    "getDestJ\0getSrcIndex\0getDestIndex\0"
-    "canHit\0std::vector<std::pair<uint,uint> >\0"
+    "startGame\0restartGame\0endGame\0loadFiles\0"
+    "getFileName\0index\0getFilePlayersName\0"
+    "loadGame\0filesCount\0gameStatus\0setP1\0"
+    "P1Name\0setP2\0P2Name\0getP1Name\0getP2Name\0"
+    "getP1_PScore\0getP1_NScore\0getP2_PScore\0"
+    "getP2_NScore\0getGameName\0winner\0"
+    "checkRandomMove\0setCanceler\0getCanceler\0"
+    "getIcon\0cellState\0isMoved\0getSrcI\0"
+    "getSrcJ\0getDestI\0getDestJ\0getSrcIndex\0"
+    "getDestIndex\0canHit\0"
+    "std::vector<std::pair<uint,uint> >\0"
     "bkndcanGo\0canGo\0choose\0unchoosePiece\0"
     "getP1OutsIcon\0getP2OutsIcon\0move\0undo\0"
     "extraMove\0randomMove\0promote\0type"
@@ -109,7 +116,7 @@ static const uint qt_meta_data_BackEnd[] = {
        8,       // revision
        0,       // classname
        0,    0, // classinfo
-      43,   14, // methods
+      48,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -117,51 +124,56 @@ static const uint qt_meta_data_BackEnd[] = {
        5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    0,  229,    2, 0x06 /* Public */,
-       3,    0,  230,    2, 0x06 /* Public */,
-       4,    0,  231,    2, 0x06 /* Public */,
-       5,    0,  232,    2, 0x06 /* Public */,
-       6,    0,  233,    2, 0x06 /* Public */,
+       1,    0,  254,    2, 0x06 /* Public */,
+       3,    0,  255,    2, 0x06 /* Public */,
+       4,    0,  256,    2, 0x06 /* Public */,
+       5,    0,  257,    2, 0x06 /* Public */,
+       6,    0,  258,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       7,    1,  234,    2, 0x0a /* Public */,
-       9,    0,  237,    2, 0x0a /* Public */,
-      10,    0,  238,    2, 0x0a /* Public */,
-      11,    0,  239,    2, 0x0a /* Public */,
-      12,    0,  240,    2, 0x0a /* Public */,
-      13,    1,  241,    2, 0x0a /* Public */,
-      15,    1,  244,    2, 0x0a /* Public */,
-      17,    0,  247,    2, 0x0a /* Public */,
-      18,    0,  248,    2, 0x0a /* Public */,
-      19,    0,  249,    2, 0x0a /* Public */,
-      20,    0,  250,    2, 0x0a /* Public */,
-      21,    0,  251,    2, 0x0a /* Public */,
-      22,    0,  252,    2, 0x0a /* Public */,
-      23,    0,  253,    2, 0x0a /* Public */,
-      24,    0,  254,    2, 0x0a /* Public */,
-      25,    0,  255,    2, 0x0a /* Public */,
-      26,    0,  256,    2, 0x0a /* Public */,
-      27,    0,  257,    2, 0x0a /* Public */,
-      28,    1,  258,    2, 0x0a /* Public */,
-      30,    1,  261,    2, 0x0a /* Public */,
-      31,    1,  264,    2, 0x0a /* Public */,
-      32,    0,  267,    2, 0x0a /* Public */,
-      33,    0,  268,    2, 0x0a /* Public */,
-      34,    0,  269,    2, 0x0a /* Public */,
-      35,    0,  270,    2, 0x0a /* Public */,
-      36,    0,  271,    2, 0x0a /* Public */,
-      37,    0,  272,    2, 0x0a /* Public */,
-      38,    2,  273,    2, 0x0a /* Public */,
-      41,    2,  278,    2, 0x0a /* Public */,
-      42,    1,  283,    2, 0x0a /* Public */,
-      43,    1,  286,    2, 0x0a /* Public */,
-      44,    1,  289,    2, 0x0a /* Public */,
-      45,    1,  292,    2, 0x0a /* Public */,
-      46,    1,  295,    2, 0x0a /* Public */,
-      47,    0,  298,    2, 0x0a /* Public */,
-      48,    0,  299,    2, 0x0a /* Public */,
-      49,    0,  300,    2, 0x0a /* Public */,
-      50,    1,  301,    2, 0x0a /* Public */,
+       7,    1,  259,    2, 0x0a /* Public */,
+       9,    0,  262,    2, 0x0a /* Public */,
+      10,    0,  263,    2, 0x0a /* Public */,
+      11,    0,  264,    2, 0x0a /* Public */,
+      12,    0,  265,    2, 0x0a /* Public */,
+      13,    1,  266,    2, 0x0a /* Public */,
+      15,    1,  269,    2, 0x0a /* Public */,
+      16,    1,  272,    2, 0x0a /* Public */,
+      17,    0,  275,    2, 0x0a /* Public */,
+      18,    0,  276,    2, 0x0a /* Public */,
+      19,    1,  277,    2, 0x0a /* Public */,
+      21,    1,  280,    2, 0x0a /* Public */,
+      23,    0,  283,    2, 0x0a /* Public */,
+      24,    0,  284,    2, 0x0a /* Public */,
+      25,    0,  285,    2, 0x0a /* Public */,
+      26,    0,  286,    2, 0x0a /* Public */,
+      27,    0,  287,    2, 0x0a /* Public */,
+      28,    0,  288,    2, 0x0a /* Public */,
+      29,    0,  289,    2, 0x0a /* Public */,
+      30,    0,  290,    2, 0x0a /* Public */,
+      31,    0,  291,    2, 0x0a /* Public */,
+      32,    0,  292,    2, 0x0a /* Public */,
+      33,    0,  293,    2, 0x0a /* Public */,
+      34,    1,  294,    2, 0x0a /* Public */,
+      35,    1,  297,    2, 0x0a /* Public */,
+      36,    1,  300,    2, 0x0a /* Public */,
+      37,    0,  303,    2, 0x0a /* Public */,
+      38,    0,  304,    2, 0x0a /* Public */,
+      39,    0,  305,    2, 0x0a /* Public */,
+      40,    0,  306,    2, 0x0a /* Public */,
+      41,    0,  307,    2, 0x0a /* Public */,
+      42,    0,  308,    2, 0x0a /* Public */,
+      43,    2,  309,    2, 0x0a /* Public */,
+      46,    2,  314,    2, 0x0a /* Public */,
+      47,    1,  319,    2, 0x0a /* Public */,
+      48,    1,  322,    2, 0x0a /* Public */,
+      49,    1,  325,    2, 0x0a /* Public */,
+      50,    1,  328,    2, 0x0a /* Public */,
+      51,    1,  331,    2, 0x0a /* Public */,
+      52,    0,  334,    2, 0x0a /* Public */,
+      53,    0,  335,    2, 0x0a /* Public */,
+      54,    0,  336,    2, 0x0a /* Public */,
+      55,    1,  337,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -175,9 +187,14 @@ static const uint qt_meta_data_BackEnd[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::QString, QMetaType::UInt,   14,
+    QMetaType::QString, QMetaType::UInt,   14,
+    QMetaType::Bool, QMetaType::QString,    2,
     QMetaType::UInt,
-    QMetaType::Void, QMetaType::QString,   14,
-    QMetaType::Void, QMetaType::QString,   16,
+    QMetaType::UInt,
+    QMetaType::Void, QMetaType::QString,   20,
+    QMetaType::Void, QMetaType::QString,   22,
     QMetaType::QString,
     QMetaType::QString,
     QMetaType::Int,
@@ -189,26 +206,26 @@ static const uint qt_meta_data_BackEnd[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::UInt,
-    QMetaType::QString, QMetaType::UInt,   29,
-    QMetaType::UInt, QMetaType::UInt,   29,
-    QMetaType::Bool, QMetaType::UInt,   29,
+    QMetaType::QString, QMetaType::UInt,   14,
+    QMetaType::UInt, QMetaType::UInt,   14,
+    QMetaType::Bool, QMetaType::UInt,   14,
     QMetaType::UInt,
     QMetaType::UInt,
     QMetaType::UInt,
     QMetaType::UInt,
     QMetaType::UInt,
     QMetaType::UInt,
-    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 39,   29,   40,
-    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 39,   29,   40,
-    QMetaType::UInt, QMetaType::UInt,   29,
-    QMetaType::Bool, QMetaType::UInt,   29,
-    QMetaType::QString, QMetaType::UInt,   29,
-    QMetaType::QString, QMetaType::UInt,   29,
-    QMetaType::Bool, QMetaType::UInt,   29,
+    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 44,   14,   45,
+    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 44,   14,   45,
+    QMetaType::UInt, QMetaType::UInt,   14,
+    QMetaType::Bool, QMetaType::UInt,   14,
+    QMetaType::QString, QMetaType::UInt,   14,
+    QMetaType::QString, QMetaType::UInt,   14,
+    QMetaType::Bool, QMetaType::UInt,   14,
     QMetaType::Void,
     QMetaType::Bool,
     QMetaType::Void,
-    QMetaType::Void, QMetaType::UInt,   51,
+    QMetaType::Void, QMetaType::UInt,   56,
 
        0        // eod
 };
@@ -228,67 +245,76 @@ void BackEnd::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 6: _t->startGame(); break;
         case 7: _t->restartGame(); break;
         case 8: _t->endGame(); break;
-        case 9: { uint _r = _t->gameStatus();
+        case 9: _t->loadFiles(); break;
+        case 10: { QString _r = _t->getFileName((*reinterpret_cast< uint(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
+        case 11: { QString _r = _t->getFilePlayersName((*reinterpret_cast< uint(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
+        case 12: { bool _r = _t->loadGame((*reinterpret_cast< QString(*)>(_a[1])));
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
+        case 13: { uint _r = _t->filesCount();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 10: _t->setP1((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 11: _t->setP2((*reinterpret_cast< QString(*)>(_a[1]))); break;
-        case 12: { QString _r = _t->getP1Name();
+        case 14: { uint _r = _t->gameStatus();
+            if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
+        case 15: _t->setP1((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 16: _t->setP2((*reinterpret_cast< QString(*)>(_a[1]))); break;
+        case 17: { QString _r = _t->getP1Name();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 13: { QString _r = _t->getP2Name();
+        case 18: { QString _r = _t->getP2Name();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 14: { int _r = _t->getP1_PScore();
+        case 19: { int _r = _t->getP1_PScore();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
-        case 15: { int _r = _t->getP1_NScore();
+        case 20: { int _r = _t->getP1_NScore();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
-        case 16: { int _r = _t->getP2_PScore();
+        case 21: { int _r = _t->getP2_PScore();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
-        case 17: { int _r = _t->getP2_NScore();
+        case 22: { int _r = _t->getP2_NScore();
             if (_a[0]) *reinterpret_cast< int*>(_a[0]) = std::move(_r); }  break;
-        case 18: { QString _r = _t->getGameName();
+        case 23: { QString _r = _t->getGameName();
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 19: { uint _r = _t->winner();
+        case 24: { uint _r = _t->winner();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 20: _t->checkRandomMove(); break;
-        case 21: _t->setCanceler(); break;
-        case 22: { uint _r = _t->getCanceler();
+        case 25: _t->checkRandomMove(); break;
+        case 26: _t->setCanceler(); break;
+        case 27: { uint _r = _t->getCanceler();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 23: { QString _r = _t->getIcon((*reinterpret_cast< uint(*)>(_a[1])));
+        case 28: { QString _r = _t->getIcon((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 24: { uint _r = _t->cellState((*reinterpret_cast< uint(*)>(_a[1])));
+        case 29: { uint _r = _t->cellState((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 25: { bool _r = _t->isMoved((*reinterpret_cast< uint(*)>(_a[1])));
+        case 30: { bool _r = _t->isMoved((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 26: { uint _r = _t->getSrcI();
+        case 31: { uint _r = _t->getSrcI();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 27: { uint _r = _t->getSrcJ();
+        case 32: { uint _r = _t->getSrcJ();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 28: { uint _r = _t->getDestI();
+        case 33: { uint _r = _t->getDestI();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 29: { uint _r = _t->getDestJ();
+        case 34: { uint _r = _t->getDestJ();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 30: { uint _r = _t->getSrcIndex();
+        case 35: { uint _r = _t->getSrcIndex();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 31: { uint _r = _t->getDestIndex();
+        case 36: { uint _r = _t->getDestIndex();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 32: { bool _r = _t->canHit((*reinterpret_cast< uint(*)>(_a[1])),(*reinterpret_cast< std::vector<std::pair<uint,uint> >(*)>(_a[2])));
+        case 37: { bool _r = _t->canHit((*reinterpret_cast< uint(*)>(_a[1])),(*reinterpret_cast< std::vector<std::pair<uint,uint> >(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 33: { bool _r = _t->canGo((*reinterpret_cast< uint(*)>(_a[1])),(*reinterpret_cast< std::vector<std::pair<uint,uint> >(*)>(_a[2])));
+        case 38: { bool _r = _t->canGo((*reinterpret_cast< uint(*)>(_a[1])),(*reinterpret_cast< std::vector<std::pair<uint,uint> >(*)>(_a[2])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 34: { uint _r = _t->choose((*reinterpret_cast< uint(*)>(_a[1])));
+        case 39: { uint _r = _t->choose((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 35: { bool _r = _t->unchoosePiece((*reinterpret_cast< uint(*)>(_a[1])));
+        case 40: { bool _r = _t->unchoosePiece((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 36: { QString _r = _t->getP1OutsIcon((*reinterpret_cast< uint(*)>(_a[1])));
+        case 41: { QString _r = _t->getP1OutsIcon((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 37: { QString _r = _t->getP2OutsIcon((*reinterpret_cast< uint(*)>(_a[1])));
+        case 42: { QString _r = _t->getP2OutsIcon((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 38: { bool _r = _t->move((*reinterpret_cast< uint(*)>(_a[1])));
+        case 43: { bool _r = _t->move((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 39: _t->undo(); break;
-        case 40: { bool _r = _t->extraMove();
+        case 44: _t->undo(); break;
+        case 45: { bool _r = _t->extraMove();
             if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = std::move(_r); }  break;
-        case 41: _t->randomMove(); break;
-        case 42: _t->promote((*reinterpret_cast< uint(*)>(_a[1]))); break;
+        case 46: _t->randomMove(); break;
+        case 47: _t->promote((*reinterpret_cast< uint(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -360,13 +386,13 @@ int BackEnd::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 43)
+        if (_id < 48)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 43;
+        _id -= 48;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 43)
+        if (_id < 48)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 43;
+        _id -= 48;
     }
     return _id;
 }

@@ -9,6 +9,8 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    app.setOrganizationName("none");
+
     QQmlApplicationEngine engine;
 
     BackEnd bknd;
