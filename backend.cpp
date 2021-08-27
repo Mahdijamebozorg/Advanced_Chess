@@ -42,7 +42,7 @@ void BackEnd::endGame()
 
 //__________________________________________________________________________
 
-void BackEnd::loadFiles()
+void BackEnd::getFiles()
 {
     _dirFiles.clear();
     DIR *dir;
@@ -66,31 +66,37 @@ void BackEnd::loadFiles()
 
 QString BackEnd::getFileName(unsigned index)
 {
-    if (!_dirFiles.empty()) {
-        return QString::fromStdString(_dirFiles[index]);
-    }
+    return QString::fromStdString(_dirFiles[index]);
 }
 
-//__________________________________________________________________________ getFilePlayersName
+//__________________________________________________________________________ getFilePlayers
 //________________// read plyer info
 
-QString BackEnd::getFilePlayersName(unsigned index)
+QString BackEnd::getFilePlayers(unsigned index)
 {
-    fstream file;
-    file.open(("./SavedGames/" + _dirFiles[index]).c_str(), ios::in);
-    string temp1, temp2;
-    getline(file, temp1, '\n');
-    getline(file, temp2, '\n');
-    file.close();
-    return QString::fromStdString('(' + temp1 + "  vs  " + temp2 + ')');
+    manager->getFileManager()->readFile(_dirFiles[index]);
+
+    string name1 = manager->getFileManager()->get_P1_Name();
+    string name2 = manager->getFileManager()->get_P2_Name();
+    unsigned score1 = manager->getFileManager()->get_P1_Score();
+    unsigned score2 = manager->getFileManager()->get_P2_Score();
+
+    return QString::fromStdString(name1 + ' ' + '(' + to_string(score1) + ')' + "  vs  " + name2
+                                  + ' ' + '(' + to_string(score2) + ')');
 }
 
 //__________________________________________________________________________ load test
 
-bool BackEnd::loadGame(QString url)
+void BackEnd::loadGame(unsigned index)
 {
-    qDebug() << "loaded: " << url;
-    //    manager->loadGame(url);
+    qDebug() << "loaded: " << _dirFiles[index].c_str();
+    try {
+        manager->loadGame(_dirFiles[index]);
+        emit gameLoaded();
+    } catch (exception &s) {
+        qDebug() << s.what();
+        emit fileError();
+    }
 }
 
 //__________________________________________________________________________
@@ -125,14 +131,14 @@ std::pair<unsigned, unsigned> indexToIJ(unsigned index)
 
 void BackEnd::setP1(QString P1Name)
 {
-    manager->setUser1(P1Name.QString::toStdString(), 0, 0);
+    manager->setUser1(P1Name.toStdString(), 0, 0);
 }
 
 //__________________________________________________________________________ setP2Name
 
 void BackEnd::setP2(QString P2Name)
 {
-    manager->setUser2(P2Name.QString::toStdString(), 0, 0);
+    manager->setUser2(P2Name.toStdString(), 0, 0);
 }
 
 //__________________________________________________________________________ getGameName

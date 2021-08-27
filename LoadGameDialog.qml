@@ -6,10 +6,10 @@ import QtQuick.Dialogs 1.2
 Dialog {
     property var modelCount: bknd.filesCount()
 
-    id: loadGame
+    id: loadGameDialog
     title: persian.checked ? "یک فایل انتخاب کنید" : "Choose a file"
 
-    width: 450
+    width: 600
     height: 300
     contentItem: Rectangle {
         color: "black"
@@ -21,11 +21,11 @@ Dialog {
             height: parent.height
             model: modelCount
             cellHeight: this.height / 3
-            cellWidth: this.width * 0.9
+            cellWidth: this.width * 0.98
             delegate: Rectangle {
                 id: deligateRec
                 color: "#00000000"
-                width: grid.width * 0.9
+                width: grid.width * 0.98
                 height: grid.height / 3
                 anchors.horizontalCenter: parent.horizontalCenter
                 Button {
@@ -43,12 +43,14 @@ Dialog {
                         horizontalAlignment: Text.AlignHCenter
                         verticalAlignment: Text.AlignVCenter
                         text: bknd.getFileName(
-                                  index) + "  :   " + bknd.getFilePlayersName(
-                                  index)
+                                  index) + "  :   " + bknd.getFilePlayers(index)
                         font.pixelSize: parent.height * 0.15
                         font.bold: true
                     } //text
-                    onClicked: bknd.loadGame(fileTxt.text)
+                    onClicked: {
+                        bknd.loadGame(index)
+                        loadGameDialog.close()
+                    }
                 } //btn
             } //deligate
         } //grid

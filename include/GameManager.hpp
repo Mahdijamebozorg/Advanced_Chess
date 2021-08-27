@@ -8,7 +8,6 @@
 
 #include <stack>
 
-
 class GameManager
 {
 public:
@@ -25,10 +24,15 @@ public:
     static GameManager *&get(GameName name);
 
     //------------------------------------------------------------------------------------- game setup
-    void loadGame(std::string gameName);
     void startGame();
     void restartGame();
     void endGame();
+
+    //-------------------------------------------- files
+    FileManager *getFileManager();
+    void loadGame(std::string gameName);
+    void loadMoves();
+    void promotionForFile(std::string move);
 
     void setChessBoardGame(const ChessBoardGame &);
     ChessBoardGame getChessBoardGame() const;

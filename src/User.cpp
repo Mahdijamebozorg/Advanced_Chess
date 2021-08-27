@@ -114,18 +114,18 @@ User::Score User::operator-=(Score score)
 //set for start game
 void User::setChessmansIn()
 {
-  chessmans_in.push_back(shared_ptr<Chessman>(new Rook  (color)));
-  chessmans_in.push_back(shared_ptr<Chessman>(new Knight(color)));
-  chessmans_in.push_back(shared_ptr<Chessman>(new Bishop(color)));
-  chessmans_in.push_back(shared_ptr<Chessman>(new Queen (color)));
-  chessmans_in.push_back(shared_ptr<Chessman>(new King  (color)));
-  chessmans_in.push_back(shared_ptr<Chessman>(new Bishop(color)));
-  chessmans_in.push_back(shared_ptr<Chessman>(new Knight(color)));
-  chessmans_in.push_back(shared_ptr<Chessman>(new Rook  (color)));
+    chessmans_in.clear();
+    chessmans_in.push_back(shared_ptr<Chessman>(new Rook(color)));
+    chessmans_in.push_back(shared_ptr<Chessman>(new Knight(color)));
+    chessmans_in.push_back(shared_ptr<Chessman>(new Bishop(color)));
+    chessmans_in.push_back(shared_ptr<Chessman>(new Queen(color)));
+    chessmans_in.push_back(shared_ptr<Chessman>(new King(color)));
+    chessmans_in.push_back(shared_ptr<Chessman>(new Bishop(color)));
+    chessmans_in.push_back(shared_ptr<Chessman>(new Knight(color)));
+    chessmans_in.push_back(shared_ptr<Chessman>(new Rook(color)));
 
-  for(int i = 8; i < 16; i++)
-  {
-    chessmans_in.push_back(shared_ptr<Chessman>(new Pawn(color)));
+    for (int i = 8; i < 16; i++) {
+        chessmans_in.push_back(shared_ptr<Chessman>(new Pawn(color)));
   }
 
   string temp_color;
@@ -135,12 +135,24 @@ void User::setChessmansIn()
     temp_color = "B";
 
   string file_addres = "qrc:/Assets/Icons/" + temp_color;
-  string names[16] = {"Rook", "Knight", "Bishop", "Queen", "King", "Bishop", "Knight", "Rook"};
-  for(int i = 8; i < 16; i++)
-    names[i] = "Pawn";
+  vector<string> names;
+  names.push_back("Rook");
+  names.push_back("Knight");
+  names.push_back("Bishop");
+  names.push_back("Queen");
+  names.push_back("King");
+  names.push_back("Bishop");
+  names.push_back("Knight");
+  names.push_back("Rook");
 
-  for(size_t i = 0; i < chessmans_in.size(); i++)
-    chessmans_in[i]->setIcon(file_addres + names[i] + ".png");
+  for (int i = 8; i < 16; i++)
+      names.push_back("Pawn");
+
+  qDebug() << "size : " << chessmans_in.size();
+  for (size_t i = 0; i < chessmans_in.size(); i++) {
+      qDebug() << "file address: " << file_addres.c_str() << "name: " << names[i].c_str();
+      chessmans_in[i]->setIcon((file_addres + names[i] + ".png"));
+  }
 }
 
 User::ChessmansIn User::getChessmansIn() const

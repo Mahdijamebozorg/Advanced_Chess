@@ -11,8 +11,26 @@ Page {
         source: "qrc:/Assets/Images/Main.jpg"
     }
 
+    Dialog {
+        id: fileErr
+        title: persian.checked ? "خظای فایل" : "File Error"
+        Text {
+            id: fileErrTxt
+            text: persian.checked ? "برخی اطلاعات این فایل اشتباه هستند" : "Some of this file's details are invalid"
+        }
+    }
+
+    Connections {
+        target: bknd
+        onFileError: fileErr.open()
+    }
+    Connections {
+        target: bknd
+        onGameLoaded: mystack.push("GamePage.qml")
+    }
+
     LoadGameDialog {
-        id: loadGame
+        id: loadGameDialog
     }
 
     //start button style
@@ -101,10 +119,9 @@ Page {
             font.italic: true
             font.pixelSize: this.height * 0.2
             onClicked: {
-                bknd.loadFiles()
-                //                mystack.push("LoadGameDialog.qml")
-                loadGame.modelCount = bknd.filesCount()
-                loadGame.open()
+                bknd.getFiles() //get files in directory
+                loadGameDialog.modelCount = bknd.filesCount() //get files count
+                loadGameDialog.open()
             }
         }
     }

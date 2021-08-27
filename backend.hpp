@@ -47,18 +47,18 @@ public slots:
 
     void endGame();
 
-    //----------------------------files
-    void loadFiles(); //load txt files from "SavedGames" folder
+    unsigned gameStatus();
+
+    //--------------------------------------------------------- files
+    void getFiles(); //load txt files from "SavedGames" folder
 
     QString getFileName(unsigned index);
 
-    QString getFilePlayersName(unsigned index);
+    QString getFilePlayers(unsigned index);
 
-    bool loadGame(QString);
+    void loadGame(unsigned index);
 
     unsigned filesCount();
-
-    unsigned gameStatus();
 
     //________________________________________________________ users
     void setP1(QString P1Name);
@@ -143,6 +143,10 @@ signals:
     void promotion();
 
     void cancel();
+
+    void fileError();
+
+    void gameLoaded();
 };
 
 std::pair<unsigned, unsigned> indexToIJ(unsigned index);

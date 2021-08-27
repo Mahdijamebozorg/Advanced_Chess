@@ -6,11 +6,16 @@ using namespace std;
 //________________________________________________________________________________________________________ LOAD FILE
 
 //------------------------------------------------------------------------- reading game from file
-void FileManager::readFile(std::string fileName)
+void FileManager::readFile(std::string fileName, bool temp)
 {
+    resetData();
+
     this->game_Name = "./SavedGames/" + fileName;
+
+    qDebug() << game_Name.c_str();
+
     file.open(game_Name.c_str(), ios::in);
-    if (!file)
+    if (!file.is_open())
         throw(runtime_error("can't open file"));
 
     file.seekg(0); //to be sure
@@ -24,16 +29,24 @@ void FileManager::readFile(std::string fileName)
         file.ignore(1, '\"');
         getline(file, tempMove, '\"');
 
-        if (file.eof()) //delimiter
-        {
+        if (file.eof() || tempMove.empty()) //delimiter
             break;
-        }
+
         moves.push_back(tempMove);
+
+        string moveColor = tempMove.substr((tempMove.find('%') + 2), 1);
+        if (moveColor == "W")
+            p1_Score += stoi(tempMove.substr(tempMove.find('$') + 1, tempMove.back()));
+        else if (moveColor == "B")
+            p2_Score += stoi(tempMove.substr(tempMove.find('$') + 1, tempMove.back()));
     }
     file.close();
+
+    if (!temp)
+        this->resetFile();
 }
 
-//-------------------------------------------------------------------------  get loaded game
+//-------------------------------------------------------------------------  get loaded game data
 string FileManager::get_Game_Name()
 {
     return this->game_Name;
@@ -46,12 +59,24 @@ string FileManager::get_P2_Name()
 {
     return this->p2_Name;
 }
+
+unsigned FileManager::get_P1_Score()
+{
+    return this->p1_Score;
+}
+
+unsigned FileManager::get_P2_Score()
+{
+    return this->p2_Score;
+}
 vector<string> FileManager::get_Moves()
 {
     return this->moves;
 }
 
-void FileManager::reset()
+//-------------------------------------------------------------------------  discard data
+
+void FileManager::resetFile()
 {
     file.open(game_Name.c_str(), ios::out | ios::trunc);
     file << p1_Name << '\n' << p2_Name << '\n';
@@ -110,8 +135,6 @@ void FileManager::delete_Last_Move()
         file << '\"' << tempMoves[i] << '\"' << '\n';
     }
 
-    tempMoves.clear();
-
     file.close();
 }
 
@@ -135,5 +158,25 @@ void FileManager::set_P2_Name(std::string name)
     this->p2_Name = name;
     file << p2_Name << '\n';
     file.close();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FileManager::resetData()
+{
+    file.close();
+    this->p1_Score = 0;
+    this->p2_Score = 0;
+    this->p1_Name = "";
+    this->p2_Name = "";
+    this->game_Name = "";
+    this->moves.clear();
+}
+
+//-------------------------------------------------------------------------------------------
+
+FileManager::~FileManager()
+{
+    resetData();
 }
 //-------------------------------------------------------------------------------------------

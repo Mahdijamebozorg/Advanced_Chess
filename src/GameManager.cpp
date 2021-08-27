@@ -29,13 +29,37 @@ GameManager *&GameManager::get(GameName name)
 }
 
 //_______________________________________________________________________________________________________ load game
+//-----------------------// sets game data
 
 void GameManager::loadGame(std::string gameName)
 {
-    setChessBoardGame(ChessBoard::get(users[0], users[1])); //make new chessborad
-    fileManager.readFile(gameName);
+    fileManager.readFile(gameName, false);
 
-    //do all moved
+    qDebug() << "---------------- loading file...";
+    string name1 = fileManager.get_P1_Name(), name2 = fileManager.get_P2_Name().c_str();
+
+    this->setTurn(Turn::USER1);
+
+    this->game_name = gameName;
+    this->users[0] = User::get(name1, Chessman::Color::WHITE, 0, 0);
+    getUser1()->setColor(Chessman::Color::WHITE);
+    getUser1()->setChessmansIn();
+
+    this->users[1] = User::get(name2, Chessman::Color::WHITE, 0, 0);
+    getUser2()->setColor(Chessman::Color::BLACK);
+    getUser2()->setChessmansIn();
+
+    startGame();
+
+    qDebug() << "user1: " << users[0]->getName().c_str() << users[0]->getColor();
+    for (auto item : users[0]->getChessmansIn())
+        qDebug() << item->getID().c_str();
+
+    qDebug() << "user2: " << users[1]->getName().c_str() << users[1]->getColor();
+    for (auto item : getUser2()->getChessmansIn())
+        qDebug() << item->getID().c_str();
+
+    this->loadMoves();
 }
 
 //________________________________________________________________________________________________________ GameManager
@@ -84,19 +108,16 @@ void GameManager::startGame()
 pair<vector<Chessman::Index>, vector<Chessman::Index>> GameManager::getCellState(
                                                                     Chessman::Index index)
 {
-  if(chess_board->getCell(index).getChessPieces() == nullptr) // Check in this home has chessman
-      throw EmptySquare("In this home any chessman not founded.");
+    if (chess_board->getCell(index).getChessPieces() == nullptr) // Check in this home has chessman
+        throw EmptySquare("In this home any chessman not founded.");
 
-  if(turn == USER1)
-  {
-    if(chess_board->getCell(index).getChessPieces()->getColor() == Chessman::BLACK)
-      throw AccessDenied("User1 can't selected Black Chessman");
-  }
-  else
-  {
-    if(chess_board->getCell(index).getChessPieces()->getColor() == Chessman::WHITE)
-      throw AccessDenied("User2 can't selected White Chessman");
-  }
+    if (turn == USER1) {
+        if (chess_board->getCell(index).getChessPieces()->getColor() == Chessman::BLACK)
+            throw AccessDenied("User1 can't selected Black Chessman");
+    } else {
+        if (chess_board->getCell(index).getChessPieces()->getColor() == Chessman::WHITE)
+            throw AccessDenied("User2 can't selected White Chessman");
+    }
   auto tempCellState = chess_board->getCanGo(index, true, enpasan);
 
   //  _______________________________ remvoe dublicated values
@@ -318,10 +339,10 @@ GameManager::ChessBoardGame GameManager::getChessBoardGame() const
 
 void GameManager::changeTurn()
 {
-  if(getTurn() == USER1)
-    setTurn(USER2);
-  else
-    setTurn(USER1);
+    if (getTurn() == USER1)
+        setTurn(USER2);
+    else
+        setTurn(USER1);
 }
 
 //________________________________________________________________________________________________________ setTurn
@@ -542,7 +563,7 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 
 void GameManager::restartGame()
 {
-    this->fileManager.reset();
+    this->fileManager.resetFile();
 
     string temp_name1 = users[0]->getName();
     string temp_name2 = users[1]->getName();
@@ -693,7 +714,7 @@ GameManager::GameStatus GameManager::analayzeGameStatus()
 {
     //search in all user chessmen
     for (shared_ptr<Chessman> &piece : users[turn]->getChessmansIn()) {
-        //        qDebug() << QString::fromStdString(piece->getIcon());
+        qDebug() << QString::fromStdString(piece->getIcon());
 
         if (this->getCellState(this->chess_board->getIndex(piece->getID())).first.size() != 0)
             //if at the least one piece still can move
@@ -862,6 +883,8 @@ User::Score GameManager::calucateScoreMovePiece(Chessman::Index src, Chessman::I
     return temp;
 }
 
+//----------------------------------------------------------------------------
+
 void GameManager::incScore(User::Score score)
 {
     users[turn]->incScore(score);
@@ -881,6 +904,66 @@ void GameManager::decNegativeScore(User::Score score)
 {
     users[turn]->decNegativeScore(score);
 }
+
+FileManager *GameManager::getFileManager()
+{
+    return &fileManager;
+}
+
+//---------------------------------------------------------------------------- load Moves
+//-------------------------------// redo all game moves
+void GameManager::loadMoves()
+{
+    if (fileManager.get_Game_Name() == "")
+        throw runtime_error("no file loaded");
+
+    for (unsigned i = 0; i < fileManager.get_Moves().size(); i++)
+    {
+        string move = fileManager.get_Moves()[i];
+        size_t pos = move.find(" ");
+        Chessman::Index src = {stoi(move.substr(pos + 1, 1)), stoi(move.substr(pos + 2, 1))};
+        Chessman::Index dest = {stoi(move.substr(pos + 3, 1)), stoi(move.substr(pos + 4, 1))};
+        qDebug() << turn;
+        try {
+            //------------------------------------- move
+            checkMove(src, dest);
+            setMove(src, dest);
+        } catch (FinalCellForPawn) {
+            //------------------------------------- promotion
+            setMove(src, dest);
+            promotionForFile(fileManager.get_Moves()[++i]);
+        }
+        changeTurn();
+    }
+}
+
+//---------------------------------------------------------------------------- promotion For File
+
+void GameManager::promotionForFile(string move)
+{
+    if (move.substr(0, 3) != "PRF")
+        throw runtime_error("a promotion has conflict");
+
+    size_t pos = move.find(" ");
+    Chessman::Index index = {stoi(move.substr(pos + 1, 1)), stoi(move.substr(pos + 2, 1))};
+
+    string id = move.substr(3, 1);
+    qDebug() << "*** promotion id: " << id.c_str();
+
+    if (id == "Q")
+        promote(index, Chessman::QUEEN);
+
+    else if (id == "H")
+        promote(index, Chessman::KNIGHT);
+
+    else if (id == "R")
+        promote(index, Chessman::ROOK);
+
+    else if (id == "B")
+        promote(index, Chessman::BISHOP);
+}
+
+//---------------------------------------------------------------------------- get Winner
 
 short unsigned GameManager::getWinner() const
 {
