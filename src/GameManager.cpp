@@ -118,11 +118,11 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> GameManager::getCellState
                              tempCellState.second.end());
 
   //  ___________________________________________ limit checkable moves
-  //  qDebug() << "-------------- canGo before limitation" << tempCellState.first;
+  qDebug() << "-------------- canGo before limitation" << tempCellState.first;
 
   limit_cells_for_king_check(index, tempCellState.first, tempCellState.second);
 
-  //  qDebug() << "-------------- canGo after limitation" << tempCellState.first;
+  qDebug() << "-------------- canGo after limitation" << tempCellState.first;
 
   return tempCellState;
 }
@@ -668,7 +668,11 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
         bool moved;
         //a temp move
         try {
-            checkMove(src, index);
+            try {
+                checkMove(src, index);
+            } catch (FinalCellForPawn) {
+            }
+
             moved = true;
             setMove(src, index, false, true);
 
