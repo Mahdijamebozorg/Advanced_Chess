@@ -12,8 +12,6 @@ void FileManager::readFile(std::string fileName, bool temp)
 
     this->game_Name = "./SavedGames/" + fileName;
 
-    qDebug() << game_Name.c_str();
-
     file.open(game_Name.c_str(), ios::in);
     if (!file.is_open())
         throw(runtime_error("can't open file"));
@@ -25,12 +23,18 @@ void FileManager::readFile(std::string fileName, bool temp)
     getline(file, p1_Name);
     getline(file, p2_Name);
 
+    if (!temp && (p1_Name.empty() || p2_Name.empty()))
+        throw runtime_error("users names have not been saved well");
+
     while (!file.eof()) {
         file.ignore(1, '\"');
         getline(file, tempMove, '\"');
 
-        if (file.eof() || tempMove.empty()) //delimiter
+        if (file.eof()) //delimiter
             break;
+
+        if (!temp && tempMove.size() < 9)
+            throw runtime_error("moves are invalid");
 
         moves.push_back(tempMove);
 
@@ -41,13 +45,40 @@ void FileManager::readFile(std::string fileName, bool temp)
             p2_Score += stoi(tempMove.substr(tempMove.find('$') + 1, tempMove.back()));
     }
     file.close();
+}
 
-    if (!temp)
-        this->resetFile();
+//-------------------------------------------------------------------------
+
+void FileManager::add_to_autoSave()
+{
+    string tempName = game_Name;
+    for (size_t i = 0; i < 4; i++)
+        tempName.pop_back();
+
+    qDebug() << tempName.substr(tempName.find("(") + 1, tempName.find(")")).c_str();
+
+    if (tempName.substr(tempName.find("(") + 1, tempName.find(")")) != "AutoSave)")
+        tempName += ("(AutoSave)");
+    tempName += ".txt";
+
+    game_Name = tempName;
+    rename(game_Name.c_str(), tempName.c_str());
+}
+
+//------------------------------------------------------------------------- save Manually
+
+void FileManager::saveManually()
+{
+    string tempName = game_Name;
+    for (size_t i = 0; i < 14; i++)
+        tempName.pop_back();
+
+    tempName += ".txt";
+    rename(game_Name.c_str(), tempName.c_str());
 }
 
 //-------------------------------------------------------------------------  get loaded game data
-string FileManager::get_Game_Name()
+string FileManager::get_File_Name()
 {
     return this->game_Name;
 }
@@ -83,7 +114,7 @@ void FileManager::resetFile()
     file.close();
 }
 
-//________________________________________________________________________________________________________ EDIT FILE
+//_________________________________________________________________________________________________ EDIT FILE
 
 //------------------------------------------------------------------------- add move to file
 void FileManager::saveMove(string move)
@@ -138,13 +169,14 @@ void FileManager::delete_Last_Move()
     file.close();
 }
 
-//________________________________________________________________________________________________________ NEW FILE
+//_________________________________________________________________________________________________ NEW FILE
 
 //------------------------------------------------------------------------- setting new game
-void FileManager::set_Game_Name(std::string name)
+void FileManager::set_newFile(std::string gameName)
 {
-    this->game_Name = "./SavedGames/" + name + ".txt";
-    file.open(game_Name.c_str(), ios::out);
+    this->game_Name = "./SavedGames/" + gameName + "(AutoSave)" + ".txt";
+
+    file.open(game_Name.c_str(), ios::trunc | ios::out);
     if (!file)
         throw(runtime_error("can't open file in set game"));
 }
@@ -158,6 +190,13 @@ void FileManager::set_P2_Name(std::string name)
     this->p2_Name = name;
     file << p2_Name << '\n';
     file.close();
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FileManager::removeFile()
+{
+    remove(game_Name.c_str());
 }
 
 //-------------------------------------------------------------------------------------------

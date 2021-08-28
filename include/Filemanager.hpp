@@ -18,23 +18,25 @@ private:
 
 public:
     void readFile(std::string fileName, bool temp = true);
+    void add_to_autoSave();
+    void saveManually();
 
-    std::string get_Game_Name();
+    std::string get_File_Name();
     std::string get_P1_Name();
     std::string get_P2_Name();
     unsigned get_P1_Score();
     unsigned get_P2_Score();
     std::vector<std::string> get_Moves();
 
-    void resetFile();
-
     void saveMove(std::string);
     void delete_Last_Move();
 
-    void set_Game_Name(std::string name);
+    void set_newFile(std::string name);
     void set_P1_Name(std::string name);
     void set_P2_Name(std::string name);
 
+    void removeFile();
+    void resetFile();
     void resetData();
 
     ~FileManager();

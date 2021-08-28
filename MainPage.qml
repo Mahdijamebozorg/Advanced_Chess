@@ -22,11 +22,11 @@ Page {
 
     Connections {
         target: bknd
-        onFileError: fileErr.open()
+        onGameLoaded: mystack.push("GamePage.qml")
     }
     Connections {
         target: bknd
-        onGameLoaded: mystack.push("GamePage.qml")
+        onFileError: fileErr.open()
     }
 
     LoadGameDialog {
@@ -120,6 +120,7 @@ Page {
             font.pixelSize: this.height * 0.2
             onClicked: {
                 bknd.getFiles() //get files in directory
+                loadGameDialog.modelCount = 0 //to refresh
                 loadGameDialog.modelCount = bknd.filesCount() //get files count
                 loadGameDialog.open()
             }

@@ -2,6 +2,7 @@
 #include "include/Exceptions.hpp"
 #include <dirent.h>
 #include <fstream>
+#include <iomanip>
 
 using namespace std;
 
@@ -30,11 +31,24 @@ void BackEnd::restartGame()
     destIndex = -1;
 }
 
+//__________________________________________________________________________
+
+void BackEnd::saveAndExit()
+{
+    manager->endGame();
+    manager->saveAutoSaved();
+    manager->getFileManager()->resetData();
+    previewsSrc = -1;
+    srcIndex = -1;
+    destIndex = -1;
+}
+
 //__________________________________________________________________________ endGame
 
 void BackEnd::endGame()
 {
     manager->endGame();
+    manager->getFileManager()->removeFile();
     previewsSrc = -1;
     srcIndex = -1;
     destIndex = -1;
@@ -63,33 +77,24 @@ void BackEnd::getFiles()
 }
 
 //__________________________________________________________________________ get file
-
-QString BackEnd::getFileName(unsigned index)
-{
-    return QString::fromStdString(_dirFiles[index]);
-}
-
-//__________________________________________________________________________ getFilePlayers
 //________________// read plyer info
-
-QString BackEnd::getFilePlayers(unsigned index)
+QString BackEnd::getFileInfo(unsigned index)
 {
     manager->getFileManager()->readFile(_dirFiles[index]);
 
     string name1 = manager->getFileManager()->get_P1_Name();
     string name2 = manager->getFileManager()->get_P2_Name();
-    unsigned score1 = manager->getFileManager()->get_P1_Score();
-    unsigned score2 = manager->getFileManager()->get_P2_Score();
+    string score1 = '(' + to_string(manager->getFileManager()->get_P1_Score()) + ')';
+    string score2 = '(' + to_string(manager->getFileManager()->get_P2_Score()) + ')';
 
-    return QString::fromStdString(name1 + ' ' + '(' + to_string(score1) + ')' + "  vs  " + name2
-                                  + ' ' + '(' + to_string(score2) + ')');
+    return QString::fromStdString(_dirFiles[index] + name1 + score1 + name2 + score2);
 }
 
 //__________________________________________________________________________ load test
 
 void BackEnd::loadGame(unsigned index)
 {
-    qDebug() << "loaded: " << _dirFiles[index].c_str();
+    qDebug() << "loaded file: " << _dirFiles[index].c_str();
     try {
         manager->loadGame(_dirFiles[index]);
         emit gameLoaded();

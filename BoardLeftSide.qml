@@ -9,21 +9,6 @@ Item {
     EndOfGameDialog {
         id: endOfGame
     }
-
-    Dialog {
-        id: cancelAlert
-        title: persian.checked ? "آیا مطمعنید؟" : "Are you sure?"
-        Text {
-            id: alertCancelText
-            text: persian.checked ? "اطلاعات بازی حذف خواهند شد" : "Game data will be lost"
-        }
-        standardButtons: Dialog.Ok | Dialog.Cancel
-        onAccepted: {
-            bknd.setCanceler()
-            endOfGame.open()
-        }
-        onRejected: cancelAlert.close()
-    }
     Dialog {
         id: restartAlert
         title: persian.checked ? "آیا مطمعنید؟" : "Are you sure?"
@@ -38,6 +23,7 @@ Item {
         }
         onRejected: restartAlert.close()
     }
+
     Rectangle {
         anchors.fill: parent
         color: "white"
@@ -182,6 +168,43 @@ Item {
                         }
                     }
                 }
+                //save & Exit Rec
+                Rectangle {
+                    id: saveExitRec
+                    color: "#00000000"
+                    border.color: "#7c6d43"
+                    width: leftSide.width * 0.8
+                    height: leftSide.height * 0.07
+                    anchors.horizontalCenter: orderCol.horizontalCenter
+                    Image {
+                        anchors.centerIn: parent
+                        width: cancelRec.width - 2
+                        height: cancelRec.height - 2
+                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        Button {
+                            anchors.fill: parent
+                            flat: true
+                            onClicked: {
+                                bknd.saveAndExit()
+                                mystack.pop()
+                            }
+                            Text {
+                                text: persian.checked ? "ذخیره و خروج" : "Save & Exit"
+                                color: "#aa882a"
+                                anchors.centerIn: parent
+                                textFormat: Text.StyledText
+                                fontSizeMode: Text.Fit
+                                minimumPixelSize: 3
+                                font.pixelSize: 15
+                                height: parent.height * 0.9
+                                width: parent.width * 0.9
+                                horizontalAlignment: Text.AlignHCenter
+                                verticalAlignment: Text.AlignVCenter
+                            }
+                        }
+                    }
+                }
+
                 //cancel
                 Rectangle {
                     id: cancelRec
@@ -199,7 +222,8 @@ Item {
                             anchors.fill: parent
                             flat: true
                             onClicked: {
-                                cancelAlert.open()
+                                bknd.setCanceler()
+                                endOfGame.open()
                             }
                             Text {
                                 text: persian.checked ? "انصراف" : "Cancel"

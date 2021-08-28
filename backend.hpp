@@ -45,6 +45,8 @@ public slots:
 
     void restartGame();
 
+    void saveAndExit();
+
     void endGame();
 
     unsigned gameStatus();
@@ -52,9 +54,7 @@ public slots:
     //--------------------------------------------------------- files
     void getFiles(); //load txt files from "SavedGames" folder
 
-    QString getFileName(unsigned index);
-
-    QString getFilePlayers(unsigned index);
+    QString getFileInfo(unsigned index);
 
     void loadGame(unsigned index);
 

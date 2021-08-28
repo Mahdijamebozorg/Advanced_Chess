@@ -35,7 +35,6 @@ void GameManager::loadGame(std::string gameName)
 {
     fileManager.readFile(gameName, false);
 
-    qDebug() << "---------------- loading file...";
     string name1 = fileManager.get_P1_Name(), name2 = fileManager.get_P2_Name().c_str();
 
     this->setTurn(Turn::USER1);
@@ -51,22 +50,14 @@ void GameManager::loadGame(std::string gameName)
 
     startGame();
 
-    qDebug() << "user1: " << users[0]->getName().c_str() << users[0]->getColor();
-    for (auto item : users[0]->getChessmansIn())
-        qDebug() << item->getID().c_str();
-
-    qDebug() << "user2: " << users[1]->getName().c_str() << users[1]->getColor();
-    for (auto item : getUser2()->getChessmansIn())
-        qDebug() << item->getID().c_str();
-
     this->loadMoves();
 }
 
 //________________________________________________________________________________________________________ GameManager
 
-GameManager::GameManager(GameName game_name)
+GameManager::GameManager(GameName temp_game_name)
 {
-    //    setGameName(game_name);
+    this->game_name = temp_game_name;
 }
 
 //________________________________________________________________________________________________________ Distructor
@@ -208,7 +199,6 @@ void GameManager::setMove(Chessman::Index src, Chessman::Index dest, bool in_und
                 if (dest.second - src.second == 2) {
                     checkMove(make_pair(dest.first, dest.second + 1),
                               make_pair(dest.first, dest.second - 1));
-                    qDebug() << "performing rook move right";
                     setMove(make_pair(dest.first, dest.second + 1),
                             make_pair(dest.first, dest.second - 1),
                             in_undo);
@@ -219,7 +209,6 @@ void GameManager::setMove(Chessman::Index src, Chessman::Index dest, bool in_und
                 else if (src.second - dest.second == 2) {
                     checkMove(make_pair(dest.first, dest.second - 2),
                               make_pair(dest.first, dest.second + 1));
-                    qDebug() << "performing rook move left";
                     setMove(make_pair(dest.first, dest.second - 2),
                             make_pair(dest.first, dest.second + 1),
                             in_undo);
@@ -364,7 +353,7 @@ GameManager::Turn GameManager::getTurn() const
 void GameManager::setGameName(GameName game_name)
 {
     this->game_name = game_name;
-    this->fileManager.set_Game_Name(game_name);
+    this->fileManager.set_newFile(game_name);
 }
 
 //________________________________________________________________________________________________________  getGameName
@@ -458,7 +447,6 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
     }
     //________________________________ if a pawn has promoted
     else if (temp.substr(0, 3) == "PRF") {
-        qDebug() << "-----------enterd in prf";
         changeTurn();
         size_t pos = temp.find(" ");
         temp_src = {stoi(temp.substr(pos + 1, 1)), stoi(temp.substr(pos + 2, 1))};
@@ -714,7 +702,7 @@ GameManager::GameStatus GameManager::analayzeGameStatus()
 {
     //search in all user chessmen
     for (shared_ptr<Chessman> &piece : users[turn]->getChessmansIn()) {
-        qDebug() << QString::fromStdString(piece->getIcon());
+        //        qDebug() << QString::fromStdString(piece->getIcon());
 
         if (this->getCellState(this->chess_board->getIndex(piece->getID())).first.size() != 0)
             //if at the least one piece still can move
@@ -914,8 +902,11 @@ FileManager *GameManager::getFileManager()
 //-------------------------------// redo all game moves
 void GameManager::loadMoves()
 {
-    if (fileManager.get_Game_Name() == "")
+    if (fileManager.get_File_Name() == "")
         throw runtime_error("no file loaded");
+
+    fileManager.add_to_autoSave(); //starting auto save
+    fileManager.resetFile();
 
     for (unsigned i = 0; i < fileManager.get_Moves().size(); i++)
     {
@@ -923,7 +914,6 @@ void GameManager::loadMoves()
         size_t pos = move.find(" ");
         Chessman::Index src = {stoi(move.substr(pos + 1, 1)), stoi(move.substr(pos + 2, 1))};
         Chessman::Index dest = {stoi(move.substr(pos + 3, 1)), stoi(move.substr(pos + 4, 1))};
-        qDebug() << turn;
         try {
             //------------------------------------- move
             checkMove(src, dest);
@@ -948,7 +938,6 @@ void GameManager::promotionForFile(string move)
     Chessman::Index index = {stoi(move.substr(pos + 1, 1)), stoi(move.substr(pos + 2, 1))};
 
     string id = move.substr(3, 1);
-    qDebug() << "*** promotion id: " << id.c_str();
 
     if (id == "Q")
         promote(index, Chessman::QUEEN);
@@ -961,6 +950,13 @@ void GameManager::promotionForFile(string move)
 
     else if (id == "B")
         promote(index, Chessman::BISHOP);
+}
+
+//---------------------------------------------------------------------------- sava game
+
+void GameManager::saveAutoSaved()
+{
+    fileManager.saveManually();
 }
 
 //---------------------------------------------------------------------------- get Winner

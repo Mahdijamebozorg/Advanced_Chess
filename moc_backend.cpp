@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_BackEnd_t {
     QByteArrayData data[59];
-    char stringdata0[584];
+    char stringdata0[581];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -45,59 +45,59 @@ QT_MOC_LITERAL(9, 71, 7), // "setGame"
 QT_MOC_LITERAL(10, 79, 8), // "gameName"
 QT_MOC_LITERAL(11, 88, 9), // "startGame"
 QT_MOC_LITERAL(12, 98, 11), // "restartGame"
-QT_MOC_LITERAL(13, 110, 7), // "endGame"
-QT_MOC_LITERAL(14, 118, 10), // "gameStatus"
-QT_MOC_LITERAL(15, 129, 8), // "getFiles"
-QT_MOC_LITERAL(16, 138, 11), // "getFileName"
-QT_MOC_LITERAL(17, 150, 5), // "index"
-QT_MOC_LITERAL(18, 156, 14), // "getFilePlayers"
-QT_MOC_LITERAL(19, 171, 8), // "loadGame"
-QT_MOC_LITERAL(20, 180, 10), // "filesCount"
-QT_MOC_LITERAL(21, 191, 5), // "setP1"
-QT_MOC_LITERAL(22, 197, 6), // "P1Name"
-QT_MOC_LITERAL(23, 204, 5), // "setP2"
-QT_MOC_LITERAL(24, 210, 6), // "P2Name"
-QT_MOC_LITERAL(25, 217, 9), // "getP1Name"
-QT_MOC_LITERAL(26, 227, 9), // "getP2Name"
-QT_MOC_LITERAL(27, 237, 12), // "getP1_PScore"
-QT_MOC_LITERAL(28, 250, 12), // "getP1_NScore"
-QT_MOC_LITERAL(29, 263, 12), // "getP2_PScore"
-QT_MOC_LITERAL(30, 276, 12), // "getP2_NScore"
-QT_MOC_LITERAL(31, 289, 11), // "getGameName"
-QT_MOC_LITERAL(32, 301, 6), // "winner"
-QT_MOC_LITERAL(33, 308, 15), // "checkRandomMove"
-QT_MOC_LITERAL(34, 324, 11), // "setCanceler"
-QT_MOC_LITERAL(35, 336, 11), // "getCanceler"
-QT_MOC_LITERAL(36, 348, 7), // "getIcon"
-QT_MOC_LITERAL(37, 356, 9), // "cellState"
-QT_MOC_LITERAL(38, 366, 7), // "isMoved"
-QT_MOC_LITERAL(39, 374, 7), // "getSrcI"
-QT_MOC_LITERAL(40, 382, 7), // "getSrcJ"
-QT_MOC_LITERAL(41, 390, 8), // "getDestI"
-QT_MOC_LITERAL(42, 399, 8), // "getDestJ"
-QT_MOC_LITERAL(43, 408, 11), // "getSrcIndex"
-QT_MOC_LITERAL(44, 420, 12), // "getDestIndex"
-QT_MOC_LITERAL(45, 433, 6), // "canHit"
-QT_MOC_LITERAL(46, 440, 34), // "std::vector<std::pair<uint,ui..."
-QT_MOC_LITERAL(47, 475, 9), // "bkndcanGo"
-QT_MOC_LITERAL(48, 485, 5), // "canGo"
-QT_MOC_LITERAL(49, 491, 6), // "choose"
-QT_MOC_LITERAL(50, 498, 13), // "unchoosePiece"
-QT_MOC_LITERAL(51, 512, 13), // "getP1OutsIcon"
-QT_MOC_LITERAL(52, 526, 13), // "getP2OutsIcon"
-QT_MOC_LITERAL(53, 540, 4), // "move"
-QT_MOC_LITERAL(54, 545, 4), // "undo"
-QT_MOC_LITERAL(55, 550, 9), // "extraMove"
-QT_MOC_LITERAL(56, 560, 10), // "randomMove"
-QT_MOC_LITERAL(57, 571, 7), // "promote"
-QT_MOC_LITERAL(58, 579, 4) // "type"
+QT_MOC_LITERAL(13, 110, 11), // "saveAndExit"
+QT_MOC_LITERAL(14, 122, 7), // "endGame"
+QT_MOC_LITERAL(15, 130, 10), // "gameStatus"
+QT_MOC_LITERAL(16, 141, 8), // "getFiles"
+QT_MOC_LITERAL(17, 150, 11), // "getFileInfo"
+QT_MOC_LITERAL(18, 162, 5), // "index"
+QT_MOC_LITERAL(19, 168, 8), // "loadGame"
+QT_MOC_LITERAL(20, 177, 10), // "filesCount"
+QT_MOC_LITERAL(21, 188, 5), // "setP1"
+QT_MOC_LITERAL(22, 194, 6), // "P1Name"
+QT_MOC_LITERAL(23, 201, 5), // "setP2"
+QT_MOC_LITERAL(24, 207, 6), // "P2Name"
+QT_MOC_LITERAL(25, 214, 9), // "getP1Name"
+QT_MOC_LITERAL(26, 224, 9), // "getP2Name"
+QT_MOC_LITERAL(27, 234, 12), // "getP1_PScore"
+QT_MOC_LITERAL(28, 247, 12), // "getP1_NScore"
+QT_MOC_LITERAL(29, 260, 12), // "getP2_PScore"
+QT_MOC_LITERAL(30, 273, 12), // "getP2_NScore"
+QT_MOC_LITERAL(31, 286, 11), // "getGameName"
+QT_MOC_LITERAL(32, 298, 6), // "winner"
+QT_MOC_LITERAL(33, 305, 15), // "checkRandomMove"
+QT_MOC_LITERAL(34, 321, 11), // "setCanceler"
+QT_MOC_LITERAL(35, 333, 11), // "getCanceler"
+QT_MOC_LITERAL(36, 345, 7), // "getIcon"
+QT_MOC_LITERAL(37, 353, 9), // "cellState"
+QT_MOC_LITERAL(38, 363, 7), // "isMoved"
+QT_MOC_LITERAL(39, 371, 7), // "getSrcI"
+QT_MOC_LITERAL(40, 379, 7), // "getSrcJ"
+QT_MOC_LITERAL(41, 387, 8), // "getDestI"
+QT_MOC_LITERAL(42, 396, 8), // "getDestJ"
+QT_MOC_LITERAL(43, 405, 11), // "getSrcIndex"
+QT_MOC_LITERAL(44, 417, 12), // "getDestIndex"
+QT_MOC_LITERAL(45, 430, 6), // "canHit"
+QT_MOC_LITERAL(46, 437, 34), // "std::vector<std::pair<uint,ui..."
+QT_MOC_LITERAL(47, 472, 9), // "bkndcanGo"
+QT_MOC_LITERAL(48, 482, 5), // "canGo"
+QT_MOC_LITERAL(49, 488, 6), // "choose"
+QT_MOC_LITERAL(50, 495, 13), // "unchoosePiece"
+QT_MOC_LITERAL(51, 509, 13), // "getP1OutsIcon"
+QT_MOC_LITERAL(52, 523, 13), // "getP2OutsIcon"
+QT_MOC_LITERAL(53, 537, 4), // "move"
+QT_MOC_LITERAL(54, 542, 4), // "undo"
+QT_MOC_LITERAL(55, 547, 9), // "extraMove"
+QT_MOC_LITERAL(56, 557, 10), // "randomMove"
+QT_MOC_LITERAL(57, 568, 7), // "promote"
+QT_MOC_LITERAL(58, 576, 4) // "type"
 
     },
     "BackEnd\0choosen\0\0moved\0unchoosen\0"
     "promotion\0cancel\0fileError\0gameLoaded\0"
     "setGame\0gameName\0startGame\0restartGame\0"
-    "endGame\0gameStatus\0getFiles\0getFileName\0"
-    "index\0getFilePlayers\0loadGame\0filesCount\0"
+    "saveAndExit\0endGame\0gameStatus\0getFiles\0"
+    "getFileInfo\0index\0loadGame\0filesCount\0"
     "setP1\0P1Name\0setP2\0P2Name\0getP1Name\0"
     "getP2Name\0getP1_PScore\0getP1_NScore\0"
     "getP2_PScore\0getP2_NScore\0getGameName\0"
@@ -141,43 +141,43 @@ static const uint qt_meta_data_BackEnd[] = {
       13,    0,  276,    2, 0x0a /* Public */,
       14,    0,  277,    2, 0x0a /* Public */,
       15,    0,  278,    2, 0x0a /* Public */,
-      16,    1,  279,    2, 0x0a /* Public */,
-      18,    1,  282,    2, 0x0a /* Public */,
-      19,    1,  285,    2, 0x0a /* Public */,
-      20,    0,  288,    2, 0x0a /* Public */,
-      21,    1,  289,    2, 0x0a /* Public */,
-      23,    1,  292,    2, 0x0a /* Public */,
-      25,    0,  295,    2, 0x0a /* Public */,
-      26,    0,  296,    2, 0x0a /* Public */,
-      27,    0,  297,    2, 0x0a /* Public */,
-      28,    0,  298,    2, 0x0a /* Public */,
-      29,    0,  299,    2, 0x0a /* Public */,
-      30,    0,  300,    2, 0x0a /* Public */,
-      31,    0,  301,    2, 0x0a /* Public */,
-      32,    0,  302,    2, 0x0a /* Public */,
-      33,    0,  303,    2, 0x0a /* Public */,
-      34,    0,  304,    2, 0x0a /* Public */,
-      35,    0,  305,    2, 0x0a /* Public */,
-      36,    1,  306,    2, 0x0a /* Public */,
-      37,    1,  309,    2, 0x0a /* Public */,
-      38,    1,  312,    2, 0x0a /* Public */,
-      39,    0,  315,    2, 0x0a /* Public */,
-      40,    0,  316,    2, 0x0a /* Public */,
-      41,    0,  317,    2, 0x0a /* Public */,
-      42,    0,  318,    2, 0x0a /* Public */,
-      43,    0,  319,    2, 0x0a /* Public */,
-      44,    0,  320,    2, 0x0a /* Public */,
-      45,    2,  321,    2, 0x0a /* Public */,
-      48,    2,  326,    2, 0x0a /* Public */,
-      49,    1,  331,    2, 0x0a /* Public */,
-      50,    1,  334,    2, 0x0a /* Public */,
-      51,    1,  337,    2, 0x0a /* Public */,
-      52,    1,  340,    2, 0x0a /* Public */,
-      53,    1,  343,    2, 0x0a /* Public */,
-      54,    0,  346,    2, 0x0a /* Public */,
-      55,    0,  347,    2, 0x0a /* Public */,
-      56,    0,  348,    2, 0x0a /* Public */,
-      57,    1,  349,    2, 0x0a /* Public */,
+      16,    0,  279,    2, 0x0a /* Public */,
+      17,    1,  280,    2, 0x0a /* Public */,
+      19,    1,  283,    2, 0x0a /* Public */,
+      20,    0,  286,    2, 0x0a /* Public */,
+      21,    1,  287,    2, 0x0a /* Public */,
+      23,    1,  290,    2, 0x0a /* Public */,
+      25,    0,  293,    2, 0x0a /* Public */,
+      26,    0,  294,    2, 0x0a /* Public */,
+      27,    0,  295,    2, 0x0a /* Public */,
+      28,    0,  296,    2, 0x0a /* Public */,
+      29,    0,  297,    2, 0x0a /* Public */,
+      30,    0,  298,    2, 0x0a /* Public */,
+      31,    0,  299,    2, 0x0a /* Public */,
+      32,    0,  300,    2, 0x0a /* Public */,
+      33,    0,  301,    2, 0x0a /* Public */,
+      34,    0,  302,    2, 0x0a /* Public */,
+      35,    0,  303,    2, 0x0a /* Public */,
+      36,    1,  304,    2, 0x0a /* Public */,
+      37,    1,  307,    2, 0x0a /* Public */,
+      38,    1,  310,    2, 0x0a /* Public */,
+      39,    0,  313,    2, 0x0a /* Public */,
+      40,    0,  314,    2, 0x0a /* Public */,
+      41,    0,  315,    2, 0x0a /* Public */,
+      42,    0,  316,    2, 0x0a /* Public */,
+      43,    0,  317,    2, 0x0a /* Public */,
+      44,    0,  318,    2, 0x0a /* Public */,
+      45,    2,  319,    2, 0x0a /* Public */,
+      48,    2,  324,    2, 0x0a /* Public */,
+      49,    1,  329,    2, 0x0a /* Public */,
+      50,    1,  332,    2, 0x0a /* Public */,
+      51,    1,  335,    2, 0x0a /* Public */,
+      52,    1,  338,    2, 0x0a /* Public */,
+      53,    1,  341,    2, 0x0a /* Public */,
+      54,    0,  344,    2, 0x0a /* Public */,
+      55,    0,  345,    2, 0x0a /* Public */,
+      56,    0,  346,    2, 0x0a /* Public */,
+      57,    1,  347,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void,
@@ -193,11 +193,11 @@ static const uint qt_meta_data_BackEnd[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
+    QMetaType::Void,
     QMetaType::UInt,
     QMetaType::Void,
-    QMetaType::QString, QMetaType::UInt,   17,
-    QMetaType::QString, QMetaType::UInt,   17,
-    QMetaType::Void, QMetaType::UInt,   17,
+    QMetaType::QString, QMetaType::UInt,   18,
+    QMetaType::Void, QMetaType::UInt,   18,
     QMetaType::UInt,
     QMetaType::Void, QMetaType::QString,   22,
     QMetaType::Void, QMetaType::QString,   24,
@@ -212,22 +212,22 @@ static const uint qt_meta_data_BackEnd[] = {
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::UInt,
-    QMetaType::QString, QMetaType::UInt,   17,
-    QMetaType::UInt, QMetaType::UInt,   17,
-    QMetaType::Bool, QMetaType::UInt,   17,
+    QMetaType::QString, QMetaType::UInt,   18,
+    QMetaType::UInt, QMetaType::UInt,   18,
+    QMetaType::Bool, QMetaType::UInt,   18,
     QMetaType::UInt,
     QMetaType::UInt,
     QMetaType::UInt,
     QMetaType::UInt,
     QMetaType::UInt,
     QMetaType::UInt,
-    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 46,   17,   47,
-    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 46,   17,   47,
-    QMetaType::UInt, QMetaType::UInt,   17,
-    QMetaType::Bool, QMetaType::UInt,   17,
-    QMetaType::QString, QMetaType::UInt,   17,
-    QMetaType::QString, QMetaType::UInt,   17,
-    QMetaType::Bool, QMetaType::UInt,   17,
+    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 46,   18,   47,
+    QMetaType::Bool, QMetaType::UInt, 0x80000000 | 46,   18,   47,
+    QMetaType::UInt, QMetaType::UInt,   18,
+    QMetaType::Bool, QMetaType::UInt,   18,
+    QMetaType::QString, QMetaType::UInt,   18,
+    QMetaType::QString, QMetaType::UInt,   18,
+    QMetaType::Bool, QMetaType::UInt,   18,
     QMetaType::Void,
     QMetaType::Bool,
     QMetaType::Void,
@@ -252,13 +252,12 @@ void BackEnd::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, voi
         case 7: _t->setGame((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 8: _t->startGame(); break;
         case 9: _t->restartGame(); break;
-        case 10: _t->endGame(); break;
-        case 11: { uint _r = _t->gameStatus();
+        case 10: _t->saveAndExit(); break;
+        case 11: _t->endGame(); break;
+        case 12: { uint _r = _t->gameStatus();
             if (_a[0]) *reinterpret_cast< uint*>(_a[0]) = std::move(_r); }  break;
-        case 12: _t->getFiles(); break;
-        case 13: { QString _r = _t->getFileName((*reinterpret_cast< uint(*)>(_a[1])));
-            if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
-        case 14: { QString _r = _t->getFilePlayers((*reinterpret_cast< uint(*)>(_a[1])));
+        case 13: _t->getFiles(); break;
+        case 14: { QString _r = _t->getFileInfo((*reinterpret_cast< uint(*)>(_a[1])));
             if (_a[0]) *reinterpret_cast< QString*>(_a[0]) = std::move(_r); }  break;
         case 15: _t->loadGame((*reinterpret_cast< uint(*)>(_a[1]))); break;
         case 16: { uint _r = _t->filesCount();

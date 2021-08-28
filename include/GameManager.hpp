@@ -33,6 +33,7 @@ public:
     void loadGame(std::string gameName);
     void loadMoves();
     void promotionForFile(std::string move);
+    void saveAutoSaved(); //manually
 
     void setChessBoardGame(const ChessBoardGame &);
     ChessBoardGame getChessBoardGame() const;

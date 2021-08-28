@@ -9,6 +9,41 @@ Dialog {
     height: parent.height * 0.17
     width: parent.width * 0.3
 
+    //-------------------------- an alert for canceling game
+    Dialog {
+        id: cancelAlert
+        title: persian.checked ? "آیا مطمعنید؟" : "Are you sure?"
+        Text {
+            id: alertCancelText
+            text: persian.checked ? "همه ی اطلاعات بازی حذف خواهند شد" : "All of game data will be lost"
+        }
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        onAccepted: {
+            mystack.pop()
+            bknd.endGame()
+            endOfGame.close()
+            window.width = Screen.width * 0.5
+            window.height = Screen.height * 0.75
+        }
+        onRejected: cancelAlert.close()
+    }
+
+    //------------------------- an alert for restaring game
+    Dialog {
+        id: restartAlert
+        title: persian.checked ? "آیا مطمعنید؟" : "Are you sure?"
+        Text {
+            id: alertRestartText
+            text: persian.checked ? "اطلاعات بازی حذف خواهند شد" : "Game data will be lost"
+        }
+        standardButtons: Dialog.Ok | Dialog.Cancel
+        onAccepted: {
+            bknd.restartGame()
+            mystack.replace("GamePage.qml")
+        }
+        onRejected: restartAlert.close()
+    }
+
     contentItem: Rectangle {
 
         border.color: "#7c6d43"
@@ -39,7 +74,10 @@ Dialog {
                 verticalAlignment: Text.AlignVCenter
                 height: parent.height - 2
                 width: parent.width - 2
-                font.pixelSize: this.width * 0.1
+                textFormat: Text.StyledText
+                fontSizeMode: Text.Fit
+                minimumPixelSize: 3
+                font.pixelSize: 25
                 Component.onCompleted: {
 
                     //------------------------------------------------------------------ title
@@ -113,11 +151,7 @@ Dialog {
                 height: parent.height
                 font.pixelSize: this.width * 0.1
                 onClicked: {
-                    mystack.pop()
-                    bknd.endGame()
-                    endOfGame.close()
-                    window.width = Screen.width * 0.5
-                    window.height = Screen.height * 0.75
+                    cancelAlert.open()
                 }
             }
             Button {
@@ -127,8 +161,7 @@ Dialog {
                 height: parent.height
                 font.pixelSize: this.width * 0.1
                 onClicked: {
-                    bknd.restartGame()
-                    mystack.replace("GamePage.qml")
+                    restartAlert.open()
                 }
             }
         }
