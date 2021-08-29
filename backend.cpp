@@ -60,7 +60,8 @@ bool BackEnd::checkInput(QString name)
 {
     for (auto ch : name.toStdString())
         if (!isalpha(ch))
-            return false;
+            if (ch != ' ' && ch != '_' && !isdigit(ch))
+                return false;
     return true;
 }
 

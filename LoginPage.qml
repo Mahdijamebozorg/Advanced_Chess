@@ -52,7 +52,7 @@ Page {
                 id: gameName
                 horizontalAlignment: Text.AlignHCenter
                 anchors.centerIn: parent
-                placeholderText: persian.checked ? "(انگلیسی)نام بازی" : "Game name(English)"
+                placeholderText: persian.checked ? "نام بازی(انگلیسی)" : "Game name(English)"
                 placeholderTextColor: "#7c6d43"
                 text: ""
                 width: gameNameRec.width * 0.8
