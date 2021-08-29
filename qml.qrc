@@ -33,6 +33,8 @@
         <file>Assets/Sound_Effects/move.mp3</file>
         <file>LoadGameDialog.qml</file>
         <file>Assets/Musics/Johann_Johannsson_Flight_From_The_City_2021.mp3</file>
+        <file>InfoDialog.qml</file>
+        <file>Assets/Icons/info.png</file>
         <file>Assets/Icons/delete.png</file>
     </qresource>
 </RCC>

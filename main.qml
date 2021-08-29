@@ -13,6 +13,10 @@ ApplicationWindow {
     minimumWidth: 700
     title: persian.checked ? "شطرنج پیشرفته" : "Advanced Chess"
 
+    InfoDialog {
+        id: infoDialog
+    }
+
     header: ToolBar {
         id: toolbar
         height: window.height * 0.05
@@ -41,26 +45,51 @@ ApplicationWindow {
         id: drawer
         width: window.width * 0.25
         height: window.height
-
-        Column {
+        Rectangle {
             anchors.fill: parent
+            color: "black"
+            Column {
+                anchors.fill: parent
 
-            Switch {
-                id: soundOn
-                text: persian.checked ? "صدا" : "Sound"
-                checked: true
+                Switch {
+                    id: soundOn
+                    text: persian.checked ? "صدا" : "Sound"
+                    checked: true
+                }
+                Switch {
+                    id: persian
+                    text: "پارسی"
+                    checked: false
+                }
+                Switch {
+                    id: fullScreen
+                    text: persian.checked ? "تمام صفحه" : "FullScreen"
+                    checked: true
+                    onCheckedChanged: {
+                        this.checked ? window.showFullScreen(
+                                           ) : window.showNormal()
+                    }
+                }
             }
-            Switch {
-                id: persian
-                text: "پارسی"
-                checked: false
-            }
-            Switch {
-                id: fullScreen
-                text: persian.checked ? "تمام صفحه" : "FullScreen"
-                checked: true
-                onCheckedChanged: {
-                    this.checked ? window.showFullScreen() : window.showNormal()
+            Rectangle {
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 8
+                anchors.left: parent.left
+                anchors.leftMargin: 8
+                width: parent.width * 0.2
+                height: parent.height * 0.06
+                Image {
+                    anchors.fill: parent
+                    source: "qrc:/Assets/Icons/info.png"
+                }
+                Button {
+                    anchors.fill: parent
+                    flat: true
+                    id: infBtn
+                    onPressed: {
+                        infoDialog.open()
+                        drawer.close()
+                    }
                 }
             }
         }

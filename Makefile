@@ -744,6 +744,7 @@ compiler_rcc_clean:
 	-$(DEL_FILE) qrc_qml.cpp
 qrc_qml.cpp: qml.qrc \
 		/opt/Qt5.13.1/5.13.1/gcc_64/bin/rcc \
+		InfoDialog.qml \
 		BoardBottomSide.qml \
 		MainPage.qml \
 		LoadGameDialog.qml \
@@ -771,6 +772,7 @@ qrc_qml.cpp: qml.qrc \
 		Assets/Icons/BRook.png \
 		Assets/Icons/WQueen.png \
 		Assets/Icons/WBishop.png \
+		Assets/Icons/info.png \
 		Assets/Images/Wood5.jpg \
 		Assets/Images/Main.jpg \
 		Assets/Images/Board.jpg \
