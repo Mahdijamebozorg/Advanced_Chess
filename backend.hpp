@@ -49,6 +49,8 @@ public slots:
 
     void endGame();
 
+    bool checkInput(QString name);
+
     unsigned gameStatus();
 
     //--------------------------------------------------------- files
@@ -59,6 +61,8 @@ public slots:
     void loadGame(unsigned index);
 
     unsigned filesCount();
+
+    void deleteFile(unsigned index);
 
     //________________________________________________________ users
     void setP1(QString P1Name);

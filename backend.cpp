@@ -56,6 +56,16 @@ void BackEnd::endGame()
 
 //__________________________________________________________________________
 
+bool BackEnd::checkInput(QString name)
+{
+    for (auto ch : name.toStdString())
+        if (!isalpha(ch))
+            return false;
+    return true;
+}
+
+//__________________________________________________________________________
+
 void BackEnd::getFiles()
 {
     _dirFiles.clear();
@@ -82,12 +92,17 @@ QString BackEnd::getFileInfo(unsigned index)
 {
     manager->getFileManager()->readFile(_dirFiles[index]);
 
-    string name1 = manager->getFileManager()->get_P1_Name();
-    string name2 = manager->getFileManager()->get_P2_Name();
-    string score1 = '(' + to_string(manager->getFileManager()->get_P1_Score()) + ')';
-    string score2 = '(' + to_string(manager->getFileManager()->get_P2_Score()) + ')';
+    QString name1 = QString::fromStdString(manager->getFileManager()->get_P1_Name());
+    QString name2 = QString::fromStdString(manager->getFileManager()->get_P2_Name());
+    QString score1 = QString::fromStdString(
+        '(' + to_string(manager->getFileManager()->get_P1_Score()) + ')');
+    QString score2 = QString::fromStdString(
+        '(' + to_string(manager->getFileManager()->get_P2_Score()) + ')');
+    QString fileName = QString::fromStdString(_dirFiles[index]);
 
-    return QString::fromStdString(_dirFiles[index] + name1 + score1 + name2 + score2);
+    QString temp = fileName + " :   P1:   " + name1 + score1 + "      P2:   " + name2 + score2;
+
+    return temp;
 }
 
 //__________________________________________________________________________ load test
@@ -104,11 +119,19 @@ void BackEnd::loadGame(unsigned index)
     }
 }
 
-//__________________________________________________________________________
+//__________________________________________________________________________ filesCount
 
 unsigned BackEnd::filesCount()
 {
     return _dirFiles.size();
+}
+
+//__________________________________________________________________________ deleteFile
+
+void BackEnd::deleteFile(unsigned index)
+{
+    remove(("./SavedGames/" + (_dirFiles[index])).c_str());
+    this->getFiles();
 }
 
 //__________________________________________________________________________ i & j and index convertion
@@ -468,7 +491,7 @@ bool BackEnd::move(unsigned index) noexcept
     try {
         destIndex = index;
         manager->checkMove(indexToIJ(srcIndex), indexToIJ(destIndex));
-        manager->setMove(indexToIJ(srcIndex), indexToIJ(destIndex));
+        manager->setMove(indexToIJ(srcIndex), indexToIJ(destIndex), false, false, _extraMove);
     }
 
     catch (ImpossibleHitKing &s) {
@@ -481,7 +504,7 @@ bool BackEnd::move(unsigned index) noexcept
         emit promotion();
         _change = true;
         previewsSrc = srcIndex;
-        manager->setMove(indexToIJ(srcIndex), indexToIJ(destIndex));
+        manager->setMove(indexToIJ(srcIndex), indexToIJ(destIndex), false, false, _extraMove);
         return false;
     }
 

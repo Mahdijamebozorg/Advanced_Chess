@@ -52,7 +52,7 @@ Page {
                 id: gameName
                 horizontalAlignment: Text.AlignHCenter
                 anchors.centerIn: parent
-                placeholderText: persian.checked ? "نام بازی" : "Game name"
+                placeholderText: persian.checked ? "(انگلیسی)نام بازی" : "Game name(English)"
                 placeholderTextColor: "#7c6d43"
                 text: ""
                 width: gameNameRec.width * 0.8
@@ -145,7 +145,9 @@ Page {
                     }
 
                     //if game name is empty
-                    if (gameName.text == "") {
+                    if (gameName.text == "" || !bknd.checkInput(
+                                gameName.text)) {
+                        gameName.clear()
                         gameName.placeholderTextColor = "red"
                         ok = false
                     } //if ok
@@ -160,6 +162,9 @@ Page {
                             bknd.setP2(player1.text)
                         }
                         bknd.startGame()
+                        player1.placeholderTextColor = "#7c6d43"
+                        player2.placeholderTextColor = "#7c6d43"
+                        gameName.placeholderTextColor = "#7c6d43"
                         player1.clear()
                         player2.clear()
                         gameName.clear()

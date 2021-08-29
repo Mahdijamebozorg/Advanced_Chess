@@ -61,8 +61,8 @@ void FileManager::add_to_autoSave()
         tempName += ("(AutoSave)");
     tempName += ".txt";
 
-    game_Name = tempName;
     rename(game_Name.c_str(), tempName.c_str());
+    game_Name = tempName;
 }
 
 //------------------------------------------------------------------------- save Manually

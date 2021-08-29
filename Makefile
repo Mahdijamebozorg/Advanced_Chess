@@ -766,6 +766,7 @@ qrc_qml.cpp: qml.qrc \
 		Assets/Icons/WKing.png \
 		Assets/Icons/BQueen.png \
 		Assets/Icons/BPawn.png \
+		Assets/Icons/delete.png \
 		Assets/Icons/BBishop.png \
 		Assets/Icons/BRook.png \
 		Assets/Icons/WQueen.png \
@@ -775,7 +776,8 @@ qrc_qml.cpp: qml.qrc \
 		Assets/Images/Board.jpg \
 		Assets/Images/Login.jpg \
 		Assets/Images/wood1.jpeg \
-		Assets/Images/Wood2.jpg
+		Assets/Images/Wood2.jpg \
+		Assets/Musics/Johann_Johannsson_Flight_From_The_City_2021.mp3
 	/opt/Qt5.13.1/5.13.1/gcc_64/bin/rcc -name qml qml.qrc -o qrc_qml.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h

@@ -69,7 +69,8 @@ public:
     void setMove(Chessman::Index src,
                  Chessman::Index dest,
                  bool in_undo = false,
-                 bool isTemp = false);
+                 bool isTemp = false,
+                 bool isExtraMove = false);
 
     // Convert order to string   // string order: "Chessman(ID) Xi Xi Chessman(ID) or N"
     std::string convertOrderToString(Chessman::Index src, Chessman::Index dest);
@@ -80,6 +81,7 @@ public:
     // Random and Extra Movement functions
     std::pair<Chessman::Index, Chessman::Index> randomMovements();
     bool extraMovements();
+    bool isThisExtramMove(std::string move);
     //
     void limit_cells_for_king_check(Chessman::Index &src,
                                     std::vector<Chessman::Index> &canGo,

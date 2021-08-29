@@ -226,7 +226,7 @@ Item {
                                 endOfGame.open()
                             }
                             Text {
-                                text: persian.checked ? "انصراف" : "Cancel"
+                                text: persian.checked ? "تسلیم" : "Surrend"
                                 color: "#aa882a"
                                 anchors.centerIn: parent
                                 textFormat: Text.StyledText

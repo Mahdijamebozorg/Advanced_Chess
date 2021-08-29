@@ -37,6 +37,7 @@ void GameManager::loadGame(std::string gameName)
 
     string name1 = fileManager.get_P1_Name(), name2 = fileManager.get_P2_Name().c_str();
 
+    //------------------------- set users and chessmen
     this->setTurn(Turn::USER1);
 
     this->game_name = gameName;
@@ -118,11 +119,11 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> GameManager::getCellState
                              tempCellState.second.end());
 
   //  ___________________________________________ limit checkable moves
-  qDebug() << "-------------- canGo before limitation" << tempCellState.first;
+  //  qDebug() << "-------------- canGo before limitation" << tempCellState.first;
 
   limit_cells_for_king_check(index, tempCellState.first, tempCellState.second);
 
-  qDebug() << "-------------- canGo after limitation" << tempCellState.first;
+  //  qDebug() << "-------------- canGo after limitation" << tempCellState.first;
 
   return tempCellState;
 }
@@ -150,7 +151,8 @@ void GameManager::checkMove(Chessman::Index src, Chessman::Index dest)
 
 //________________________________________________________________________________________________________
 
-void GameManager::setMove(Chessman::Index src, Chessman::Index dest, bool in_undo, bool isTemp)
+void GameManager::setMove(
+    Chessman::Index src, Chessman::Index dest, bool in_undo, bool isTemp, bool isExtraMove)
 {
     if (src != dest) {
         if (!chess_board->getCell(src).isFull())
@@ -160,7 +162,9 @@ void GameManager::setMove(Chessman::Index src, Chessman::Index dest, bool in_und
         User::Score temp_score = 0;
 
         if (!in_undo && !isTemp) {
-            temp_score = calucateScoreMovePiece(src, dest);
+            if (isExtraMove)
+                temp_score -= 30;
+            temp_score += calucateScoreMovePiece(src, dest);
             users[turn]->incScore(temp_score);
         }
 
@@ -421,11 +425,18 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         return make_pair(Chessman::Index(-1, -1), Chessman::Index(-1, -1));
 
     string temp = movements.top();
+
+    static bool extram_move_has_done;
+
     if (!isTemp) {
+        qDebug() << "move in undo: " << QString::fromStdString(temp) << endl;
         this->fileManager.delete_Last_Move();
-        qDebug() << "move in undo: " << QString::fromStdString(temp);
     }
     movements.pop();
+
+    //if after allowing extra move user pressed undo
+    if (isThisExtramMove(temp) && !isTemp && !extram_move_has_done)
+        changeTurn();
 
     Chessman::Index temp_src;
     User::Score temp_score = 0;
@@ -520,9 +531,7 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
             .setChessPieces(users[turn]->backChessmanInGame(temp_chessman->getID()));
     }
 
-    this->changeTurn();
-
-    //____________________________ undo for En-Passant
+    //____________________________ reallow en-passant
     if (movements.size() != 0 && temp.substr(0, 3) != "ENP") {
         if (movements.top().substr(0, 2) == "AE") {
             string last = movements.top();
@@ -531,18 +540,34 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         }
     }
 
+    this->changeTurn();
+
     if (!isTemp) { //undo neg score
         this->users[turn]->incNegativeScore(5);
         try {
-            stoi(temp.substr(temp.find("$") + 1, 2));
-            temp_score = stoi(temp.substr(temp.find("$") + 1, 2));
+            temp_score = stoi(temp.substr(temp.find("$") + 1, 3));
         } catch (invalid_argument) { //if one digit
-            temp_score = stoi(temp.substr(temp.find("$") + 1, 1));
+            try {
+                temp_score = stoi(temp.substr(temp.find("$") + 1, 2));
+            } catch (invalid_argument) {
+                temp_score = stoi(temp.substr(temp.find("$") + 1, 1));
+            }
         }
 
         //        qDebug() << "undone score: " << temp_score;
         users[turn]->decScore(temp_score);
     }
+
+    //if user in last move allowed extra move
+    if (movements.size() != 0 && !isTemp)
+        if (isThisExtramMove(movements.top())) {
+            changeTurn();
+            extram_move_has_done = true;
+        } else
+            extram_move_has_done = false;
+
+    if (!isTemp)
+        qDebug() << "last turn: " << turn;
 
     return make_pair(dest, src);
 }
@@ -627,19 +652,30 @@ pair<Chessman::Index, Chessman::Index> GameManager::randomMovements()
 
 bool GameManager::extraMovements()
 {
-  int temp;
-  if(turn == USER1)
-    temp = 0;
-  else
-    temp = 1;
+    if (users[turn]->getScore() >= 30) {
+        return true;
+    }
+    return false;
+}
+//________________________________________________________________________________________________________
 
-  if(users[temp]->getScore() >= 30)
-  {
-    users[temp]->decScore(30);
-    return true;
-  }
-
-  return false;
+bool GameManager::isThisExtramMove(std::string move)
+{
+    int temp_score;
+    try {
+        temp_score = stoi(move.substr(move.find("$") + 1, 3));
+    } catch (invalid_argument) { //if one digit
+        try {
+            temp_score = stoi(move.substr(move.find("$") + 1, 2));
+        } catch (invalid_argument) {
+            try {
+                temp_score = stoi(move.substr(move.find("$") + 1, 1));
+            } catch (invalid_argument) {
+                return false;
+            }
+        }
+    }
+    return temp_score < 0;
 }
 
 //________________________________________________________________________________________________________ isKingChecked
