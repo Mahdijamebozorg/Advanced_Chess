@@ -886,7 +886,6 @@ User::Score GameManager::calucateScoreMovePiece(Chessman::Index src, Chessman::I
         moved = true;
         setMove(src, dest, false, true);
     } catch (exception &s) {
-        qDebug() << "exception in score ," << s.what();
     }
 
     if (moved) {
@@ -960,8 +959,12 @@ void GameManager::loadMoves()
             setMove(src, dest);
         } catch (FinalCellForPawn) {
             //------------------------------------- promotion
-            setMove(src, dest);
-            promotionForFile(fileManager.get_Moves()[++i]);
+            //fixing promotion bug in loading game
+            if (fileManager.get_Moves().size() > i + 1) {
+                setMove(src, dest);
+                promotionForFile(fileManager.get_Moves()[++i]);
+            } else
+                changeTurn();
         }
         changeTurn();
     }

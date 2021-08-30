@@ -3,6 +3,7 @@
 #include <dirent.h>
 #include <fstream>
 #include <iomanip>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -69,6 +70,12 @@ bool BackEnd::checkInput(QString name)
 
 void BackEnd::getFiles()
 {
+    //if save file doesn't exist , makes one
+    struct stat buff;
+    if (stat("./SavedGames", &buff) != 0)
+        if (mkdir("./SavedGames", S_IRUSR | S_IWUSR | S_IXUSR) != 0)
+            throw runtime_error("can't make save files");
+
     _dirFiles.clear();
     DIR *dir;
     struct dirent *diread;

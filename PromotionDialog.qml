@@ -1,7 +1,7 @@
 import QtQuick 2.9
 import QtQuick.Controls 2.5
-import QtQuick.Dialogs 1.2
 import QtQuick.Window 2.3
+import QtQuick.Dialogs 1.2
 
 //promotion dialog
 Dialog {
@@ -9,7 +9,10 @@ Dialog {
     title: persian.checked ? "ارتقا" : "Promotion"
     width: parent.height * 0.35
     height: parent.height * 0.35
-
+    onRejected: {
+        bknd.promote(4)
+        mystack.replace("GamePage.qml")
+    }
     contentItem: Rectangle {
         id: promotionRec
         border.color: "#7c6d43"

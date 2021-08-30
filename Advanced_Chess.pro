@@ -95,4 +95,3 @@ HEADERS += \
     include/Queen.hpp \
     include/Rook.hpp \
     include/User.hpp \
-    include/filemanager.hpp

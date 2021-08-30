@@ -291,8 +291,7 @@ DIST          = Images/Black/BBishop.png \
 		include/Pawn.hpp \
 		include/Queen.hpp \
 		include/Rook.hpp \
-		include/User.hpp \
-		include/Filemanager.hpp backend.cpp \
+		include/User.hpp backend.cpp \
 		main.cpp \
 		src/Bishop.cpp \
 		src/Cell.cpp \
@@ -714,7 +713,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/Qt5.13.1/5.13.1/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents backend.hpp include/Bishop.hpp include/Cell.hpp include/ChessBoard.hpp include/Chessman.hpp include/Exceptions.hpp include/Filemanager.hpp include/GameManager.hpp include/King.hpp include/Knight.hpp include/Pawn.hpp include/Queen.hpp include/Rook.hpp include/User.hpp include/Filemanager.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents backend.hpp include/Bishop.hpp include/Cell.hpp include/ChessBoard.hpp include/Chessman.hpp include/Exceptions.hpp include/Filemanager.hpp include/GameManager.hpp include/King.hpp include/Knight.hpp include/Pawn.hpp include/Queen.hpp include/Rook.hpp include/User.hpp $(DISTDIR)/
 	$(COPY_FILE) --parents backend.cpp main.cpp src/Bishop.cpp src/Cell.cpp src/ChessBoard.cpp src/Chessman.cpp src/Filemanager.cpp src/GameManager.cpp src/King.cpp src/Knight.cpp src/Pawn.cpp src/Queen.cpp src/Rook.cpp src/User.cpp $(DISTDIR)/
 
 

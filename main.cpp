@@ -11,6 +11,8 @@ int main(int argc, char *argv[])
 
     app.setOrganizationName("none");
 
+    app.setWindowIcon(QIcon("icon.png"));
+
     QQmlApplicationEngine engine;
 
     BackEnd bknd;
