@@ -7,9 +7,7 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-//    app.setOrganizationName("none");
-
-//    app.setWindowIcon(QIcon("icon.png"));
+    app.setWindowIcon(QIcon(":/icon.png"));
 
     QQmlApplicationEngine engine;
 

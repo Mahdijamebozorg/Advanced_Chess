@@ -37,6 +37,6 @@
         <file>Assets/Icons/info.png</file>
         <file>Assets/Icons/delete.png</file>
         <file>Assets/Musics/Martin_Kohlstedt_NIODOM.mp3</file>
-        <file>Assets/Musics/For Erika.mid</file>
+        <file>icon.png</file>
     </qresource>
 </RCC>
