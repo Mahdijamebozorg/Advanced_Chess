@@ -1,4 +1,4 @@
-import QtQuick 2.12
+import QtQuick 2.9
 import QtQuick.Controls 2.5
 import QtQuick.Window 2.3
 import QtMultimedia 5.9
@@ -111,29 +111,37 @@ ApplicationWindow {
             }
         }
     }
+
+    // replace with MediaPlayer on Qt 6 and above
     Audio {
         id: music
         autoLoad: true
         autoPlay: true
         playlist: Playlist {
+            id: playList
             playbackMode: Playlist.Loop
+            PlaylistItem {
+                source: "qrc:/Assets/Musics/Martin_Kohlstedt_NIODOM.mp3"
+            }
             PlaylistItem {
                 source: "qrc:/Assets/Musics/Johann_Johannsson_Flight_From_The_City_2021.mp3"
             }
         }
     }
+
     Audio {
         id: moveSound
         autoLoad: true
-        autoPlay: false
-        playlist: Playlist {
-            PlaylistItem {
-                source: "qrc:/Assets/Sound_Effects/move.mp3"
-            }
-        }
+        source: "qrc:/Assets/Sound_Effects/move.mp3"
     }
+
     Connections {
         target: soundOn
-        onClicked: soundOn.checked ? music.play() : music.pause()
+        function onClicked() {
+            if (soundOn.checked)
+                music.play()
+            else
+                music.pause()
+        }
     }
 }

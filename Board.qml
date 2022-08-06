@@ -24,7 +24,7 @@ Item {
     //Promotion control
     Connections {
         target: bknd
-        onPromotion: {
+        function onPromotion() {
             promotion.open()
         }
     }
@@ -38,7 +38,7 @@ Item {
     Image {
         id: boardImage
         anchors.fill: parent
-        source: "qrc:/Assets/Images/Board.jpg"
+        source: "qrc:/Assets/Images/Board.png"
 
         //A grid of buttons for choosing move src
         GridView {
@@ -95,7 +95,7 @@ Item {
                     //Highlight canGo and canHit cells on choose
                     Connections {
                         target: bknd
-                        onChoosen: {
+                        function onChoosen() {
 
                             //Shows dest choose buttons
                             srcCell.visible = false
@@ -138,7 +138,7 @@ Item {
                     //Unchoose the piece
                     Connections {
                         target: bknd
-                        onUnchoosen: {
+                        function onUnchoosen() {
                             srcCell.visible = true
                             dest.visible = false
                             cellRec.color = "#00000000"
@@ -189,13 +189,16 @@ Item {
                         ]
 
                         onStopped: {
-                            moveSound.play()
+                            if (soundOn.checked) {
+                                moveSound.play()
+                                console.log("play moveSound")
+                            }
                             mystack.replace("GamePage.qml")
                         }
                     }
                     Connections {
                         target: bknd
-                        onMoved: {
+                        function onMoved() {
 
                             //____________________________________________________ unchoose
                             srcCell.visible = true

@@ -178,7 +178,7 @@ void FileManager::set_newFile(std::string gameName)
     //if save file doesn't exist , makes one
     struct stat buff;
     if (stat("./SavedGames", &buff) != 0)
-        if (mkdir("./SavedGames", S_IRUSR | S_IWUSR | S_IXUSR) != 0)
+        if (mkdir("./SavedGames") != 0)
             throw runtime_error("can't make save files");
 
     this->game_Name = "./SavedGames/" + gameName + "(AutoSave)" + ".txt";

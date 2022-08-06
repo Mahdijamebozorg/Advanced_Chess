@@ -73,7 +73,7 @@ void BackEnd::getFiles()
     //if save file doesn't exist , makes one
     struct stat buff;
     if (stat("./SavedGames", &buff) != 0)
-        if (mkdir("./SavedGames", S_IRUSR | S_IWUSR | S_IXUSR) != 0)
+        if (mkdir("./SavedGames") != 0)
             throw runtime_error("can't make save files");
 
     _dirFiles.clear();
@@ -98,7 +98,12 @@ void BackEnd::getFiles()
 //________________// read plyer info
 QString BackEnd::getFileInfo(unsigned index)
 {
-    manager->getFileManager()->readFile(_dirFiles[index]);
+    try{
+        manager->getFileManager()->readFile(_dirFiles[index]);
+    }
+    catch(const runtime_error &e){
+        qDebug() << e.what();
+    }
 
     QString name1 = QString::fromStdString(manager->getFileManager()->get_P1_Name());
     QString name2 = QString::fromStdString(manager->getFileManager()->get_P2_Name());

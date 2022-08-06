@@ -8,7 +8,7 @@ Page {
     id: mainPage
     background: Image {
         id: image
-        source: "qrc:/Assets/Images/Main.jpg"
+        source: "qrc:/Assets/Images/Main.png"
     }
 
     Dialog {
@@ -22,11 +22,15 @@ Page {
 
     Connections {
         target: bknd
-        onGameLoaded: mystack.push("GamePage.qml")
+        function onGameLoaded() {
+            mystack.push("GamePage.qml")
+        }
     }
     Connections {
         target: bknd
-        onFileError: fileErr.open()
+        function onFileError() {
+            fileErr.open()
+        }
     }
 
     LoadGameDialog {

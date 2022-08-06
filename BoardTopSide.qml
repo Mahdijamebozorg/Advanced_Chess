@@ -10,7 +10,7 @@ Item {
             height: parent.height - 2
             id: wood3
             anchors.centerIn: parent
-            source: "qrc:/Assets/Images/Wood5.jpg"
+            source: "qrc:/Assets/Images/Wood5.png"
 
             GridView {
                 interactive: false

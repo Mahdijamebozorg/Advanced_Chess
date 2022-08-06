@@ -29,7 +29,7 @@ Item {
         color: "white"
         Image {
             id: leftSide
-            source: "qrc:/Assets/Images/Wood5.jpg"
+            source: "qrc:/Assets/Images/Wood5.png"
             width: parent.width - 2
             height: parent.height - 2
             anchors.centerIn: parent
@@ -45,7 +45,7 @@ Item {
                 anchors.topMargin: 10
                 anchors.horizontalCenter: leftSide.horizontalCenter
                 Image {
-                    source: "qrc:/Assets/Images/wood1.jpeg"
+                    source: "qrc:/Assets/Images/wood1.png"
                     width: parent.width - 2
                     height: parent.height - 2
                     anchors.centerIn: parent
@@ -109,7 +109,7 @@ Item {
                         anchors.centerIn: parent
                         width: undoRec.width - 2
                         height: undoRec.height - 2
-                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        source: "qrc:/Assets/Images/wood1.png"
                         Button {
                             id: undo
                             anchors.fill: parent
@@ -146,7 +146,7 @@ Item {
                         anchors.centerIn: parent
                         width: undoRec.width - 2
                         height: undoRec.height - 2
-                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        source: "qrc:/Assets/Images/wood1.png"
                         Button {
                             id: restart
                             anchors.fill: parent
@@ -180,7 +180,7 @@ Item {
                         anchors.centerIn: parent
                         width: cancelRec.width - 2
                         height: cancelRec.height - 2
-                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        source: "qrc:/Assets/Images/wood1.png"
                         Button {
                             anchors.fill: parent
                             flat: true
@@ -217,7 +217,7 @@ Item {
                         anchors.centerIn: parent
                         width: cancelRec.width - 2
                         height: cancelRec.height - 2
-                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        source: "qrc:/Assets/Images/wood1.png"
                         Button {
                             anchors.fill: parent
                             flat: true

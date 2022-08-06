@@ -8,7 +8,7 @@ Page {
     //Background
     background: Image {
         id: image
-        source: "qrc:/Assets/Images/Login.jpg"
+        source: "qrc:/Assets/Images/Login.png"
     }
 
     children: [

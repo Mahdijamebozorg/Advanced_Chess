@@ -429,7 +429,7 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
     static bool extram_move_has_done;
 
     if (!isTemp) {
-        qDebug() << "move in undo: " << QString::fromStdString(temp) << endl;
+        qDebug() << "move in undo: " << QString::fromStdString(temp);
         this->fileManager.delete_Last_Move();
     }
     movements.pop();

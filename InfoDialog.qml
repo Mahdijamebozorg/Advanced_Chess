@@ -5,7 +5,7 @@ import QtQuick.Window 2.3
 
 Dialog {
     id: infoDialog
-    title: persian.checked ? "Info" : "اطلاعات"
+    title: persian.checked ? "اطلاعات" : "Info"
     standardButtons: Dialog.Close
     width: Screen.width * 0.5
     height: Screen.height * 0.4

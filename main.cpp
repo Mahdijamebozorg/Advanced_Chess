@@ -5,13 +5,11 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-
     QGuiApplication app(argc, argv);
 
-    app.setOrganizationName("none");
+//    app.setOrganizationName("none");
 
-    app.setWindowIcon(QIcon("icon.png"));
+//    app.setWindowIcon(QIcon("icon.png"));
 
     QQmlApplicationEngine engine;
 

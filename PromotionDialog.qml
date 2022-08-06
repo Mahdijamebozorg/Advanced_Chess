@@ -22,7 +22,7 @@ Dialog {
         //background
         Image {
             id: name
-            source: "qrc:/Assets/Images/Wood2.jpg"
+            source: "qrc:/Assets/Images/Wood2.png"
             width: parent.width - 2
             height: parent.height - 2
             anchors.centerIn: parent
@@ -66,7 +66,7 @@ Dialog {
                 width: parent.width * 0.45
                 height: parent.height * 0.45
                 Image {
-                    source: "qrc:/Assets/Images/wood1.jpeg"
+                    source: "qrc:/Assets/Images/wood1.png"
                     width: parent.width - 2
                     height: parent.height - 2
                     anchors.centerIn: parent
@@ -95,7 +95,7 @@ Dialog {
                 width: parent.width * 0.45
                 height: parent.height * 0.45
                 Image {
-                    source: "qrc:/Assets/Images/wood1.jpeg"
+                    source: "qrc:/Assets/Images/wood1.png"
                     width: parent.width - 2
                     height: parent.height - 2
                     anchors.centerIn: parent
@@ -125,7 +125,7 @@ Dialog {
                 width: parent.width * 0.45
                 height: parent.height * 0.45
                 Image {
-                    source: "qrc:/Assets/Images/wood1.jpeg"
+                    source: "qrc:/Assets/Images/wood1.png"
                     width: parent.width - 2
                     height: parent.height - 2
                     anchors.centerIn: parent
@@ -154,7 +154,7 @@ Dialog {
                 width: parent.width * 0.45
                 height: parent.height * 0.45
                 Image {
-                    source: "qrc:/Assets/Images/wood1.jpeg"
+                    source: "qrc:/Assets/Images/wood1.png"
                     width: parent.width - 2
                     height: parent.height - 2
                     anchors.centerIn: parent

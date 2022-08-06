@@ -61,7 +61,7 @@ Dialog {
                 //background
                 Image {
                     id: img
-                    source: "qrc:/Assets/Images/wood1.jpeg"
+                    source: "qrc:/Assets/Images/wood1.png"
                     width: parent.width - 2
                     height: parent.height - 2
                     anchors.centerIn: parent

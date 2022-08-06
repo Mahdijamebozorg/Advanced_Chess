@@ -9,11 +9,11 @@
         <file>LoginPage.qml</file>
         <file>main.qml</file>
         <file>MainPage.qml</file>
-        <file>Assets/Images/Board.jpg</file>
-        <file>Assets/Images/Login.jpg</file>
-        <file>Assets/Images/Main.jpg</file>
-        <file>Assets/Images/Wood2.jpg</file>
-        <file>Assets/Images/Wood5.jpg</file>
+        <file>Assets/Images/Board.png</file>
+        <file>Assets/Images/Login.png</file>
+        <file>Assets/Images/Main.png</file>
+        <file>Assets/Images/Wood2.png</file>
+        <file>Assets/Images/Wood5.png</file>
         <file>qtquickcontrols2.conf</file>
         <file>Assets/Icons/BBishop.png</file>
         <file>Assets/Icons/BKing.png</file>
@@ -27,7 +27,7 @@
         <file>Assets/Icons/WPawn.png</file>
         <file>Assets/Icons/WQueen.png</file>
         <file>Assets/Icons/WRook.png</file>
-        <file>Assets/Images/wood1.jpeg</file>
+        <file>Assets/Images/wood1.png</file>
         <file>PromotionDialog.qml</file>
         <file>EndOfGameDialog.qml</file>
         <file>Assets/Sound_Effects/move.mp3</file>
@@ -36,5 +36,7 @@
         <file>InfoDialog.qml</file>
         <file>Assets/Icons/info.png</file>
         <file>Assets/Icons/delete.png</file>
+        <file>Assets/Musics/Martin_Kohlstedt_NIODOM.mp3</file>
+        <file>Assets/Musics/For Erika.mid</file>
     </qresource>
 </RCC>

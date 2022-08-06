@@ -6,7 +6,7 @@ Page {
     id: gamePage
     title: persian.checked ? "صفحه ی بازی" : "Game Page"
     background: Image {
-        source: "qrc:/Assets/Images/Wood2.jpg"
+        source: "qrc:/Assets/Images/Wood2.png"
     }
 
     Board {

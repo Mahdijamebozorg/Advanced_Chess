@@ -20,7 +20,7 @@ Item {
             height: parent.height - 2
             id: rightSide
             anchors.centerIn: parent
-            source: "qrc:/Assets/Images/Wood5.jpg"
+            source: "qrc:/Assets/Images/Wood5.png"
 
             Text {
                 id: scoresSideText
@@ -54,7 +54,7 @@ Item {
                     height: rightSide.height * 0.3
                     anchors.horizontalCenter: scoreCol.horizontalCenter
                     Image {
-                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        source: "qrc:/Assets/Images/wood1.png"
                         width: parent.width - 2
                         height: parent.height - 2
                         anchors.centerIn: parent
@@ -157,7 +157,7 @@ Item {
                     height: rightSide.height * 0.3
                     anchors.horizontalCenter: scoreCol.horizontalCenter
                     Image {
-                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        source: "qrc:/Assets/Images/wood1.png"
                         width: parent.width - 2
                         height: parent.height - 2
                         anchors.centerIn: parent
@@ -262,7 +262,7 @@ Item {
                         anchors.centerIn: parent
                         width: extraMoveRec.width - 2
                         height: extraMoveRec.height - 2
-                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        source: "qrc:/Assets/Images/wood1.png"
                         Button {
                             id: extraMove
                             anchors.fill: parent
@@ -303,7 +303,7 @@ Item {
                         anchors.centerIn: parent
                         width: randomMoveRec.width - 2
                         height: randomMoveRec.height - 2
-                        source: "qrc:/Assets/Images/wood1.jpeg"
+                        source: "qrc:/Assets/Images/wood1.png"
                         Button {
                             id: randomMove
                             anchors.fill: parent
