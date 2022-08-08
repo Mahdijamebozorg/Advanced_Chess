@@ -32,18 +32,19 @@ void FileManager::readFile(std::string fileName, bool isChecking)
 
     // read moves in file
     string tempMove;
+    qDebug() << "checking: " << QString::fromStdString(fileName);
     while (!file.eof())
     {
-        //        file.ignore(1, '\"');
+        //file.ignore(1, '\"');
         getline(file, tempMove);
-
+        qDebug() << "move:" <<  QString::fromStdString(tempMove);
         qDebug() << "move size:" << tempMove.size();
 
         if (file.eof()) // delimiter
             break;
 
         // if has unknow moves
-        if (tempMove.size() < 9 || tempMove.size() > 26)
+        if (tempMove.size() < 20 || tempMove.size() > 26)
         {
             // if is checking the file
             if (isChecking)
@@ -176,8 +177,7 @@ void FileManager::delete_Last_Move()
 
     while (!file.eof())
     {
-        file.ignore(1, '\"');
-        getline(file, tempMove, '\"');
+        getline(file, tempMove);
 
         if (file.eof())
             break;
@@ -198,7 +198,7 @@ void FileManager::delete_Last_Move()
 
     for (size_t i = 0; i < tempMoves.size() - 1; i++)
     {
-        file << '\"' << tempMoves[i] << '\"' << '\n';
+        file << tempMoves[i] << '\n';
     }
 
     file.close();
