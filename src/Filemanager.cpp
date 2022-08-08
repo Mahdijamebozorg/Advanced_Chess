@@ -56,6 +56,14 @@ void FileManager::readFile(std::string fileName, bool isChecking)
                 throw LoadingFailed("moves are invalid");
         }
 
+        // remove Rook single move on king-rook
+        if(tempMove.substr(1,3)=="KRO")
+        {
+            moves.pop_back();
+        }
+
+        moves.push_back(tempMove);
+
         // color
         string moveColor = tempMove.substr((tempMove.find('%') + 2), 1);
 
