@@ -8,13 +8,13 @@ Cell::Cell()
   setColor(BLACK);
 }
 
-Cell::Cell(Color color, const ChessPieces& chess_pieces)
+Cell::Cell(Color color, const ChessPieces &chess_pieces)
 {
   setChessPieces(chess_pieces);
-  setColor      (color);
+  setColor(color);
 }
 
-void Cell::setChessPieces(const ChessPieces& chess_pieces)
+void Cell::setChessPieces(const ChessPieces &chess_pieces)
 {
   this->chess_pieces = chess_pieces;
 }
@@ -24,7 +24,7 @@ Cell::ChessPieces Cell::getChessPieces() const
   return chess_pieces;
 }
 
-void Cell::moveChessPieces(Cell& cell)
+void Cell::moveChessPieces(Cell &cell)
 {
   cell.setChessPieces(getChessPieces());
 
@@ -51,7 +51,7 @@ Cell::Color Cell::getColor() const
 
 Chessman::Icon Cell::getIcon() const
 {
-  if(isFull())
+  if (isFull())
     return this->getChessPieces()->getIcon();
 
   return "";
@@ -59,7 +59,7 @@ Chessman::Icon Cell::getIcon() const
 
 bool Cell::isFull() const
 {
-  if(chess_pieces == nullptr)
+  if (chess_pieces == nullptr)
     return false;
 
   return true;

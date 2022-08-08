@@ -17,8 +17,18 @@ public:
     using Movements = std::stack<std::string>;
     using Enpasan = Chessman::Index;
 
-    enum Turn { USER1, USER2 };
-    enum GameStatus { NORMAL, CHECKED, STALEMATE, CHECKMATE };
+    enum Turn
+    {
+        USER1,
+        USER2
+    };
+    enum GameStatus
+    {
+        NORMAL,
+        CHECKED,
+        STALEMATE,
+        CHECKMATE
+    };
 
     // Static Singleton Pattern
     static GameManager *&get(GameName name);
@@ -33,7 +43,7 @@ public:
     void loadGame(std::string gameName);
     void loadMoves();
     void promotionForFile(std::string move);
-    void saveAutoSaved(); //manually
+    void saveAutoSaved(); // manually
 
     void setChessBoardGame(const ChessBoardGame &);
     ChessBoardGame getChessBoardGame() const;
@@ -64,7 +74,7 @@ public:
 
     // Move and hit chessman
     void checkMove(Chessman::Index src,
-                   Chessman::Index dest); //if is testing
+                   Chessman::Index dest); // if is testing
 
     void setMove(Chessman::Index src,
                  Chessman::Index dest,

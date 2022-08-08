@@ -128,11 +128,9 @@ ApplicationWindow {
             }
         }
     }
-
     Audio {
         id: moveSound
-        autoLoad: true
-        source: "qrc:/Assets/Sound_Effects/move.mp3"
+        source: "qrc:/Assets/SoundEffects/move.wav"
     }
 
     Connections {

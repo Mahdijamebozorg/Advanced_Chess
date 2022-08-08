@@ -7,7 +7,8 @@ class Rook : public Chessman
 {
 public:
   Rook(Color, Icon = "");
-  Rook(const Rook&     ); // Copy constructor
+  Rook(const Rook &); // Copy constructor
+  ~Rook();
 
   // moves functinos
   virtual std::list<Index> getCellsCanGo(Index) const;
@@ -16,14 +17,14 @@ public:
   virtual void setIcon(Icon);
 
   // set and get functons
-  void rookMoved   ()      ;
-  bool getMoved    () const;
-  void rookNotMoved()      ;
+  void rookMoved();
+  bool getMoved() const;
+  void rookNotMoved();
 
 private:
   // Data member
-  static size_t cnt        ;
-         bool moved = false;
+  static size_t cnt;
+  bool moved = false;
 
   // set functinos
   virtual void setID();

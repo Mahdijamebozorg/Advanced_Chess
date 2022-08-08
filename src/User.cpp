@@ -9,25 +9,23 @@
 #include "../include/Rook.hpp"
 
 #include <stdexcept>
-#include <QDebug>
-
 
 using namespace std;
 
 std::array<User *, 2> User::users = {nullptr, nullptr};
 int User::cnt = 0;
 
-User*& User::get(Name name, Color color, Score positive_score, Score negative_score)
+User *&User::get(Name name, Color color, Score positive_score, Score negative_score)
 {
-    if (cnt < 2)
-        users[cnt++] = new User(name, color, positive_score, negative_score);
+  if (cnt < 2)
+    users[cnt++] = new User(name, color, positive_score, negative_score);
 
-    return users[cnt - 1];
+  return users[cnt - 1];
 }
 
 User::User(Name name, Color color, Score score, Score negative_score)
 {
-  setName (name );
+  setName(name);
   setColor(color);
   setScore(score);
   setNegativeScore(negative_score);
@@ -44,7 +42,7 @@ User::Name User::getName() const
   return name;
 }
 
-void  User::setColor(Color color)
+void User::setColor(Color color)
 {
   this->color = color;
 }
@@ -108,28 +106,29 @@ User::Score User::operator+=(Score score)
 
 User::Score User::operator-=(Score score)
 {
-    return this->score -= score;
+  return this->score -= score;
 }
 
-//set for start game
+// set for start game
 void User::setChessmansIn()
 {
-    chessmans_in.clear();
-    chessmans_in.push_back(shared_ptr<Chessman>(new Rook(color)));
-    chessmans_in.push_back(shared_ptr<Chessman>(new Knight(color)));
-    chessmans_in.push_back(shared_ptr<Chessman>(new Bishop(color)));
-    chessmans_in.push_back(shared_ptr<Chessman>(new Queen(color)));
-    chessmans_in.push_back(shared_ptr<Chessman>(new King(color)));
-    chessmans_in.push_back(shared_ptr<Chessman>(new Bishop(color)));
-    chessmans_in.push_back(shared_ptr<Chessman>(new Knight(color)));
-    chessmans_in.push_back(shared_ptr<Chessman>(new Rook(color)));
+  chessmans_in.clear();
+  chessmans_in.push_back(shared_ptr<Chessman>(new Rook(color)));
+  chessmans_in.push_back(shared_ptr<Chessman>(new Knight(color)));
+  chessmans_in.push_back(shared_ptr<Chessman>(new Bishop(color)));
+  chessmans_in.push_back(shared_ptr<Chessman>(new Queen(color)));
+  chessmans_in.push_back(shared_ptr<Chessman>(new King(color)));
+  chessmans_in.push_back(shared_ptr<Chessman>(new Bishop(color)));
+  chessmans_in.push_back(shared_ptr<Chessman>(new Knight(color)));
+  chessmans_in.push_back(shared_ptr<Chessman>(new Rook(color)));
 
-    for (int i = 8; i < 16; i++) {
-        chessmans_in.push_back(shared_ptr<Chessman>(new Pawn(color)));
+  for (int i = 8; i < 16; i++)
+  {
+    chessmans_in.push_back(shared_ptr<Chessman>(new Pawn(color)));
   }
 
   string temp_color;
-  if(color == Chessman::WHITE)
+  if (color == Chessman::WHITE)
     temp_color = "W";
   else
     temp_color = "B";
@@ -147,10 +146,10 @@ void User::setChessmansIn()
   names.push_back("Rook");
 
   for (int i = 8; i < 16; i++)
-      names.push_back("Pawn");
+    names.push_back("Pawn");
 
   for (size_t i = 0; i < chessmans_in.size(); i++)
-      chessmans_in[i]->setIcon((file_addres + names[i] + ".png"));
+    chessmans_in[i]->setIcon((file_addres + names[i] + ".png"));
 }
 
 User::ChessmansIn User::getChessmansIn() const
@@ -165,16 +164,16 @@ User::ChessmansOut User::getChessmansOut() const
 
 shared_ptr<Chessman> User::getChessman(Chessman::ID id, bool in) const
 {
-  if(in)
+  if (in)
   {
-    for(auto const &item: chessmans_in)
-      if(item->getID() == id)
+    for (auto const &item : chessmans_in)
+      if (item->getID() == id)
         return item;
   }
   else
   {
-    for(auto const &item: chessmans_out)
-      if(item->getID() == id)
+    for (auto const &item : chessmans_out)
+      if (item->getID() == id)
         return item;
   }
 
@@ -183,14 +182,14 @@ shared_ptr<Chessman> User::getChessman(Chessman::ID id, bool in) const
 
 void User::hitChessman(Chessman::ID id, bool chessman_pawn)
 {
-  for(auto it = chessmans_in.begin(); it != chessmans_in.end(); it++)
+  for (auto it = chessmans_in.begin(); it != chessmans_in.end(); it++)
   {
-    if((*it)->getID() == id)
+    if ((*it)->getID() == id)
     {
-      if(chessman_pawn)
+      if (chessman_pawn)
         pawns_reach_last.push_back(*it);
       else
-          chessmans_out.push_back(*it);
+        chessmans_out.push_back(*it);
 
       *it = nullptr;
       chessmans_in.erase(it);
@@ -203,9 +202,9 @@ void User::hitChessman(Chessman::ID id, bool chessman_pawn)
 
 shared_ptr<Chessman> User::backChessmanInGame(Chessman::ID id)
 {
-  for(auto it = chessmans_out.begin(); it != chessmans_out.end(); it++)
+  for (auto it = chessmans_out.begin(); it != chessmans_out.end(); it++)
   {
-    if((*it)->getID() == id)
+    if ((*it)->getID() == id)
     {
       chessmans_in.push_back(*it);
       *it = nullptr;
@@ -218,9 +217,9 @@ shared_ptr<Chessman> User::backChessmanInGame(Chessman::ID id)
 
 Chessman::ID User::getKingID() const
 {
-  for(auto const & item: chessmans_in)
-    if(item->getID()[0] == 'K')
-        return item->getID();
+  for (auto const &item : chessmans_in)
+    if (item->getID()[0] == 'K')
+      return item->getID();
 
   throw runtime_error("King not founded.");
 }
@@ -228,17 +227,17 @@ Chessman::ID User::getKingID() const
 User::~User()
 {
   cnt--;
-  for(auto & item: chessmans_in)
+  for (auto &item : chessmans_in)
     item.reset();
 
-  for(auto & item: chessmans_out)
+  for (auto &item : chessmans_out)
     item.reset();
   users[cnt] = nullptr;
 }
 
 void User::addToChessmansIn(std::shared_ptr<Chessman> chess_man)
 {
-   chessmans_in.push_back(chess_man);
+  chessmans_in.push_back(chess_man);
 }
 
 shared_ptr<Chessman> User::removePawnsReach()
@@ -251,5 +250,5 @@ shared_ptr<Chessman> User::removePawnsReach()
 
 User::Score User::decNegativeScore(Score score)
 {
-    return this->negative_score -= score;
+  return this->negative_score -= score;
 }

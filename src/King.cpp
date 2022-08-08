@@ -9,25 +9,30 @@ extern void checkRange(Chessman::Index);
 
 size_t King::cnt = 1;
 
-King::King(Color color, Icon icon):Chessman(color)
+King::King(Color color, Icon icon) : Chessman(color)
 {
   this->chess_type = KING;
-  setID  (    );
+  setID();
   setIcon(icon);
 }
 
-King::King(const King & king):Chessman(king)
+King::King(const King &king) : Chessman(king)
 {
   this->chess_type = KING;
-  setID  (    );
+  setID();
   setIcon(icon);
+}
+
+King::~King()
+{
+  cnt--;
 }
 
 void King::setID()
 {
   Chessman::ID temp = "K";
 
-  if(getColor() == WHITE)
+  if (getColor() == WHITE)
     temp += "W";
   else
     temp += "B";
@@ -47,32 +52,33 @@ list<King::Index> King::getCellsCanGo(Index index) const
 
   if (moved == false) // if king not moved yet,can KING-ROOK
   {
-      l.push_back(make_pair(index.first, index.second + 2));
-      l.push_back(make_pair(index.first, index.second - 2));
+    l.push_back(make_pair(index.first, index.second + 2));
+    l.push_back(make_pair(index.first, index.second - 2));
   }
 
   //(+)->up (-)->down
-  for(int i = -1; i <= 1; i++)
+  for (int i = -1; i <= 1; i++)
   {
-      //up and down move
-      temp.first = index.first + i;
-      // check range
-      if (temp.first < 0 || temp.first > 7)
-          continue;
+    // up and down move
+    temp.first = index.first + i;
+    // check range
+    if (temp.first < 0 || temp.first > 7)
+      continue;
 
-      //(+)->right (-)->left
-      for (int j = -1; j <= 1; j++) {
-          //no move
-          if (i == 0 && j == 0)
-              continue;
+    //(+)->right (-)->left
+    for (int j = -1; j <= 1; j++)
+    {
+      // no move
+      if (i == 0 && j == 0)
+        continue;
 
-          //left and right move
-          temp.second = index.second + j;
-          if (temp.second < 0 || temp.second > 7)
-              continue;
+      // left and right move
+      temp.second = index.second + j;
+      if (temp.second < 0 || temp.second > 7)
+        continue;
 
-          l.push_back(temp);
-      }
+      l.push_back(temp);
+    }
   }
 
   return l;
@@ -93,8 +99,7 @@ bool King::getMoved() const
   return moved;
 }
 
-
 void King::kingNotMoved()
 {
- moved = false;
+  moved = false;
 }

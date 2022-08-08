@@ -7,18 +7,18 @@ class Bishop : public Chessman
 
 {
 public:
-    Bishop(Color, Icon = "");
-    Bishop(const Bishop &); // Copy constructor
+  Bishop(Color, Icon = "");
+  Bishop(const Bishop &); // Copy constructor
+  ~Bishop();
 
-    // moves functinos
-    virtual std::list<Index> getCellsCanGo(Index) const;
+  // moves functinos
+  virtual std::list<Index> getCellsCanGo(Index) const;
 
-    // Set public functions
-    virtual void setIcon(Icon);
-
+  // Set public functions
+  virtual void setIcon(Icon);
 
 private:
-  // Data member
+  // count
   static size_t cnt;
 
   // set functinos

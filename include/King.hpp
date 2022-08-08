@@ -8,7 +8,8 @@ class King : public Chessman
 public:
   // Constructor
   King(Color, Icon = "");
-  King(const King&     ); // Copy constructor
+  King(const King &); // Copy constructor
+  ~King();
 
   // moves functinos
   virtual std::list<Index> getCellsCanGo(Index) const;
@@ -17,14 +18,16 @@ public:
   virtual void setIcon(Icon);
 
   // set and get functons
-  void kingMoved   ()      ;
-  bool getMoved    () const;
-  void kingNotMoved()      ;
-
+  void kingMoved();
+  bool getMoved() const;
+  void kingNotMoved();
 
 private:
-  static size_t cnt        ;
-         bool moved = false;
+  // count
+  static size_t cnt;
+
+  // king-rook
+  bool moved = false;
 
   virtual void setID();
 };

@@ -3,7 +3,6 @@
 
 #include <include/GameManager.hpp>
 #include <vector>
-#include <QDebug>
 #include <QObject>
 #include <QPair>
 #include <QString>
@@ -14,8 +13,8 @@ class BackEnd : public QObject
     Q_OBJECT
 
 private:
-    //ChessBoard
-    int previewsSrc = -1; //for showing movements
+    // ChessBoard
+    int previewsSrc = -1; // for showing movements
     int srcIndex = -1;
     int destIndex = -1;
     bool _change = false;
@@ -32,9 +31,20 @@ private:
 public:
     std::pair<std::vector<Chessman::Index>, std::vector<Chessman::Index>> srcState;
 
-    enum SrcCellState { EMPTY, UNACCESSABLE, OK };
+    enum SrcCellState
+    {
+        EMPTY,
+        UNACCESSABLE,
+        OK
+    };
 
-    enum DestCellState { UNAVAILABLE, CANGO, CANHIT, SELECTED };
+    enum DestCellState
+    {
+        UNAVAILABLE,
+        CANGO,
+        CANHIT,
+        SELECTED
+    };
 
 public slots:
 
@@ -54,7 +64,7 @@ public slots:
     unsigned gameStatus();
 
     //--------------------------------------------------------- files
-    void getFiles(); //load txt files from "SavedGames" folder
+    void getFiles(); // load txt files from "SavedGames" folder
 
     QString getFileInfo(unsigned index);
 

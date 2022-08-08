@@ -65,32 +65,33 @@ GameManager::GameManager(GameName temp_game_name)
 
 GameManager::~GameManager()
 {
-  if(users[0] != nullptr)
-  {
-    delete users[0];
-    users[0] = nullptr;
-  }
-  if(users[1] != nullptr)
-  {
-    delete users[1];
-    users[1] = nullptr;
-  }
+    if (users[0] != nullptr)
+    {
+        delete users[0];
+        users[0] = nullptr;
+    }
+    if (users[1] != nullptr)
+    {
+        delete users[1];
+        users[1] = nullptr;
+    }
 
-  if(chess_board != nullptr)
-  {
-    delete chess_board;
+    if (chess_board != nullptr)
+    {
+        delete chess_board;
+        chess_board = nullptr;
+    }
+
     chess_board = nullptr;
-  }
-
-  chess_board = nullptr;
 }
 
 //________________________________________________________________________________________________________ startGame
 
 void GameManager::startGame()
 {
+    // error if users are no setted
     if (users[0] == nullptr || users[1] == nullptr)
-        throw runtime_error("All user not seted.");
+        throw LoadingFailed("All user not setted.");
 
     setChessBoardGame(ChessBoard::get(users[0], users[1]));
 }
@@ -98,41 +99,48 @@ void GameManager::startGame()
 //________________________________________________________________________________________________________ getCellState
 
 pair<vector<Chessman::Index>, vector<Chessman::Index>> GameManager::getCellState(
-                                                                    Chessman::Index index)
+    Chessman::Index index)
 {
-    if (chess_board->getCell(index).getChessPieces() == nullptr) // Check in this home has chessman
-        throw EmptySquare("In this home any chessman not founded.");
+    // Check if in this cell has chessman
+    if (chess_board->getCell(index).getChessPieces() == nullptr)
+        throw EmptySquare("no chessman in this cell.");
 
-    if (turn == USER1) {
+    // if user1 choosed user2 cells
+    if (turn == USER1)
+    {
         if (chess_board->getCell(index).getChessPieces()->getColor() == Chessman::BLACK)
             throw AccessDenied("User1 can't selected Black Chessman");
-    } else {
+    }
+    // if user2 choosed user1 cells
+    else
+    {
         if (chess_board->getCell(index).getChessPieces()->getColor() == Chessman::WHITE)
             throw AccessDenied("User2 can't selected White Chessman");
     }
-  auto tempCellState = chess_board->getCanGo(index, true, enpasan);
+    auto tempCellState = chess_board->getCanGo(index, true, enpasan);
 
-  //  _______________________________ remvoe dublicated values
-  tempCellState.first.erase(unique(tempCellState.first.begin(), tempCellState.first.end()),
-                            tempCellState.first.end());
-  tempCellState.second.erase(unique(tempCellState.second.begin(), tempCellState.second.end()),
-                             tempCellState.second.end());
+    //  _______________________________ remvoe dublicated values
+    tempCellState.first.erase(unique(tempCellState.first.begin(), tempCellState.first.end()),
+                              tempCellState.first.end());
+    tempCellState.second.erase(unique(tempCellState.second.begin(), tempCellState.second.end()),
+                               tempCellState.second.end());
 
-  //  ___________________________________________ limit checkable moves
-  //  qDebug() << "-------------- canGo before limitation" << tempCellState.first;
+    //  ___________________________________________ limit kimg checkable moves
+    //  qDebug() << "-------------- canGo before limitation" << tempCellState.first;
 
-  limit_cells_for_king_check(index, tempCellState.first, tempCellState.second);
+    limit_cells_for_king_check(index, tempCellState.first, tempCellState.second);
 
-  //  qDebug() << "-------------- canGo after limitation" << tempCellState.first;
+    //  qDebug() << "-------------- canGo after limitation" << tempCellState.first;
 
-  return tempCellState;
+    return tempCellState;
 }
 
 //_______________________________________________________________________________________________ checkMove
 
 void GameManager::checkMove(Chessman::Index src, Chessman::Index dest)
 {
-    if (src != dest) {
+    if (src != dest)
+    {
         if (!chess_board->getCell(src).isFull())
             throw invalid_argument("no chessman selected (check)");
 
@@ -143,8 +151,7 @@ void GameManager::checkMove(Chessman::Index src, Chessman::Index dest)
 
         //_____________________________________________________ Promotion
         if ((dest.first == 0 || dest.first == 7))
-            if (chess_board->getCell(src).getChessPieces()->getChessType()
-                == Chessman::ChessType::PAWN)
+            if (chess_board->getCell(src).getChessPieces()->getChessType() == Chessman::ChessType::PAWN)
                 throw FinalCellForPawn("Pawn moved to final cell");
     }
 }
@@ -154,14 +161,16 @@ void GameManager::checkMove(Chessman::Index src, Chessman::Index dest)
 void GameManager::setMove(
     Chessman::Index src, Chessman::Index dest, bool in_undo, bool isTemp, bool isExtraMove)
 {
-    if (src != dest) {
+    if (src != dest)
+    {
         if (!chess_board->getCell(src).isFull())
             throw invalid_argument("no chessman selected (set)");
 
         //---------------- calculate score
         User::Score temp_score = 0;
 
-        if (!in_undo && !isTemp) {
+        if (!in_undo && !isTemp)
+        {
             if (isExtraMove)
                 temp_score -= 30;
             temp_score += calucateScoreMovePiece(src, dest);
@@ -171,12 +180,10 @@ void GameManager::setMove(
         string temp_movement;
 
         //_____________________________________________________ check en-passnat
-        if ((turn == USER2)
-            && ((src.first == 1 && dest.first == 3) || (src.first == 4 && dest.first == 3)))
+        if ((turn == USER2) && ((src.first == 1 && dest.first == 3) || (src.first == 4 && dest.first == 3)))
             allowEnpasan(dest);
 
-        else if (turn == USER1
-                 && ((src.first == 6 && dest.first == 4) || (src.first == 3 && dest.first == 4)))
+        else if (turn == USER1 && ((src.first == 6 && dest.first == 4) || (src.first == 3 && dest.first == 4)))
             allowEnpasan(dest);
 
         else
@@ -194,13 +201,14 @@ void GameManager::setMove(
 
         //____________________________________________________________________________ king-rook move
 
-        if (chess_board->getCell(src).isFull()) {
-            if (chess_board->getCell(src).getChessPieces()->getChessType() == Chessman::KING
-                && in_undo == false)
+        if (chess_board->getCell(src).isFull())
+        {
+            if (chess_board->getCell(src).getChessPieces()->getChessType() == Chessman::KING && in_undo == false)
 
             {
-                //right king-rook
-                if (dest.second - src.second == 2) {
+                // right king-rook
+                if (dest.second - src.second == 2)
+                {
                     checkMove(make_pair(dest.first, dest.second + 1),
                               make_pair(dest.first, dest.second - 1));
                     setMove(make_pair(dest.first, dest.second + 1),
@@ -209,8 +217,9 @@ void GameManager::setMove(
                     temp_movement = "KRO" + temp_movement + " #";
                 }
 
-                //left king-rook
-                else if (src.second - dest.second == 2) {
+                // left king-rook
+                else if (src.second - dest.second == 2)
+                {
                     checkMove(make_pair(dest.first, dest.second - 2),
                               make_pair(dest.first, dest.second + 1));
                     setMove(make_pair(dest.first, dest.second - 2),
@@ -226,31 +235,35 @@ void GameManager::setMove(
         pair<Chessman::ID, Chessman::ID> temp = chess_board->moveChessman(src, dest);
 
         //----------------------- if has hitted a chessman
-        if (temp.first != "") {
+        if (temp.first != "")
+        {
             if (turn == USER1) // move chessman from chessmans_in to chessmans_out in user class
                 users[1]->hitChessman(temp.first);
             else
                 users[0]->hitChessman(temp.first);
         }
         //___________________________________________________________ en-passant move
-        if (temp.second != "") {
-            string temp_movement_ENP = "ENP%" + chess_board->getCell(dest).getChessPieces()->getID()
-                                       + " ";
+        if (temp.second != "")
+        {
+            string temp_movement_ENP = "ENP%" + chess_board->getCell(dest).getChessPieces()->getID() + " ";
             temp_movement_ENP += to_string(src.first) + to_string(src.second);
             if (turn == USER1) // move chessman from chessmans_in to chessmans_out in user class
             {
                 temp_movement_ENP += to_string(dest.first);
                 users[1]->hitChessman(temp.second);
-            } else {
+            }
+            else
+            {
                 temp_movement_ENP += to_string(dest.first);
                 users[0]->hitChessman(temp.second);
             }
 
             //_____________________________________________________ save move
-            temp_movement_ENP += to_string(dest.second) + " " + temp.second + "^$"
-                                 + to_string(temp_score);
-            if (!in_undo && (movements.empty() ? true : temp_movement_ENP != movements.top())) {
-                if (!isTemp) {
+            temp_movement_ENP += to_string(dest.second) + " " + temp.second + "^$" + to_string(temp_score);
+            if (!in_undo && (movements.empty() ? true : temp_movement_ENP != movements.top()))
+            {
+                if (!isTemp)
+                {
                     qDebug() << "enp move: " << (temp_movement_ENP).c_str();
                     this->fileManager.saveMove(temp_movement_ENP);
                 }
@@ -270,8 +283,10 @@ void GameManager::setMove(
         //_____________________________________________________ save move in stack
         auto tempMove = temp_movement + "$" + to_string(temp_score);
 
-        if (!in_undo && (movements.empty() ? true : tempMove != movements.top())) {
-            if (!isTemp) {
+        if (!in_undo && (movements.empty() ? true : tempMove != movements.top()))
+        {
+            if (!isTemp)
+            {
                 qDebug() << "movement: " << tempMove.c_str();
                 this->fileManager.saveMove(tempMove);
             }
@@ -288,7 +303,7 @@ void GameManager::setMove(
 
 void GameManager::setUser1(User::Name user1_name, User::Score user1_Pscore, User::Score user1_Nscore)
 {
-    this->users[0] =  User::get(user1_name, User::Color::WHITE, user1_Pscore, user1_Nscore);
+    this->users[0] = User::get(user1_name, User::Color::WHITE, user1_Pscore, user1_Nscore);
     this->fileManager.set_P1_Name(users[0]->getName());
 }
 
@@ -304,28 +319,28 @@ void GameManager::setUser2(User::Name user2_name, User::Score user2_Pscore, User
 
 GameManager::GameUser GameManager::getUser1() const
 {
-  return users[0];
+    return users[0];
 }
 
 //________________________________________________________________________________________________________ getUser2
 
 GameManager::GameUser GameManager::getUser2() const
 {
-  return users[1];
+    return users[1];
 }
 
 //________________________________________________________________________________________________________ setChessBoardGame
 
 void GameManager::setChessBoardGame(const ChessBoardGame &chess_board)
 {
-  this->chess_board = chess_board;
+    this->chess_board = chess_board;
 }
 
 //________________________________________________________________________________________________________ getChessBoardGame
 
 GameManager::ChessBoardGame GameManager::getChessBoardGame() const
 {
-  return chess_board;
+    return chess_board;
 }
 
 //________________________________________________________________________________________________________  changeTurn
@@ -342,14 +357,14 @@ void GameManager::changeTurn()
 
 void GameManager::setTurn(Turn turn)
 {
-  this->turn = turn;
+    this->turn = turn;
 }
 
 //________________________________________________________________________________________________________ getTurn
 
 GameManager::Turn GameManager::getTurn() const
 {
-  return turn;
+    return turn;
 }
 
 //________________________________________________________________________________________________________ setGameName
@@ -364,57 +379,64 @@ void GameManager::setGameName(GameName game_name)
 
 GameManager::GameName GameManager::getGameName() const
 {
-  return game_name;
+    return game_name;
 }
 
 //________________________________________________________________________________________________________ convertOrderToString
 
 string GameManager::convertOrderToString(Chessman::Index src, Chessman::Index dest)
 {
-  shared_ptr<Chessman> temp_chessman = chess_board->getCell(src).getChessPieces();
-  if(temp_chessman == nullptr)
-    throw invalid_argument("any chessman not exisetd in this cell.");
+    shared_ptr<Chessman> temp_chessman = chess_board->getCell(src).getChessPieces();
+    if (temp_chessman == nullptr)
+        throw invalid_argument("no chessman exisetd in this cell.");
 
-  string temp = temp_chessman->getID() + " ";
-  temp += to_string(src.first) + to_string(src.second);
-  temp += to_string(dest.first) + to_string(dest.second);
-  temp += " ";
+    string temp = temp_chessman->getID() + ' ';
+    temp += to_string(src.first) + to_string(src.second);
+    temp += to_string(dest.first) + to_string(dest.second);
+    temp += ' ';
 
-  //check destination
-  temp_chessman = chess_board->getCell(dest).getChessPieces();
+    // check destination
+    temp_chessman = chess_board->getCell(dest).getChessPieces();
 
-  //if a piece is in dest
-  if(temp_chessman != nullptr)
-    temp += temp_chessman->getID();
-  else
-    temp += "N";
+    // if a piece is in dest
+    if (temp_chessman != nullptr)
+        temp += temp_chessman->getID();
+    else
+        temp += "N";
 
-  temp += "^";
+    temp += "^";
 
-  //king rook
-  temp_chessman = chess_board->getCell(src).getChessPieces();
-  Chessman::ChessType chess_type = temp_chessman->getChessType();
-  if (chess_type == Chessman::KING)
+    // king rook
+    temp_chessman = chess_board->getCell(src).getChessPieces();
+    Chessman::ChessType chess_type = temp_chessman->getChessType();
+    if (chess_type == Chessman::KING)
 
-  {
-      //if king has moved
-      if(!dynamic_cast<King*>(temp_chessman.get())->getMoved()) {
-          temp += "#";
-      } else{
-          temp += "@";
-      }
-  } else if (chess_type == Chessman::ROOK)
+    {
+        // if king has moved
+        if (!dynamic_cast<King *>(temp_chessman.get())->getMoved())
+        {
+            temp += "#";
+        }
+        else
+        {
+            temp += "@";
+        }
+    }
+    else if (chess_type == Chessman::ROOK)
 
-  {
-      //if rook has moved
-      if(!dynamic_cast<Rook*>(temp_chessman.get())->getMoved()) {
-          temp += "#";
-      } else {
-          temp += "@";
-      }
-  }
+    {
+        // if rook has moved
+        if (!dynamic_cast<Rook *>(temp_chessman.get())->getMoved())
+        {
+            temp += "#";
+        }
+        else
+        {
+            temp += "@";
+        }
+    }
 
-  return temp;
+    return temp;
 }
 
 //________________________________________________________________________________________________________ undo
@@ -428,13 +450,14 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 
     static bool extram_move_has_done;
 
-    if (!isTemp) {
+    if (!isTemp)
+    {
         qDebug() << "move in undo: " << QString::fromStdString(temp);
         this->fileManager.delete_Last_Move();
     }
     movements.pop();
 
-    //if after allowing extra move user pressed undo
+    // if after allowing extra move user pressed undo
     if (isThisExtramMove(temp) && !isTemp && !extram_move_has_done)
         changeTurn();
 
@@ -442,7 +465,8 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
     User::Score temp_score = 0;
 
     //________________________________ if a king rook happened
-    if(temp.substr(0, 3) == "KRO") {
+    if (temp.substr(0, 3) == "KRO")
+    {
         size_t pos = temp.find(" ");
         Chessman::Index temp_src = {stoi(temp.substr(pos + 1, 1)), stoi(temp.substr(pos + 2, 1))};
         Chessman::Index temp_dest = {stoi(temp.substr(pos + 3, 1)), stoi(temp.substr(pos + 4, 1))};
@@ -457,7 +481,8 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         this->fileManager.delete_Last_Move();
     }
     //________________________________ if a pawn has promoted
-    else if (temp.substr(0, 3) == "PRF") {
+    else if (temp.substr(0, 3) == "PRF")
+    {
         changeTurn();
         size_t pos = temp.find(" ");
         temp_src = {stoi(temp.substr(pos + 1, 1)), stoi(temp.substr(pos + 2, 1))};
@@ -487,15 +512,21 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
     this->setMove(dest, src, true, isTemp);
 
     //_________________________________ undo for king-rook
-    if (chess_board->getCell(src).isFull()) {
+    if (chess_board->getCell(src).isFull())
+    {
         Chessman::ChessType chess_type = chess_board->getCell(src).getChessPieces()->getChessType();
-        if (chess_type == Chessman::KING) {
-            if ('#' == temp[temp.find("^") + 1]) {
+        if (chess_type == Chessman::KING)
+        {
+            if ('#' == temp[temp.find("^") + 1])
+            {
                 dynamic_cast<King *>(chess_board->getCell(src).getChessPieces().get())
                     ->kingNotMoved();
             }
-        } else if (chess_type == Chessman::ROOK) {
-            if ('#' == temp[temp.find("^") + 1]) {
+        }
+        else if (chess_type == Chessman::ROOK)
+        {
+            if ('#' == temp[temp.find("^") + 1])
+            {
                 dynamic_cast<Rook *>(chess_board->getCell(src).getChessPieces().get())
                     ->rookNotMoved();
             }
@@ -504,23 +535,28 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 
     size_t pos2 = temp.find(" ", pos + 1);
     //________________________________ if has hit a chessmen
-    if (temp[pos2 + 1] != 'N') {
+    if (temp[pos2 + 1] != 'N')
+    {
         Chessman::Index hitted_index;
         shared_ptr<Chessman> temp_chessman;
         temp_chessman = users[turn]->getChessman(temp.substr(pos2 + 1, temp.find("^") - pos2 - 1),
                                                  false);
 
-        if (temp.substr(0, 3) != "ENP") {
+        if (temp.substr(0, 3) != "ENP")
+        {
             hitted_index = dest;
         }
 
         //-------------------------- if hitted by en-passant move
-        else {
-            if (turn == USER1) {
+        else
+        {
+            if (turn == USER1)
+            {
                 hitted_index = make_pair(dest.first - 1, dest.second);
             }
 
-            else if (turn == USER2) {
+            else if (turn == USER2)
+            {
                 hitted_index = make_pair(dest.first + 1, dest.second);
             }
             allowEnpasan(hitted_index);
@@ -532,8 +568,10 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
     }
 
     //____________________________ reallow en-passant
-    if (movements.size() != 0 && temp.substr(0, 3) != "ENP") {
-        if (movements.top().substr(0, 2) == "AE") {
+    if (movements.size() != 0 && temp.substr(0, 3) != "ENP")
+    {
+        if (movements.top().substr(0, 2) == "AE")
+        {
             string last = movements.top();
             size_t pos = last.find("E");
             allowEnpasan(make_pair(stoi(last.substr(pos + 1, 1)), stoi(last.substr(pos + 2, 1))));
@@ -542,14 +580,25 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 
     this->changeTurn();
 
-    if (!isTemp) { //undo neg score
+    if (!isTemp)
+    {
+        // undo neg score
         this->users[turn]->incNegativeScore(5);
-        try {
+        try
+        {
+            // 3 digits
             temp_score = stoi(temp.substr(temp.find("$") + 1, 3));
-        } catch (invalid_argument) { //if one digit
-            try {
+        }
+        catch (invalid_argument)
+        {
+            try
+            {
+                // 2 digits
                 temp_score = stoi(temp.substr(temp.find("$") + 1, 2));
-            } catch (invalid_argument) {
+            }
+            catch (invalid_argument)
+            {
+                // 1 digits
                 temp_score = stoi(temp.substr(temp.find("$") + 1, 1));
             }
         }
@@ -558,16 +607,15 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         users[turn]->decScore(temp_score);
     }
 
-    //if user in last move allowed extra move
+    // if user in last move allowed extra move
     if (movements.size() != 0 && !isTemp)
-        if (isThisExtramMove(movements.top())) {
+        if (isThisExtramMove(movements.top()))
+        {
             changeTurn();
             extram_move_has_done = true;
-        } else
+        }
+        else
             extram_move_has_done = false;
-
-    if (!isTemp)
-        qDebug() << "last turn: " << turn;
 
     return make_pair(dest, src);
 }
@@ -604,34 +652,35 @@ void GameManager::restartGame()
 
 void GameManager::endGame()
 {
-  delete users[0];
-  users[0] = nullptr;
-  delete users[1];
-  users[1] = nullptr;
+    delete users[0];
+    users[0] = nullptr;
+    delete users[1];
+    users[1] = nullptr;
 
-  delete chess_board;
-  chess_board = nullptr;
+    delete chess_board;
+    chess_board = nullptr;
 
-  this->turn = USER1;
-  size_t size = this->movements.size();
-  for(size_t i = 0; i < size; i++)
-    movements.pop();
+    this->turn = USER1;
+    size_t size = this->movements.size();
+    for (size_t i = 0; i < size; i++)
+        movements.pop();
 }
 
 //________________________________________________________________________________________________________ randomMovements
 
 pair<Chessman::Index, Chessman::Index> GameManager::randomMovements()
 {
-    //random piece
+    // random piece
     vector<shared_ptr<Chessman>> temp_chessmans = users[turn]->getChessmansIn();
 
     Chessman::ID temp_id = temp_chessmans[randomNum() % temp_chessmans.size()]->getID();
     Chessman::Index temp_src = chess_board->getIndex(temp_id);
 
-    //random movements
+    // random movements
     vector<Chessman::Index> temp_can_go = getCellState(temp_src).first;
 
-    while (temp_can_go.size() == 0) {
+    while (temp_can_go.size() == 0)
+    {
         temp_id = temp_chessmans[randomNum() % temp_chessmans.size()]->getID();
         temp_src = chess_board->getIndex(temp_id);
         temp_can_go = getCellState(temp_src).first;
@@ -639,10 +688,14 @@ pair<Chessman::Index, Chessman::Index> GameManager::randomMovements()
 
     Chessman::Index temp_dest = temp_can_go[randomNum() % temp_can_go.size()];
 
-    try {
+    try
+    {
         checkMove(temp_src, temp_dest);
         setMove(temp_src, temp_dest);
-    } catch (...) {
+    }
+    catch (exception &e)
+    {
+        qDebug() << e.what();
     }
 
     return make_pair(temp_src, temp_dest);
@@ -652,7 +705,8 @@ pair<Chessman::Index, Chessman::Index> GameManager::randomMovements()
 
 bool GameManager::extraMovements()
 {
-    if (users[turn]->getScore() >= 30) {
+    if (users[turn]->getScore() >= 30)
+    {
         return true;
     }
     return false;
@@ -662,15 +716,27 @@ bool GameManager::extraMovements()
 bool GameManager::isThisExtramMove(std::string move)
 {
     int temp_score;
-    try {
+    try
+    {
+        // 3 digits
         temp_score = stoi(move.substr(move.find("$") + 1, 3));
-    } catch (invalid_argument) { //if one digit
-        try {
+    }
+    catch (invalid_argument)
+    {
+        try
+        {
+            // 2 digits
             temp_score = stoi(move.substr(move.find("$") + 1, 2));
-        } catch (invalid_argument) {
-            try {
+        }
+        catch (invalid_argument)
+        {
+            try
+            {
+                // 1 digit
                 temp_score = stoi(move.substr(move.find("$") + 1, 1));
-            } catch (invalid_argument) {
+            }
+            catch (invalid_argument)
+            {
                 return false;
             }
         }
@@ -699,31 +765,38 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
     list<Chessman::Index> tempCango(canGo.begin(), canGo.end());
     list<Chessman::Index> tempCanHit(canHit.begin(), canHit.end());
 
-    //searching fo unwanted moves
-    for (Chessman::Index &index : canGo) {
+    // searching fo unwanted moves
+    for (Chessman::Index &index : canGo)
+    {
         bool moved;
-        //a temp move
-        try {
-            try {
+        // a temp move
+        try
+        {
+            try
+            {
                 checkMove(src, index);
-            } catch (FinalCellForPawn) {
+            }
+            catch (FinalCellForPawn)
+            {
             }
 
             moved = true;
             setMove(src, index, false, true);
-
         }
 
-        catch (KingIsChecked &s) {
+        catch (KingIsChecked &s)
+        {
             tempCango.remove(index);
             tempCanHit.remove(index);
         }
 
-        catch (exception &s) {
+        catch (exception &s)
+        {
             qDebug() << s.what();
         }
 
-        if (moved) {
+        if (moved)
+        {
             this->changeTurn();
             this->undo(true);
         }
@@ -740,15 +813,16 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
 
 GameManager::GameStatus GameManager::analayzeGameStatus()
 {
-    //search in all user chessmen
-    for (shared_ptr<Chessman> &piece : users[turn]->getChessmansIn()) {
+    // search in all user chessmen
+    for (shared_ptr<Chessman> &piece : users[turn]->getChessmansIn())
+    {
         //        qDebug() << QString::fromStdString(piece->getIcon());
 
         if (this->getCellState(this->chess_board->getIndex(piece->getID())).first.size() != 0)
-            //if at the least one piece still can move
+            // if at the least one piece still can move
             return isKingChecked() ? GameStatus::CHECKED : GameStatus::NORMAL;
     }
-    //if no piece can move
+    // if no piece can move
     return isKingChecked() ? GameStatus::CHECKMATE : GameStatus::STALEMATE;
 }
 
@@ -756,51 +830,52 @@ GameManager::GameStatus GameManager::analayzeGameStatus()
 
 void GameManager::promote(Chessman::Index index, Chessman::ChessType chess_type)
 {
-  Chessman::Icon  temp_icon = "qrc:/Assets/Icons/";
-  Chessman::Color temp_color;
-  if (turn == USER1) {
-      temp_color = Chessman::Color::WHITE;
-      temp_icon += "W";
-  } else {
-      temp_color = Chessman::Color::BLACK;
-      temp_icon += "B";
-  }
+    Chessman::Icon temp_icon = "qrc:/Assets/Icons/";
+    Chessman::Color temp_color;
+    if (turn == USER1)
+    {
+        temp_color = Chessman::Color::WHITE;
+        temp_icon += "W";
+    }
+    else
+    {
+        temp_color = Chessman::Color::BLACK;
+        temp_icon += "B";
+    }
 
-  users[turn]->hitChessman(chess_board->getCell(index).getChessPieces()->getID(), true);
-  string temp_name;
-  switch(chess_type)
-  {
+    users[turn]->hitChessman(chess_board->getCell(index).getChessPieces()->getID(), true);
+    string temp_name;
+    switch (chess_type)
+    {
     case Chessman::KNIGHT:
-         chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Knight(temp_color, temp_icon + "Knight.png")));
-         temp_name = "H";
-      break;
+        chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Knight(temp_color, temp_icon + "Knight.png")));
+        temp_name = "H";
+        break;
 
     case Chessman::BISHOP:
-         chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Bishop(temp_color, temp_icon + "Bishop.png")));
-         temp_name = "B";
-      break;
+        chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Bishop(temp_color, temp_icon + "Bishop.png")));
+        temp_name = "B";
+        break;
 
     case Chessman::ROOK:
-         chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Rook(temp_color, temp_icon + "Rook.png")));
-         temp_name = "R";
-      break;
+        chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Rook(temp_color, temp_icon + "Rook.png")));
+        temp_name = "R";
+        break;
 
     case Chessman::QUEEN:
-         chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Queen(temp_color, temp_icon + "Queen.png")));
-         temp_name = "Q";
-      break;
+        chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Queen(temp_color, temp_icon + "Queen.png")));
+        temp_name = "Q";
+        break;
 
     default:
-        throw invalid_argument("This ChessType not allow.");
-  }
+        throw invalid_argument("This ChessType is not allowed.");
+    }
 
-  users[turn]->addToChessmansIn(chess_board->getCell(index).getChessPieces());
+    users[turn]->addToChessmansIn(chess_board->getCell(index).getChessPieces());
 
-  movements.push("PRF" + chess_board->getCell(index).getChessPieces()->getID() + " "
-                 + to_string(index.first) + to_string(index.second));
+    movements.push("PRF" + chess_board->getCell(index).getChessPieces()->getID() + " " + to_string(index.first) + to_string(index.second));
 
-  this->fileManager.saveMove("PRF" + chess_board->getCell(index).getChessPieces()->getID() + " "
-                             + to_string(index.first) + to_string(index.second));
+    this->fileManager.saveMove("PRF" + chess_board->getCell(index).getChessPieces()->getID() + " " + to_string(index.first) + to_string(index.second));
 }
 
 //________________________________________________________________________________________________________ allowEnpasan
@@ -814,7 +889,7 @@ void GameManager::allowEnpasan(Enpasan enpasan)
 
 void GameManager::notAllowEnpasan()
 {
-  enpasan = make_pair(100, 100);
+    enpasan = make_pair(100, 100);
 }
 
 User::Score GameManager::calucateScoreMovePiece(Chessman::Index src, Chessman::Index dest)
@@ -823,22 +898,24 @@ User::Score GameManager::calucateScoreMovePiece(Chessman::Index src, Chessman::I
 
     //--------------------------------------------------------------------------------  hit enemy chessman
 
-    if (chess_board->getCell(dest).isFull()) {
+    if (chess_board->getCell(dest).isFull())
+    {
         Chessman::ChessType chess_type = chess_board->getCell(dest).getChessPieces()->getChessType();
-        switch (chess_type) {
+        switch (chess_type)
+        {
         case Chessman::PAWN:
             temp += 3;
-          break;
+            break;
 
         case Chessman::ROOK:
         case Chessman::BISHOP:
         case Chessman::KNIGHT:
             temp += 8;
-          break;
+            break;
 
         case Chessman::QUEEN:
             temp += 15;
-          break;
+            break;
 
         default:
             break;
@@ -849,49 +926,56 @@ User::Score GameManager::calucateScoreMovePiece(Chessman::Index src, Chessman::I
     shared_ptr<Chessman> srcPiece = chess_board->getCell(src).getChessPieces();
     shared_ptr<Chessman> destPiece = nullptr;
     //---------------------- if white pawn
-    if (turn == USER1 && dest.first == 2) {
-        if (chess_board->getCell(make_pair(dest.first + 1, dest.second)).isFull()) {
+    if (turn == USER1 && dest.first == 2)
+    {
+        if (chess_board->getCell(make_pair(dest.first + 1, dest.second)).isFull())
+        {
             destPiece = chess_board->getCell(make_pair(dest.first + 1, dest.second)).getChessPieces();
             //------ if piece and piece behind is pawn
-            if (dynamic_cast<Pawn *>(destPiece.get()) != nullptr
-                && dynamic_cast<Pawn *>(srcPiece.get()) != nullptr
-                && destPiece->getColor() != srcPiece->getColor())
+            if (dynamic_cast<Pawn *>(destPiece.get()) != nullptr && dynamic_cast<Pawn *>(srcPiece.get()) != nullptr && destPiece->getColor() != srcPiece->getColor())
                 temp += 3;
         }
     }
     //---------------------- if black pawn
-    else if (dest.first == 5) {
-        if (chess_board->getCell(make_pair(dest.first - 1, dest.second)).isFull()) {
+    else if (dest.first == 5)
+    {
+        if (chess_board->getCell(make_pair(dest.first - 1, dest.second)).isFull())
+        {
             destPiece = chess_board->getCell(make_pair(dest.first - 1, dest.second)).getChessPieces();
             //----- if piece and piece behind is pawn
-            if (dynamic_cast<Pawn *>(destPiece.get()) != nullptr
-                && dynamic_cast<Pawn *>(srcPiece.get()) != nullptr
-                && destPiece->getColor() != srcPiece->getColor())
+            if (dynamic_cast<Pawn *>(destPiece.get()) != nullptr && dynamic_cast<Pawn *>(srcPiece.get()) != nullptr && destPiece->getColor() != srcPiece->getColor())
                 temp += 3;
         }
     }
 
     //-------------------------------------------------------------------------------- move pawn from half of chessboard
 
-    if (chess_board->getCell(src).getChessPieces()->getChessType() == Chessman::PAWN) {
-        if ((src.first <= 3 && dest.first >= 4) || (src.first >= 4 && dest.first <= 3)) {
+    if (chess_board->getCell(src).getChessPieces()->getChessType() == Chessman::PAWN)
+    {
+        if ((src.first <= 3 && dest.first >= 4) || (src.first >= 4 && dest.first <= 3))
+        {
             temp += 3;
         }
     }
 
-    //    -------------------------- a temp move for gettin status
+    //    -------------------------- a temp move for getin status
     bool moved = false;
-    try {
+    try
+    {
         checkMove(src, dest);
         moved = true;
         setMove(src, dest, false, true);
-    } catch (exception &s) {
+    }
+    catch (exception &s)
+    {
     }
 
-    if (moved) {
+    if (moved)
+    {
         //-------------------------------------- check and checkmate score
         changeTurn();
-        switch (analayzeGameStatus()) {
+        switch (analayzeGameStatus())
+        {
         case GameStatus::CHECKED:
             temp += 10;
             break;
@@ -942,28 +1026,34 @@ FileManager *GameManager::getFileManager()
 void GameManager::loadMoves()
 {
     if (fileManager.get_File_Name() == "")
-        throw runtime_error("no file loaded");
+        throw LoadingFailed("no file loaded");
 
-    fileManager.add_to_autoSave(); //starting auto save
+    fileManager.add_to_autoSave(); // starting auto save
     fileManager.resetFile();
 
     for (unsigned i = 0; i < fileManager.get_Moves().size(); i++)
     {
         string move = fileManager.get_Moves()[i];
+        qDebug() << QString::fromStdString(move);
         size_t pos = move.find(" ");
         Chessman::Index src = {stoi(move.substr(pos + 1, 1)), stoi(move.substr(pos + 2, 1))};
         Chessman::Index dest = {stoi(move.substr(pos + 3, 1)), stoi(move.substr(pos + 4, 1))};
-        try {
+        try
+        {
             //------------------------------------- move
             checkMove(src, dest);
             setMove(src, dest);
-        } catch (FinalCellForPawn) {
+        }
+        catch (FinalCellForPawn)
+        {
             //------------------------------------- promotion
-            //fixing promotion bug in loading game
-            if (fileManager.get_Moves().size() > i + 1) {
+            // fixing promotion bug in loading game
+            if (fileManager.get_Moves().size() > i + 1)
+            {
                 setMove(src, dest);
                 promotionForFile(fileManager.get_Moves()[++i]);
-            } else
+            }
+            else
                 changeTurn();
         }
         changeTurn();
@@ -995,7 +1085,7 @@ void GameManager::promotionForFile(string move)
         promote(index, Chessman::BISHOP);
 }
 
-//---------------------------------------------------------------------------- sava game
+//---------------------------------------------------------------------------- save game
 
 void GameManager::saveAutoSaved()
 {
@@ -1008,7 +1098,7 @@ short unsigned GameManager::getWinner() const
 {
     if (users[0]->getScore() > users[1]->getScore())
         return 0;
-    else if(users[1]->getScore() > users[0]->getScore())
+    else if (users[1]->getScore() > users[0]->getScore())
         return 1;
     else
         return 2;

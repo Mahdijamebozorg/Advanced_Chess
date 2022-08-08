@@ -7,7 +7,8 @@ class Queen : public Chessman
 {
 public:
   Queen(Color, Icon = "");
-  Queen(const Queen&    ); // Copy constructor
+  Queen(const Queen &); // Copy constructor
+  ~Queen();
 
   // moves functinos
   virtual std::list<Index> getCellsCanGo(Index) const;
@@ -16,7 +17,7 @@ public:
   virtual void setIcon(Icon);
 
 private:
-  // Data member
+  // count
   static size_t cnt;
 
   // set functinos

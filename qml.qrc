@@ -1,20 +1,25 @@
 <RCC>
     <qresource prefix="/">
+        <file>qtquickcontrols2.conf</file>
+        <file>main.qml</file>
+        <file>MainPage.qml</file>
+        <file>LoginPage.qml</file>
+        <file>GamePage.qml</file>
         <file>Board.qml</file>
         <file>BoardBottomSide.qml</file>
         <file>BoardLeftSide.qml</file>
         <file>BoardRightSide.qml</file>
         <file>BoardTopSide.qml</file>
-        <file>GamePage.qml</file>
-        <file>LoginPage.qml</file>
-        <file>main.qml</file>
-        <file>MainPage.qml</file>
-        <file>Assets/Images/Board.png</file>
-        <file>Assets/Images/Login.png</file>
+        <file>PromotionDialog.qml</file>
+        <file>EndOfGameDialog.qml</file>
+        <file>LoadGameDialog.qml</file>
+        <file>InfoDialog.qml</file>
         <file>Assets/Images/Main.png</file>
+        <file>Assets/Images/Login.png</file>
+        <file>Assets/Images/Board.png</file>
+        <file>Assets/Images/wood1.png</file>
         <file>Assets/Images/Wood2.png</file>
         <file>Assets/Images/Wood5.png</file>
-        <file>qtquickcontrols2.conf</file>
         <file>Assets/Icons/BBishop.png</file>
         <file>Assets/Icons/BKing.png</file>
         <file>Assets/Icons/BKnight.png</file>
@@ -27,16 +32,11 @@
         <file>Assets/Icons/WPawn.png</file>
         <file>Assets/Icons/WQueen.png</file>
         <file>Assets/Icons/WRook.png</file>
-        <file>Assets/Images/wood1.png</file>
-        <file>PromotionDialog.qml</file>
-        <file>EndOfGameDialog.qml</file>
-        <file>Assets/Sound_Effects/move.mp3</file>
-        <file>LoadGameDialog.qml</file>
-        <file>Assets/Musics/Johann_Johannsson_Flight_From_The_City_2021.mp3</file>
-        <file>InfoDialog.qml</file>
         <file>Assets/Icons/info.png</file>
         <file>Assets/Icons/delete.png</file>
-        <file>Assets/Musics/Martin_Kohlstedt_NIODOM.mp3</file>
         <file>icon.png</file>
+        <file>Assets/Musics/Johann_Johannsson_Flight_From_The_City_2021.mp3</file>
+        <file>Assets/Musics/Martin_Kohlstedt_NIODOM.mp3</file>
+        <file>Assets/SoundEffects/move.wav</file>
     </qresource>
 </RCC>

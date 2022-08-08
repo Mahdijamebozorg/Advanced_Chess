@@ -7,7 +7,8 @@ class Knight : public Chessman
 {
 public:
   Knight(Color, Icon = "");
-  Knight(const Knight&   ); // Copy constructor
+  Knight(const Knight &); // Copy constructor
+  ~Knight();
 
   // moves functinos
   virtual std::list<Index> getCellsCanGo(Index) const;
@@ -15,7 +16,8 @@ public:
   // Set public functions
   virtual void setIcon(Icon);
 
-  private:
+private:
+  // count
   static size_t cnt;
 
   // set functinos

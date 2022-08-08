@@ -10,7 +10,7 @@ Chessman::Chessman(Color color)
   setColor(color);
 }
 
-Chessman::Chessman(const Chessman & chessman)
+Chessman::Chessman(const Chessman &chessman)
 {
   setColor(chessman.getColor());
 }

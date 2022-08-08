@@ -1,10 +1,9 @@
 #include "../include/ChessBoard.hpp"
 
 #include <stdexcept>
+#include <algorithm>
 #include "../include/King.hpp"
 #include "../include/Rook.hpp"
-
-#include <QDebug>
 
 using namespace std;
 
@@ -13,16 +12,18 @@ extern void checkRange(Chessman::Index);
 // Initialize static data member
 ChessBoard *ChessBoard::chess_board = nullptr;
 
-ChessBoard*& ChessBoard::get(User* white_user, User* black_user)
+ChessBoard *&ChessBoard::get(User *white_user, User *black_user)
 {
   if (chess_board == nullptr)
+  {
     chess_board = new ChessBoard(white_user, black_user);
+  }
 
   return chess_board;
 }
 
 // Constructor
-ChessBoard::ChessBoard(User* white_user, User* black_user)
+ChessBoard::ChessBoard(User *white_user, User *black_user)
 {
   setCells(white_user->getChessmansIn(), black_user->getChessmansIn());
 }
@@ -30,11 +31,11 @@ ChessBoard::ChessBoard(User* white_user, User* black_user)
 ChessBoard::~ChessBoard()
 {
   chess_board = nullptr;
-  for(auto &row: cells)
+  for (auto &row : cells)
   {
-    for(auto &item: row)
+    for (auto &item : row)
     {
-      if(item.isFull())
+      if (item.isFull())
       {
         item.setChessPieces(nullptr);
       }
@@ -47,29 +48,30 @@ ChessBoard::~ChessBoard()
 // member functinos
 void ChessBoard::setCells(User::ChessmansIn white_chessman, User::ChessmansIn black_chessman)
 {
-  for(int i = 0; i < 8; i++)
+  for (int i = 0; i < 8; i++)
   {
-    for(int j = 0; j < 8; j++)
+    for (int j = 0; j < 8; j++)
     {
-        //setting cell colors
-        if (((i + 1) % 2 == 0 && (j + 1) % 2 != 0) || (((i + 1) % 2 == 0) && ((j + 1) % 2 == 0)))
-            cells[i][j].setColor(Cell::BLACK);
+      // setting cell colors
+      if (((i + 1) % 2 == 0 && (j + 1) % 2 != 0) || (((i + 1) % 2 == 0) && ((j + 1) % 2 == 0)))
+        cells[i][j].setColor(Cell::BLACK);
 
-        if (i == 0) {
-            cells[i][j].setChessPieces(black_chessman[j]);
-            black_chessmans.push_back(make_pair(i, j));
+      if (i == 0)
+      {
+        cells[i][j].setChessPieces(black_chessman[j]);
+        black_chessmans.push_back(make_pair(i, j));
       }
-      else if(i == 1)
+      else if (i == 1)
       {
         cells[i][j].setChessPieces(black_chessman[j + 8]);
         black_chessmans.push_back(make_pair(i, j));
       }
-      else if(i == 6)
+      else if (i == 6)
       {
         cells[i][j].setChessPieces(white_chessman[j + 8]);
         white_chessmans.push_back(make_pair(i, j));
       }
-      else if(i == 7)
+      else if (i == 7)
       {
         cells[i][j].setChessPieces(white_chessman[j]);
         white_chessmans.push_back(make_pair(i, j));
@@ -93,218 +95,233 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> ChessBoard::getCanGo(Ches
   Chessman::ChessType chess_type = chess_man->getChessType();
   Chessman::Color color = chess_man->getColor();
 
-  vector<Chessman::Index> can_go ;
+  vector<Chessman::Index> can_go;
   vector<Chessman::Index> can_hit;
 
-  if (chess_type == Chessman::PAWN) {
-      list_cells.sort();
-      list_cells.erase(unique(list_cells.begin(), list_cells.end()), list_cells.end());
-      //______________________________________________if this pawn can En-passant
+  if (chess_type == Chessman::PAWN)
+  {
+    list_cells.sort();
+    list_cells.erase(unique(list_cells.begin(), list_cells.end()), list_cells.end());
+    //______________________________________________if this pawn can En-passant
 
-      if ((index.first == 3 && getCell(index).getChessPieces()->getColor() == Chessman::WHITE)
-          || (index.first == 4 && getCell(index).getChessPieces()->getColor() == Chessman::BLACK))
+    if ((index.first == 3 && getCell(index).getChessPieces()->getColor() == Chessman::WHITE) || (index.first == 4 && getCell(index).getChessPieces()->getColor() == Chessman::BLACK))
+
+    {
+      //____________________________________________________ if En-passnat is allowed
+      if (enpasan.first != 100 && enpasan.second != 100)
 
       {
-          //____________________________________________________ if En-passnat is allowed
-          if (enpasan.first != 100 && enpasan.second != 100)
+        //-------------------------------------------- if white chessman in chosen
+
+        if (color == Chessman::WHITE)
+        {
+          Chessman::Index ENP_left = *(++list_cells.begin());
+          Chessman::Index ENP_right = list_cells.back();
+          //----------------------- if piece is on left
+          if ((ENP_left.first == enpasan.first - 1) && (ENP_left.second == enpasan.second))
 
           {
-              //-------------------------------------------- if white chessman in chosen
-
-              if (color == Chessman::WHITE) {
-                  Chessman::Index ENP_left = *(++list_cells.begin());
-                  Chessman::Index ENP_right = list_cells.back();
-                  //----------------------- if piece is on left
-                  if ((ENP_left.first == enpasan.first - 1) && (ENP_left.second == enpasan.second))
-
-                  {
-                      can_go.push_back(ENP_left);
-                      can_hit.push_back(ENP_left);
-                      setEnpasan(index, ENP_left);
-                  }
-                  //----------------------- if piece is on right
-                  else if ((ENP_right.first == enpasan.first - 1)
-                           && (ENP_right.second == enpasan.second))
-
-                  {
-                      can_go.push_back(ENP_right);
-                      can_hit.push_back(ENP_right);
-                      setEnpasan(index, ENP_right);
-                  }
-              }
-
-              //-------------------------------------------- if black chessman in chosen
-
-              else {
-                  Chessman::Index ENP_left = list_cells.front();
-                  Chessman::Index ENP_right = *(--(--list_cells.end()));
-
-                  //----------------------- if piece is on left
-                  if ((ENP_left.first == enpasan.first + 1) && (ENP_left.second == enpasan.second))
-
-                  {
-                      can_go.push_back(ENP_left);
-                      can_hit.push_back(ENP_left);
-                      setEnpasan(index, ENP_left);
-
-                  }
-
-                  //----------------------- if piece is on right
-                  else if ((ENP_right.first == enpasan.first + 1)
-                           && (ENP_right.second == enpasan.second))
-
-                  {
-                      can_go.push_back(ENP_right);
-                      can_hit.push_back(ENP_right);
-                      setEnpasan(index, ENP_right);
-                  }
-              }
+            can_go.push_back(ENP_left);
+            can_hit.push_back(ENP_left);
+            setEnpasan(index, ENP_left);
           }
+          //----------------------- if piece is on right
+          else if ((ENP_right.first == enpasan.first - 1) && (ENP_right.second == enpasan.second))
+
+          {
+            can_go.push_back(ENP_right);
+            can_hit.push_back(ENP_right);
+            setEnpasan(index, ENP_right);
+          }
+        }
+
+        //-------------------------------------------- if black chessman in chosen
+
+        else
+        {
+          Chessman::Index ENP_left = list_cells.front();
+          Chessman::Index ENP_right = *(--(--list_cells.end()));
+
+          //----------------------- if piece is on left
+          if ((ENP_left.first == enpasan.first + 1) && (ENP_left.second == enpasan.second))
+
+          {
+            can_go.push_back(ENP_left);
+            can_hit.push_back(ENP_left);
+            setEnpasan(index, ENP_left);
+          }
+
+          //----------------------- if piece is on right
+          else if ((ENP_right.first == enpasan.first + 1) && (ENP_right.second == enpasan.second))
+
+          {
+            can_go.push_back(ENP_right);
+            can_hit.push_back(ENP_right);
+            setEnpasan(index, ENP_right);
+          }
+        }
       }
-      //----------------------------- check first move for black pawn
-      if (color == Chessman::BLACK) {
-          if (index.first != 6) {
-              if ((index.first != 1)
-                  || (getCell(make_pair((*(--list_cells.end())).first - 1,
-                                        (*(--list_cells.end())).second))
-                          .isFull())
-                  || (getCell((*(--list_cells.end()))).isFull())) {
-                  list_cells.erase(--list_cells.end());
-              }
-          }
+    }
+    //----------------------------- check first move for black pawn
+    if (color == Chessman::BLACK)
+    {
+      if (index.first != 6)
+      {
+        if ((index.first != 1) || (getCell(make_pair((*(--list_cells.end())).first - 1, (*(--list_cells.end())).second)).isFull()) || (getCell((*(--list_cells.end()))).isFull()))
+        {
+          list_cells.erase(--list_cells.end());
+        }
       }
+    }
 
-      //----------------------------- check first move for white pawn
-      else if (color == Chessman::WHITE) {
-          if (index.first != 1) {
-              if ((index.first != 6)
-                  || (getCell(make_pair(list_cells.begin()->first + 1, list_cells.begin()->second))
-                          .isFull())
-                  || (getCell(*list_cells.begin()).isFull())) {
-                  list_cells.erase(list_cells.begin());
-              }
-          }
+    //----------------------------- check first move for white pawn
+    else if (color == Chessman::WHITE)
+    {
+      if (index.first != 1)
+      {
+        if ((index.first != 6) || (getCell(make_pair(list_cells.begin()->first + 1, list_cells.begin()->second)).isFull()) || (getCell(*list_cells.begin()).isFull()))
+        {
+          list_cells.erase(list_cells.begin());
+        }
       }
+    }
 
-      for (auto &item : list_cells) {
-          //-------------------- if there is a piece in canGo list
-          if (getCell(item).isFull()) {
-              //------- if not cross move
-              if (item.second == index.second)
-                  continue;
+    for (auto &item : list_cells)
+    {
+      //-------------------- if there is a piece in canGo list
+      if (getCell(item).isFull())
+      {
+        //------- if not cross move
+        if (item.second == index.second)
+          continue;
 
-              //---------------------if is ally
-              if (getCell(item).getChessPieces()->getColor() == color)
-                  continue;
+        //---------------------if is ally
+        if (getCell(item).getChessPieces()->getColor() == color)
+          continue;
 
-              //-----------------------if is enemy --> cango there
-              can_go.push_back(item);
-              can_hit.push_back(item);
-          }
-          //------------------ if can go forward
-          else {
-              if (item.second == index.second)
-                  can_go.push_back(item);
-          }
+        //-----------------------if is enemy --> cango there
+        can_go.push_back(item);
+        can_hit.push_back(item);
       }
+      //------------------ if can go forward
+      else
+      {
+        if (item.second == index.second)
+          can_go.push_back(item);
+      }
+    }
   }
 
-  else if (chess_type == Chessman::KNIGHT || chess_type == Chessman::KING) {
-      if (chess_type == Chessman::KING) {
-          //if is king first move
-          if (dynamic_cast<King *>(chess_man.get())->getMoved() == false) {
-              if (check_king_rook)
-
-              {
-                  //if king isn't checked
-                  if (isChecked(index, color).first == false) {
-                      for (int i = 0; i < 2;
-                           i++) // i == 0 king move to right, i == 1 king moved to left
-                      {
-                          Chessman::Index temp = index;
-                          for (int k = 0; k <= i + 2; k++) {
-                              if (i == 0)
-                                  temp.second++;
-                              else
-                                  temp.second--;
-
-                              if(temp.second != 0 && temp.second != 7) {
-                                  //if there is a piece on the way
-                                  if(getCell(temp).isFull())
-                                      break;
-
-                                  //if this cell is checked
-                                  if(isChecked(temp, color).first)
-                                      break;
-                              } else {
-                                  if(!getCell(temp).isFull())
-                                      break;
-
-                                  if(!(getCell(temp).getChessPieces()->getChessType() == Chessman::ROOK))
-                                     break;
-
-                                  if(dynamic_cast<Rook*>(getCell(temp).getChessPieces().get())->getMoved())
-                                    break;
-
-                                  if (i == 0)
-                                      can_go.push_back(list_cells.front()); // right
-                                  else
-                                      can_go.push_back(*(++list_cells.begin())); // left
-                              }
-                          }
-                      }
-                  }
-              }
-
-              list_cells.pop_front();
-              list_cells.pop_front();
-          }
-      }
-
-      //------------------------------------------------------ king and knight
-      for (auto it = list_cells.begin(); it != list_cells.end(); it++)
-
+  else if (chess_type == Chessman::KNIGHT || chess_type == Chessman::KING)
+  {
+    if (chess_type == Chessman::KING)
+    {
+      // if is king first move
+      if (dynamic_cast<King *>(chess_man.get())->getMoved() == false)
       {
-          //-------------------------------------if no piece in this cell
-          if (cells[it->first][it->second].getChessPieces() == nullptr)
-              can_go.push_back(*it);
+        if (check_king_rook)
 
-          //-------------------------------------if there is a enemy piece in this cell
-          else if (color != cells[it->first][it->second].getChessPieces()->getColor()) {
-              can_go.push_back(*it);
-              can_hit.push_back(*it);
+        {
+          // if king isn't checked
+          if (isChecked(index, color).first == false)
+          {
+            for (int i = 0; i < 2;
+                 i++) // i == 0 king move to right, i == 1 king moved to left
+            {
+              Chessman::Index temp = index;
+              for (int k = 0; k <= i + 2; k++)
+              {
+                if (i == 0)
+                  temp.second++;
+                else
+                  temp.second--;
+
+                if (temp.second != 0 && temp.second != 7)
+                {
+                  // if there is a piece on the way
+                  if (getCell(temp).isFull())
+                    break;
+
+                  // if this cell is checked
+                  if (isChecked(temp, color).first)
+                    break;
+                }
+                else
+                {
+                  if (!getCell(temp).isFull())
+                    break;
+
+                  if (!(getCell(temp).getChessPieces()->getChessType() == Chessman::ROOK))
+                    break;
+
+                  if (dynamic_cast<Rook *>(getCell(temp).getChessPieces().get())->getMoved())
+                    break;
+
+                  if (i == 0)
+                    can_go.push_back(list_cells.front()); // right
+                  else
+                    can_go.push_back(*(++list_cells.begin())); // left
+                }
+              }
+            }
           }
-      }
+        }
 
+        list_cells.pop_front();
+        list_cells.pop_front();
+      }
+    }
+
+    //------------------------------------------------------ king and knight
+    for (auto it = list_cells.begin(); it != list_cells.end(); it++)
+
+    {
+      //-------------------------------------if no piece in this cell
+      if (cells[it->first][it->second].getChessPieces() == nullptr)
+        can_go.push_back(*it);
+
+      //-------------------------------------if there is a enemy piece in this cell
+      else if (color != cells[it->first][it->second].getChessPieces()->getColor())
+      {
+        can_go.push_back(*it);
+        can_hit.push_back(*it);
+      }
+    }
   }
 
   //---------------------------------------------------------- for other chessmen
-  else {
-      for (auto it = list_cells.begin(); it != list_cells.end(); it++)
+  else
+  {
+    for (auto it = list_cells.begin(); it != list_cells.end(); it++)
 
+    {
+      //-----------------if out of range
+      if (it->first == 100)
+        continue;
+
+      //----------------------- if there is a enemy piece in this cell
+      if (getCell(*it).isFull())
       {
-          //-----------------if out of range
-          if (it->first == 100)
-              continue;
+        if (getCell(*it).getChessPieces()->getColor() != color)
+        {
+          can_go.push_back(*it);
+          can_hit.push_back(*it);
+        }
 
-          //----------------------- if there is a enemy piece in this cell
-          if (getCell(*it).isFull()) {
-              if (getCell(*it).getChessPieces()->getColor() != color) {
-                  can_go.push_back(*it);
-                  can_hit.push_back(*it);
-              }
+        while (true)
+        {
+          // if reaches the limitation
+          if ((it)->first == 100)
+            break;
 
-              while (true) {
-                  //if reaches the limitation
-                  if ((it)->first == 100)
-                      break;
-
-                  it++;
-              }
-          } else {
-              can_go.push_back(*it);
-          }
+          it++;
+        }
       }
+      else
+      {
+        can_go.push_back(*it);
+      }
+    }
   }
   return make_pair(can_go, can_hit);
 }
@@ -314,44 +331,48 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> ChessBoard::getCanGo(Ches
 
 pair<Chessman::ID, Chessman::ID> ChessBoard::moveChessman(Chessman::Index src, Chessman::Index dest)
 {
-    pair<string, string> temp = make_pair("", "");
+  pair<string, string> temp = make_pair("", "");
 
-    //-----------------------------if there is piece
-    if (getCell(dest).isFull())
+  //-----------------------------if there is piece
+  if (getCell(dest).isFull())
 
+  {
+    // if is ally
+    if (getCell(dest).getChessPieces()->getColor() == getCell(src).getChessPieces()->getColor())
+      throw invalid_argument("This move cannot be preforemd.");
+
+    temp.first = this->hitChessman(dest);
+  }
+
+  this->getCell(src).moveChessPieces(getCell(dest));
+
+  //------------------------------ allow En-passant move
+  if (checkEnpasan(src, dest))
+  {
+    if (getCell(dest).getChessPieces()->getColor() == Chessman::WHITE)
     {
-        //if is ally
-        if (getCell(dest).getChessPieces()->getColor() == getCell(src).getChessPieces()->getColor())
-            throw invalid_argument("This move cannot be preforemd.");
-
-        temp.first = this->hitChessman(dest);
+      // hit the chessman back of it
+      temp.second = this->hitChessman(make_pair(dest.first + 1, dest.second));
+      removeChessmanIndex(make_pair(dest.first + 1, dest.second));
     }
-
-    this->getCell(src).moveChessPieces(getCell(dest));
-
-    //------------------------------ allow En-passant move
-    if (checkEnpasan(src, dest)) {
-        if (getCell(dest).getChessPieces()->getColor() == Chessman::WHITE) {
-            //hit the chessman back of it
-            temp.second = this->hitChessman(make_pair(dest.first + 1, dest.second));
-            removeChessmanIndex(make_pair(dest.first + 1, dest.second));
-        } else {
-            //hit the chessman back of it
-            temp.second = this->hitChessman(make_pair(dest.first - 1, dest.second));
-            removeChessmanIndex(make_pair(dest.first - 1, dest.second));
-        }
-    }
-
-    //------------------------------- change index chessman in saved indexes
-    //if doesn't hit any chessmen
-    if (temp.first == "")
-        changeIndex(src, dest, false);
-
-    //if hit a chessmen
     else
-        changeIndex(src, dest, true);
+    {
+      // hit the chessman back of it
+      temp.second = this->hitChessman(make_pair(dest.first - 1, dest.second));
+      removeChessmanIndex(make_pair(dest.first - 1, dest.second));
+    }
+  }
 
-    return temp;
+  //------------------------------- change index chessman in saved indexes
+  // if doesn't hit any chessmen
+  if (temp.first == "")
+    changeIndex(src, dest, false);
+
+  // if hit a chessmen
+  else
+    changeIndex(src, dest, true);
+
+  return temp;
 }
 
 //___________________________________________________________________________________________________  hit
@@ -363,14 +384,14 @@ Chessman::ID ChessBoard::hitChessman(Chessman::Index index)
 
 //___________________________________________________________________________________________________ getCell
 
-Cell& ChessBoard::getCell(Chessman::Index index)
+Cell &ChessBoard::getCell(Chessman::Index index)
 {
   return cells[index.first][index.second];
 }
 
 //___________________________________________________________________________________________________ getCells
 
-const ChessBoard::Cells& ChessBoard::getCells() const
+const ChessBoard::Cells &ChessBoard::getCells() const
 {
   return cells;
 }
@@ -380,13 +401,13 @@ const ChessBoard::Cells& ChessBoard::getCells() const
 
 Chessman::Index ChessBoard::getIndex(Chessman::ID id) const
 {
-  for(int i = 0; i < 8; i++)
+  for (int i = 0; i < 8; i++)
   {
-    for(int j = 0; j < 8; j++)
+    for (int j = 0; j < 8; j++)
     {
-      if(cells[i][j].isFull())
+      if (cells[i][j].isFull())
       {
-        if(cells[i][j].getChessPieces()->getID() == id)
+        if (cells[i][j].getChessPieces()->getID() == id)
         {
           return make_pair(i, j);
         }
@@ -402,11 +423,11 @@ Chessman::Index ChessBoard::getIndex(Chessman::ID id) const
 
 void ChessBoard::changeIndex(Chessman::Index src, Chessman::Index dest, bool hit)
 {
-  for(auto it = white_chessmans.begin(); it != white_chessmans.end(); it++)
+  for (auto it = white_chessmans.begin(); it != white_chessmans.end(); it++)
   {
-    if(*it == src)
+    if (*it == src)
     {
-      if(hit)
+      if (hit)
         this->removeChessmanIndex(dest);
 
       white_chessmans.erase(it);
@@ -416,11 +437,11 @@ void ChessBoard::changeIndex(Chessman::Index src, Chessman::Index dest, bool hit
     }
   }
 
-  for(auto it = black_chessmans.begin(); it != black_chessmans.end(); it++)
+  for (auto it = black_chessmans.begin(); it != black_chessmans.end(); it++)
   {
-    if(*it == src)
+    if (*it == src)
     {
-      if(hit)
+      if (hit)
         this->removeChessmanIndex(dest);
 
       black_chessmans.erase(it);
@@ -437,21 +458,21 @@ void ChessBoard::changeIndex(Chessman::Index src, Chessman::Index dest, bool hit
 
 void ChessBoard::removeChessmanIndex(Chessman::Index index)
 {
-  for(auto it = white_chessmans.begin(); it != white_chessmans.end(); it++)
+  for (auto it = white_chessmans.begin(); it != white_chessmans.end(); it++)
   {
-    if(*it == index)
+    if (*it == index)
     {
       white_chessmans.erase(it);
-      return ;
+      return;
     }
   }
 
-  for(auto it = black_chessmans.begin(); it != black_chessmans.end(); it++)
+  for (auto it = black_chessmans.begin(); it != black_chessmans.end(); it++)
   {
-    if(*it == index)
+    if (*it == index)
     {
       black_chessmans.erase(it);
-      return ;
+      return;
     }
   }
 
@@ -464,37 +485,45 @@ void ChessBoard::removeChessmanIndex(Chessman::Index index)
 pair<bool, Chessman::Index> ChessBoard::isChecked(
     Chessman::Index userKingIndex, Chessman::Color userColor) // color is enemy chessmans color
 {
-    //if white Chessmen are checking black king
-    if (userColor == Chessman::BLACK) {
-        for (auto &item : white_chessmans) {
-            auto temp_go = this->getCanGo(item, false).second;
-            for (auto &item2 : temp_go) {
-                if (item2 == userKingIndex) {
-                    return make_pair(true, userKingIndex);
-                }
-            }
+  // if white Chessmen are checking black king
+  if (userColor == Chessman::BLACK)
+  {
+    for (auto &item : white_chessmans)
+    {
+      auto temp_go = this->getCanGo(item, false).second;
+      for (auto &item2 : temp_go)
+      {
+        if (item2 == userKingIndex)
+        {
+          return make_pair(true, userKingIndex);
         }
+      }
     }
-    //if black Chessmen are checking white king
-    else {
-        for (auto &item : black_chessmans) {
-            auto temp_go = this->getCanGo(item, false).second;
-            for (auto &item2 : temp_go) {
-                if (item2 == userKingIndex) {
-                    return make_pair(true, userKingIndex);
-                }
-            }
+  }
+  // if black Chessmen are checking white king
+  else
+  {
+    for (auto &item : black_chessmans)
+    {
+      auto temp_go = this->getCanGo(item, false).second;
+      for (auto &item2 : temp_go)
+      {
+        if (item2 == userKingIndex)
+        {
+          return make_pair(true, userKingIndex);
         }
+      }
     }
+  }
 
-    return make_pair(false, make_pair(100, 100));
+  return make_pair(false, make_pair(100, 100));
 }
 
 //___________________________________________________________________________________________________ addChessmanIndex
 
 void ChessBoard::addChessmanIndex(Chessman::Color color, Chessman::Index index)
 {
-  if(color == Chessman::WHITE)
+  if (color == Chessman::WHITE)
     white_chessmans.push_back(index);
   else
     black_chessmans.push_back(index);
@@ -502,7 +531,7 @@ void ChessBoard::addChessmanIndex(Chessman::Color color, Chessman::Index index)
 
 void ChessBoard::setEnpasan(Chessman::Index src, Chessman::Index dest)
 {
-  enpasan.first  = src ;
+  enpasan.first = src;
   enpasan.second = dest;
 }
 
@@ -510,7 +539,7 @@ void ChessBoard::setEnpasan(Chessman::Index src, Chessman::Index dest)
 
 bool ChessBoard::checkEnpasan(Chessman::Index src, Chessman::Index dest)
 {
-  if(this->enpasan.first == src && this->enpasan.second == dest)
+  if (this->enpasan.first == src && this->enpasan.second == dest)
     return true;
 
   return false;

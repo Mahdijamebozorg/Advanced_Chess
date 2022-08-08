@@ -1,4 +1,5 @@
 #include "../include/Filemanager.hpp"
+#include "../include/Exceptions.hpp"
 #include <sys/stat.h>
 #include <QDebug>
 
@@ -7,39 +8,58 @@ using namespace std;
 //________________________________________________________________________________________________________ LOAD FILE
 
 //------------------------------------------------------------------------- reading game from file
-void FileManager::readFile(std::string fileName, bool temp)
+void FileManager::readFile(std::string fileName, bool isChecking)
 {
     resetData();
 
+    // dir
     this->game_Name = "./SavedGames/" + fileName;
 
+    // open
     file.open(game_Name.c_str(), ios::in);
     if (!file.is_open())
-        throw(runtime_error("can't open file"));
+        throw(OpenFileFailed("can't open file"));
 
-    file.seekg(0); //to be sure
+    // make sure is begining of file
+    file.seekg(0);
 
-    string tempMove;
-
+    // read players name
     getline(file, p1_Name);
     getline(file, p2_Name);
 
-    if (!temp && (p1_Name.empty() || p2_Name.empty()))
-        throw runtime_error("users names have not been saved well");
+    if (!isChecking && (p1_Name.empty() || p2_Name.empty()))
+        throw LoadingFailed("users names have not been saved well");
 
-    while (!file.eof()) {
-        file.ignore(1, '\"');
-        getline(file, tempMove, '\"');
+    // read moves in file
+    string tempMove;
+    while (!file.eof())
+    {
+        //        file.ignore(1, '\"');
+        getline(file, tempMove);
 
-        if (file.eof()) //delimiter
+        qDebug() << "move size:" << tempMove.size();
+
+        if (file.eof()) // delimiter
             break;
 
-        if (!temp && tempMove.size() < 9)
-            throw runtime_error("moves are invalid");
+        // if has unknow moves
+        if (tempMove.size() < 9 || tempMove.size() > 26)
+        {
+            // if is checking the file
+            if (isChecking)
+            {
+                this->game_Name = "Corrupted";
+                throw CheckingFailed("moves are invalid");
+            }
+            // if is loading the file
+            else
+                throw LoadingFailed("moves are invalid");
+        }
 
-        moves.push_back(tempMove);
-
+        // color
         string moveColor = tempMove.substr((tempMove.find('%') + 2), 1);
+
+        // score
         if (moveColor == "W")
             p1_Score += stoi(tempMove.substr(tempMove.find('$') + 1, tempMove.back()));
         else if (moveColor == "B")
@@ -48,20 +68,23 @@ void FileManager::readFile(std::string fileName, bool temp)
     file.close();
 }
 
-//-------------------------------------------------------------------------
+//------------------------------------------------------------------------- auto save
 
 void FileManager::add_to_autoSave()
 {
     string tempName = game_Name;
+    // remove format
     for (size_t i = 0; i < 4; i++)
         tempName.pop_back();
 
-    qDebug() << tempName.substr(tempName.find("(") + 1, tempName.find(")")).c_str();
-
+    // check if is autosave
     if (tempName.substr(tempName.find("(") + 1, tempName.find(")")) != "AutoSave)")
         tempName += ("(AutoSave)");
+
+    // add format
     tempName += ".txt";
 
+    // rename file to autosave
     rename(game_Name.c_str(), tempName.c_str());
     game_Name = tempName;
 }
@@ -111,7 +134,8 @@ vector<string> FileManager::get_Moves()
 void FileManager::resetFile()
 {
     file.open(game_Name.c_str(), ios::out | ios::trunc);
-    file << p1_Name << '\n' << p2_Name << '\n';
+    file << p1_Name << '\n'
+         << p2_Name << '\n';
     file.close();
 }
 
@@ -122,7 +146,7 @@ void FileManager::saveMove(string move)
 {
     file.open(this->game_Name.c_str(), ios::app);
     if (!file.is_open())
-        throw(runtime_error("can't open file"));
+        throw(OpenFileFailed("can't open file"));
 
     file << '\"' << move << '\"' << '\n';
     file.close();
@@ -136,13 +160,14 @@ void FileManager::delete_Last_Move()
     //---------------------------------------- read
     file.open(game_Name.c_str(), ios::in);
     if (!file)
-        throw(runtime_error("can't open file"));
+        throw(OpenFileFailed("can't open file"));
     file.seekg(0);
 
     getline(file, p1_Name, '\n');
     getline(file, p2_Name, '\n');
 
-    while (!file.eof()) {
+    while (!file.eof())
+    {
         file.ignore(1, '\"');
         getline(file, tempMove, '\"');
 
@@ -157,13 +182,14 @@ void FileManager::delete_Last_Move()
     //---------------------------------------- write
     file.open(game_Name.c_str(), ios::trunc | ios::out);
     if (!file.is_open())
-        throw(runtime_error("can't open file"));
+        throw(OpenFileFailed("can't open file"));
     file.seekp(0);
 
     file << p1_Name << '\n';
     file << p2_Name << '\n';
 
-    for (size_t i = 0; i < tempMoves.size() - 1; i++) {
+    for (size_t i = 0; i < tempMoves.size() - 1; i++)
+    {
         file << '\"' << tempMoves[i] << '\"' << '\n';
     }
 
@@ -175,17 +201,17 @@ void FileManager::delete_Last_Move()
 //------------------------------------------------------------------------- setting new game
 void FileManager::set_newFile(std::string gameName)
 {
-    //if save file doesn't exist , makes one
+    // if save file doesn't exist , makes one
     struct stat buff;
     if (stat("./SavedGames", &buff) != 0)
         if (mkdir("./SavedGames") != 0)
-            throw runtime_error("can't make save files");
+            throw OpenFileFailed("can't make save files");
 
     this->game_Name = "./SavedGames/" + gameName + "(AutoSave)" + ".txt";
 
     file.open(game_Name.c_str(), ios::trunc | ios::out);
     if (!file)
-        throw(runtime_error("can't open file in set game"));
+        throw(OpenFileFailed("can't open file in set game"));
 }
 void FileManager::set_P1_Name(std::string name)
 {

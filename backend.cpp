@@ -1,4 +1,5 @@
 #include "backend.hpp"
+#include <QDebug>
 #include "include/Exceptions.hpp"
 #include <dirent.h>
 #include <fstream>
@@ -67,30 +68,34 @@ bool BackEnd::checkInput(QString name)
 }
 
 //__________________________________________________________________________
-
+//________________// if save file doesn't exist , makes one
 void BackEnd::getFiles()
 {
-    //if save file doesn't exist , makes one
     struct stat buff;
     if (stat("./SavedGames", &buff) != 0)
         if (mkdir("./SavedGames") != 0)
-            throw runtime_error("can't make save files");
+            throw AccessDenied("can't make save files");
 
     _dirFiles.clear();
     DIR *dir;
     struct dirent *diread;
-    if ((dir = opendir("./SavedGames")) != nullptr) {
-        while ((diread = readdir(dir)) != nullptr) {
+    if ((dir = opendir("./SavedGames")) != nullptr)
+    {
+        while ((diread = readdir(dir)) != nullptr)
+        {
             string temp = diread->d_name;
             string suffix = temp.substr(temp.find('.'), temp.back());
-            if (suffix == ".txt") {
+            if (suffix == ".txt")
+            {
                 _dirFiles.push_back(temp);
             }
         }
         closedir(dir);
-    } else {
+    }
+    else
+    {
         perror("opendir");
-        throw("can't acces files");
+        throw OpenFileFailed("can't acces files");
     }
 }
 
@@ -98,20 +103,31 @@ void BackEnd::getFiles()
 //________________// read plyer info
 QString BackEnd::getFileInfo(unsigned index)
 {
-    try{
+    QString fileName = QString::fromStdString(_dirFiles[index]);
+
+    try
+    {
         manager->getFileManager()->readFile(_dirFiles[index]);
     }
-    catch(const runtime_error &e){
+
+    catch (const LoadingFailed &e)
+    {
         qDebug() << e.what();
+    }
+
+    catch (CheckingFailed &e)
+    {
+        qDebug() << e.what();
+        fileName = "Corrupted";
     }
 
     QString name1 = QString::fromStdString(manager->getFileManager()->get_P1_Name());
     QString name2 = QString::fromStdString(manager->getFileManager()->get_P2_Name());
+
     QString score1 = QString::fromStdString(
         '(' + to_string(manager->getFileManager()->get_P1_Score()) + ')');
     QString score2 = QString::fromStdString(
         '(' + to_string(manager->getFileManager()->get_P2_Score()) + ')');
-    QString fileName = QString::fromStdString(_dirFiles[index]);
 
     QString temp = fileName + " :   P1:   " + name1 + score1 + "      P2:   " + name2 + score2;
 
@@ -123,11 +139,14 @@ QString BackEnd::getFileInfo(unsigned index)
 void BackEnd::loadGame(unsigned index)
 {
     qDebug() << "loaded file: " << _dirFiles[index].c_str();
-    try {
+    try
+    {
         manager->loadGame(_dirFiles[index]);
         emit gameLoaded();
-    } catch (exception &s) {
-        qDebug() << s.what();
+    }
+    catch (LoadingFailed &e)
+    {
+        qDebug() << e.what();
         emit fileError();
     }
 }
@@ -161,7 +180,8 @@ std::pair<unsigned, unsigned> indexToIJ(unsigned index)
 {
     unsigned j = index % 8;
     unsigned i = 0;
-    while (index >= 8) {
+    while (index >= 8)
+    {
         i++;
         index -= 8;
     }
@@ -243,13 +263,18 @@ unsigned BackEnd::winner()
 
 void BackEnd::checkRandomMove()
 {
-    if (manager->getTurn() == GameManager::USER1) {
-        if (manager->getUser1()->getNegativeScore() >= 15) {
+    if (manager->getTurn() == GameManager::USER1)
+    {
+        if (manager->getUser1()->getNegativeScore() >= 15)
+        {
             manager->getUser1()->decNegativeScore(15);
             this->randomMove();
         }
-    } else {
-        if (manager->getUser2()->getNegativeScore() >= 15) {
+    }
+    else
+    {
+        if (manager->getUser2()->getNegativeScore() >= 15)
+        {
             manager->getUser2()->decNegativeScore(15);
             this->randomMove();
         }
@@ -286,16 +311,19 @@ unsigned BackEnd::choose(unsigned index)
     //    qDebug() << "choosen: " << indexToIJ(index);
 
     Chessman::Index src = indexToIJ(index);
-    try {
+    try
+    {
         srcState = manager->getCellState(src);
     }
 
-    catch (EmptySquare &s) {
+    catch (EmptySquare &s)
+    {
         qDebug() << s.what();
         return EMPTY;
     }
 
-    catch (AccessDenied &s) {
+    catch (AccessDenied &s)
+    {
         qDebug() << s.what();
         return UNACCESSABLE;
     }
@@ -309,8 +337,9 @@ unsigned BackEnd::choose(unsigned index)
 
 bool BackEnd::canGo(unsigned index, std::vector<std::pair<unsigned int, unsigned int>> bkndcanGo)
 {
-    for (auto const &item : bkndcanGo) {
-        if (IJToIndex(item) == index) //if this square is in the available squares which piece can go
+    for (auto const &item : bkndcanGo)
+    {
+        if (IJToIndex(item) == index) // if this square is in the available squares which piece can go
             return true;
     }
     return false;
@@ -320,9 +349,9 @@ bool BackEnd::canGo(unsigned index, std::vector<std::pair<unsigned int, unsigned
 
 bool BackEnd::canHit(unsigned index, std::vector<std::pair<unsigned int, unsigned int>> bkndcanHit)
 {
-    for (auto const &item : bkndcanHit) {
-        if (IJToIndex(item)
-            == index) //if this square is in the available squares which piece can hit
+    for (auto const &item : bkndcanHit)
+    {
+        if (IJToIndex(item) == index) // if this square is in the available squares which piece can hit
             return true;
     }
     return false;
@@ -332,7 +361,7 @@ bool BackEnd::canHit(unsigned index, std::vector<std::pair<unsigned int, unsigne
 
 unsigned BackEnd::cellState(unsigned index)
 {
-    if (index == (unsigned) srcIndex)
+    if (index == (unsigned)srcIndex)
         return SELECTED;
 
     else if (canHit(index, srcState.second))
@@ -398,20 +427,22 @@ unsigned BackEnd::getDestIndex()
     return this->destIndex;
 }
 
-//QString BackEnd::getHitPiece()
+// QString BackEnd::getHitPiece()
 //{
-//    return QString::fromStdString(manager->getHitPiece());
-//}
+//     return QString::fromStdString(manager->getHitPiece());
+// }
 
 //__________________________________________________________________________ unchoosePiece
 
 bool BackEnd::unchoosePiece(unsigned index)
 {
-    if (_change) { //____________ on changing piece no error should be opened
+    if (_change)
+    { //____________ on changing piece no error should be opened
         _change = false;
         return true;
     }
-    if (index == (unsigned) srcIndex) {
+    if (index == (unsigned)srcIndex)
+    {
         emit unchoosen();
         return true;
     }
@@ -428,7 +459,8 @@ QString BackEnd::getP1OutsIcon(unsigned index)
 
     if (index + 1 > outs.size() || outs.size() == 0)
         return "";
-    else {
+    else
+    {
         return QString::fromStdString(outs[index]->getIcon());
     }
 }
@@ -439,10 +471,11 @@ QString BackEnd::getP2OutsIcon(unsigned index)
 {
     auto outs = manager->getUser2()->getChessmansOut();
 
-    //if index is in outs length
+    // if index is in outs length
     if (index < outs.size())
         return QString::fromStdString(outs[index]->getIcon());
-    else {
+    else
+    {
         return "";
     }
 }
@@ -457,12 +490,14 @@ bool BackEnd::move(unsigned index) noexcept
     //    qDebug() << "dest: " << index;
     //    qDebug() << "dest: " << indexToIJ(index);
 
-    //unchoose
-    if (cellState(index) == SELECTED) {
-        //if user have chosen a moveable piece for first time in this turn
+    // unchoose
+    if (cellState(index) == SELECTED)
+    {
+        // if user have chosen a moveable piece for first time in this turn
         if (!_touchedPiece)
-            //if piece is moveable
-            if (!srcState.first.empty()) {
+            // if piece is moveable
+            if (!srcState.first.empty())
+            {
                 _touchedPiece = true;
                 this->touchedPiece(manager->getTurn());
             }
@@ -471,21 +506,22 @@ bool BackEnd::move(unsigned index) noexcept
 
     //___________________________change choosen piece
 
-    //if cell is full
-    if (manager->getChessBoardGame()->getCell(indexToIJ(index)).isFull()
-        && manager->getChessBoardGame()->getCell(indexToIJ(srcIndex)).isFull()) {
-        //if colors are the same
-        if (manager->getChessBoardGame()->getCell(indexToIJ(index)).getChessPieces()->getColor()
-            == manager->getChessBoardGame()
-                   ->getCell(indexToIJ(srcIndex))
-                   .getChessPieces()
-                   ->getColor()) {
+    // if cell is full
+    if (manager->getChessBoardGame()->getCell(indexToIJ(index)).isFull() && manager->getChessBoardGame()->getCell(indexToIJ(srcIndex)).isFull())
+    {
+        // if colors are the same
+        if (manager->getChessBoardGame()->getCell(indexToIJ(index)).getChessPieces()->getColor() == manager->getChessBoardGame()
+                                                                                                        ->getCell(indexToIJ(srcIndex))
+                                                                                                        .getChessPieces()
+                                                                                                        ->getColor())
+        {
             _change = true;
 
-            //if user have chosen a moveable piece for first time in this turn
+            // if user have chosen a moveable piece for first time in this turn
             if (!_touchedPiece)
-                //if piece is moveable
-                if (!srcState.first.empty()) {
+                // if piece is moveable
+                if (!srcState.first.empty())
+                {
                     _touchedPiece = true;
                     this->touchedPiece(manager->getTurn());
                 }
@@ -496,23 +532,27 @@ bool BackEnd::move(unsigned index) noexcept
         }
     }
 
-    //if can't go
-    if (cellState(index) == UNAVAILABLE) {
+    // if can't go
+    if (cellState(index) == UNAVAILABLE)
+    {
         return false;
     }
 
-    try {
+    try
+    {
         destIndex = index;
         manager->checkMove(indexToIJ(srcIndex), indexToIJ(destIndex));
         manager->setMove(indexToIJ(srcIndex), indexToIJ(destIndex), false, false, _extraMove);
     }
 
-    catch (ImpossibleHitKing &s) {
+    catch (ImpossibleHitKing &s)
+    {
         qDebug() << s.what();
         return false;
     }
 
-    catch (FinalCellForPawn &s) {
+    catch (FinalCellForPawn &s)
+    {
         qDebug() << s.what();
         emit promotion();
         _change = true;
@@ -521,7 +561,8 @@ bool BackEnd::move(unsigned index) noexcept
         return false;
     }
 
-    catch (exception &s) {
+    catch (exception &s)
+    {
         qDebug() << s.what();
         return false;
     }
@@ -535,7 +576,7 @@ bool BackEnd::move(unsigned index) noexcept
     else
         _extraMove = false;
 
-    //Turn changed
+    // Turn changed
     _touchedPiece = false;
 
     //    emit unchoosen();
@@ -558,7 +599,8 @@ void BackEnd::undo()
 //__________________________________________________________________________ extraMove
 bool BackEnd::extraMove()
 {
-    if (manager->extraMovements()) {
+    if (manager->extraMovements())
+    {
         _extraMove = true;
         return true;
     }
@@ -571,17 +613,19 @@ void BackEnd::randomMove()
 {
     pair<Chessman::Index, Chessman::Index> temp;
 
-    try {
+    try
+    {
         temp = manager->randomMovements();
 
-        previewsSrc = (int) IJToIndex(temp.first);
-        destIndex = (int) IJToIndex(temp.second);
+        previewsSrc = (int)IJToIndex(temp.first);
+        destIndex = (int)IJToIndex(temp.second);
 
         manager->changeTurn();
         emit moved();
     }
 
-    catch (exception &s) {
+    catch (exception &s)
+    {
         qDebug() << s.what();
     }
 }
@@ -589,7 +633,7 @@ void BackEnd::randomMove()
 //__________________________________________________________________________ promote
 void BackEnd::promote(unsigned type)
 {
-    manager->promote(indexToIJ(destIndex), (Chessman::ChessType) type);
+    manager->promote(indexToIJ(destIndex), (Chessman::ChessType)type);
     emit moved();
     manager->changeTurn();
 }
@@ -598,16 +642,19 @@ void BackEnd::promote(unsigned type)
 
 unsigned BackEnd::gameStatus()
 {
-    //0->NORMAL  1->CHECKED  2->STALEMATE  3->CHECKMATE
+    // 0->NORMAL  1->CHECKED  2->STALEMATE  3->CHECKMATE
     return manager->analayzeGameStatus();
 }
 
 //__________________________________________________________________________ touched piece
 void BackEnd::touchedPiece(GameManager::Turn turn)
 {
-    if (turn == GameManager::USER1) {
+    if (turn == GameManager::USER1)
+    {
         manager->getUser1()->incNegativeScore(5);
-    } else {
+    }
+    else
+    {
         manager->getUser2()->incNegativeScore(5);
     }
     checkRandomMove();
