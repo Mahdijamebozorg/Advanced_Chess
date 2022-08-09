@@ -1,6 +1,10 @@
-#include "../include/Chessman.hpp"
-#include "random"
+#include <random>
+#include <stack>
 #include <stdexcept>
+
+#include <QDebug>
+
+#include "../include/Chessman.hpp"
 
 using namespace std;
 
@@ -17,4 +21,16 @@ long unsigned randomNum()
     uniform_int_distribution<long> distribution{0, 1000000000}; // range
 
     return distribution(generator);
+}
+
+void printStack(const std::stack<std::string> &moves)
+{
+    std::stack<std::string> temp = moves;
+    qDebug() << "====================================";
+    while (!temp.empty())
+    {
+        qDebug() << QString::fromStdString(temp.top());
+        temp.pop();
+    }
+    qDebug() << "====================================";
 }

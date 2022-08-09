@@ -32,13 +32,11 @@ void FileManager::readFile(std::string fileName, bool isChecking)
 
     // read moves in file
     string tempMove;
-    qDebug() << "checking: " << QString::fromStdString(fileName);
+    qDebug() << "Checking: " << QString::fromStdString(fileName);
     while (!file.eof())
     {
         //file.ignore(1, '\"');
         getline(file, tempMove);
-        qDebug() << "move:" <<  QString::fromStdString(tempMove);
-        qDebug() << "move size:" << tempMove.size();
 
         if (file.eof()) // delimiter
             break;

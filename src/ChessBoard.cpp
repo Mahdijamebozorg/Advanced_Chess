@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "../include/King.hpp"
 #include "../include/Rook.hpp"
+#include <QDebug>
 
 using namespace std;
 
@@ -333,9 +334,8 @@ pair<Chessman::ID, Chessman::ID> ChessBoard::moveChessman(Chessman::Index src, C
 {
   pair<string, string> temp = make_pair("", "");
 
-  //-----------------------------if there is piece
+  //-----------------------------if dest has a piece
   if (getCell(dest).isFull())
-
   {
     // if is ally
     if (getCell(dest).getChessPieces()->getColor() == getCell(src).getChessPieces()->getColor())
@@ -344,24 +344,28 @@ pair<Chessman::ID, Chessman::ID> ChessBoard::moveChessman(Chessman::Index src, C
     temp.first = this->hitChessman(dest);
   }
 
-  this->getCell(src).moveChessPieces(getCell(dest));
-
-  //------------------------------ allow En-passant move
-  if (checkEnpasan(src, dest))
+  //------------------------------ En-passant move
+  else
   {
-    if (getCell(dest).getChessPieces()->getColor() == Chessman::WHITE)
-    {
-      // hit the chessman back of it
-      temp.second = this->hitChessman(make_pair(dest.first + 1, dest.second));
-      removeChessmanIndex(make_pair(dest.first + 1, dest.second));
-    }
-    else
-    {
-      // hit the chessman back of it
-      temp.second = this->hitChessman(make_pair(dest.first - 1, dest.second));
-      removeChessmanIndex(make_pair(dest.first - 1, dest.second));
-    }
+      if (checkEnpasan(src, dest))
+      {
+          if (getCell(src).getChessPieces()->getColor() == Chessman::WHITE)
+          {
+              // hit the chessman back of it
+              temp.second = this->hitChessman(make_pair(dest.first + 1, dest.second));
+              removeChessmanIndex(make_pair(dest.first + 1, dest.second));
+          }
+          else
+          {
+              // hit the chessman back of it
+              temp.second = this->hitChessman(make_pair(dest.first - 1, dest.second));
+              removeChessmanIndex(make_pair(dest.first - 1, dest.second));
+          }
+      }
   }
+
+  // move
+  this->getCell(src).moveChessPieces(getCell(dest));
 
   //------------------------------- change index chessman in saved indexes
   // if doesn't hit any chessmen

@@ -189,10 +189,7 @@ Item {
                         ]
 
                         onStopped: {
-                            if (soundOn.checked) {
-                                moveSound.play()
-                                console.log("play moveSound")
-                            }
+                            moveSound.play()
                             mystack.replace("GamePage.qml")
                         }
                     }

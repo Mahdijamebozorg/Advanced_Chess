@@ -52,8 +52,8 @@ ApplicationWindow {
                 anchors.fill: parent
 
                 Switch {
-                    id: soundOn
-                    text: persian.checked ? "صدا" : "Sound"
+                    id: musicOn
+                    text: persian.checked ? "موسیقی" : "Music"
                     checked: true
                 }
                 Switch {
@@ -134,9 +134,9 @@ ApplicationWindow {
     }
 
     Connections {
-        target: soundOn
+        target: musicOn
         function onClicked() {
-            if (soundOn.checked)
+            if (musicOn.checked)
                 music.play()
             else
                 music.pause()
