@@ -263,20 +263,22 @@ unsigned BackEnd::winner()
 
 void BackEnd::checkRandomMove()
 {
-    if (manager->getTurn() == GameManager::USER1)
-    {
-        if (manager->getUser1()->getNegativeScore() >= 15)
+    if(_random_enabled){
+        if (manager->getTurn() == GameManager::USER1)
         {
-            manager->getUser1()->decNegativeScore(15);
-            this->randomMove();
+            if (manager->getUser1()->getNegativeScore() >= 15)
+            {
+                manager->getUser1()->decNegativeScore(15);
+                this->randomMove();
+            }
         }
-    }
-    else
-    {
-        if (manager->getUser2()->getNegativeScore() >= 15)
+        else
         {
-            manager->getUser2()->decNegativeScore(15);
-            this->randomMove();
+            if (manager->getUser2()->getNegativeScore() >= 15)
+            {
+                manager->getUser2()->decNegativeScore(15);
+                this->randomMove();
+            }
         }
     }
 }
@@ -628,6 +630,11 @@ void BackEnd::randomMove()
     {
         qDebug() << s.what();
     }
+}
+
+void BackEnd::toggleRandom()
+{
+    _random_enabled = !_random_enabled;
 }
 
 //__________________________________________________________________________ promote
