@@ -10,10 +10,8 @@ Graphical chess with Qt Quick QML and C++
 ## Home Page
 [![Home Screen Shot][Home]]()
 
-<div>
 ## Login Page
 [![Login Screen Shot][Login]]()
-</div>
   
 ## Load Game
 [![Load Screen Shot][Load]]()
