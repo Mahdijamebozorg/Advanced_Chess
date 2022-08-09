@@ -7,24 +7,22 @@ Graphical chess with Qt Quick QML and C++
   </a>
 </div>
 
-## Screen shots
-
-### Home Page
+## Home Page
 [![Home Screen Shot][Home]]()
 
-### Login Page
+## Login Page
 [![Login Screen Shot][Login]]()
 
-### Load Game
+## Load Game
 [![Load Screen Shot][Load]]()
 
-### Game Page
+## Game Page
 [![Game Screen Shot][Game]]()
 
-### Promotion Dialog
+## Promotion Dialog
 [![Promotion Screen Shot][Promotion]]()
 
-### Built With
+## Built With
 
 * [![Qt][Qt.com]][Qt-url]
 * [![C++][C++.com]][C++-url]
