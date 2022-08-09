@@ -33,7 +33,7 @@ Graphical chess with Qt Quick QML and C++
 [Game]: Images/ScreenShots/game.PNG
 [Promotion]: Images/ScreenShots/promotion.PNG
 
-[Qt-url]: https://cplusplus.com/
+[Qt-url]: https://www.qt.io/
 [Qt.com]: https://img.shields.io/badge/qt-35495E?style=for-the-badge&logo=qt&logoColor=4FC08D
-[C++-url]: https://www.qt.io/
+[C++-url]: https://cplusplus.com/
 [C++.com]: https://img.shields.io/badge/C++-0769AD?style=for-the-badge&logo=cplusplus&logoColor=white
