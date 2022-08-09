@@ -53,19 +53,19 @@ ApplicationWindow {
 
                 Switch {
                     id: musicOn
-                    width: parent.width / 4
+                    height: parent.height * 0.05
                     text: persian.checked ? "موسیقی" : "Music"
                     checked: true
                 }
                 Switch {
                     id: persian
-                    width: parent.width / 4
+                    height: parent.height * 0.05
                     text: "پارسی"
                     checked: false
                 }
                 Switch {
                     id: fullScreen
-                    width: parent.width / 4
+                    height: parent.height * 0.05
                     text: persian.checked ? "تمام صفحه" : "FullScreen"
                     checked: true
                     onCheckedChanged: {
@@ -75,7 +75,7 @@ ApplicationWindow {
                 }
                 Switch {
                     id: random
-                    width: parent.width / 4
+                    height: parent.height * 0.05
                     text: persian.checked ? "حرکت تصادفی" : "Random move"
                     checked: true
                     onCheckedChanged: {
