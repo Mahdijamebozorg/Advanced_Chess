@@ -22,13 +22,13 @@ Graphical chess with Qt Quick QML and C++
 * [![Qt][Qt.com]][Qt-url]
 * [![C++][C++.com]][C++-url]
 
-[Home]: Images/ScreenShots/home.png
-[Login]: Images/ScreenShots/login.png
-[Load]: Images/ScreenShots/load.png
-[Game]: Images/ScreenShots/game.png
-[Promotion]: Images/ScreenShots/promotion.png
+[Home]: Images/ScreenShots/home.PNG
+[Login]: Images/ScreenShots/login.PNG
+[Load]: Images/ScreenShots/load.PNG
+[Game]: Images/ScreenShots/game.PNG
+[Promotion]: Images/ScreenShots/promotion.PNG
 
 [Qt-url]: https://cplusplus.com/
 [Qt.com]: https://img.shields.io/badge/qt-35495E?style=for-the-badge&logo=qt&logoColor=4FC08D
 [C++-url]: https://www.qt.io/
-[C++.com]: https://img.shields.io/badge/C++-0769AD?style=for-the-badge&logo=c++&logoColor=white
+[C++.com]: https://img.shields.io/badge/C++-0769AD?style=for-the-badge&logo=cplusplus&logoColor=white
