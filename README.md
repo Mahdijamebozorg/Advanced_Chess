@@ -23,19 +23,19 @@ Graphical 2P chess built with Qt Quick QML and C++
 - ...
 
 ## Home Page
-[![Home Screen Shot][Home]](Home)
+[![Home Screen Shot][Home]](https://github.com/Mahdijamebozorg/Advanced_Chess/tree/main/[Home])
 
 ## Login Page
-[![Login Screen Shot][Login]]()
+[![Login Screen Shot][Login]](https://github.com/Mahdijamebozorg/Advanced_Chess/tree/main/[Login])
   
 ## Load Game
-[![Load Screen Shot][Load]]()
+[![Load Screen Shot][Load]](https://github.com/Mahdijamebozorg/Advanced_Chess/tree/main/[Load])
 
 ## Game Page
-[![Game Screen Shot][Game]]()
+[![Game Screen Shot][Game]](https://github.com/Mahdijamebozorg/Advanced_Chess/tree/main/[Game])
 
 ## Promotion Dialog
-[![Promotion Screen Shot][Promotion]]()
+[![Promotion Screen Shot][Promotion]](https://github.com/Mahdijamebozorg/Advanced_Chess/tree/main/[Promotion])
 
 ## Game rules:
 This game is a modified 2P chess with all chess rules plus some features:
@@ -63,7 +63,6 @@ Touch piece: if you choose a moveable piece and reselct in this turn, you'll get
 
 * [![Qt][Qt.com]][Qt-url]
 * [![C++][C++.com]][C++-url]
-
 
 [Home]: Images/ScreenShots/home.PNG
 [Login]: Images/ScreenShots/login.PNG
