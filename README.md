@@ -23,7 +23,7 @@ Graphical 2P chess built with Qt Quick QML and C++
 - ...
 
 ## Home Page
-[![Home Screen Shot][Home]](Home)
+[![Home Screen Shot][Home]]([Home])
 
 ## Login Page
 [![Login Screen Shot][Login]](Login-url)
