@@ -2,7 +2,7 @@
 Graphical 2P chess built with Qt Quick QML and C++
 
 <div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
+  <a>
     <img src="Images/ScreenShots/icon.png" alt="Icon" width="80" height="80">
   </a>
 </div>
