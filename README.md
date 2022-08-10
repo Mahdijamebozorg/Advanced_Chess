@@ -48,7 +48,7 @@ Score is the key to win in this game, some movement have score:
 - Hit: Pawn-> +3 , Queen-> +15 , others-> +8 (you can't hit the king!)
 - Pawn pass away half of board: +3 
 - Check enemy king: +10
-- checkmate: +50
+- Checkmate: +50
 - Extra move: if you have 30 scores, you can make an extra move!
 ### Negative score:
 Some works add your negatice score , if your negative score reachs 15 , you will have a random move.
