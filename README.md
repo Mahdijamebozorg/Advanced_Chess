@@ -1,4 +1,4 @@
-# Advanced_Chess
+# Advanced Chess
 Graphical 2P chess built with Qt Quick QML and C++
 
 <div align="center">
