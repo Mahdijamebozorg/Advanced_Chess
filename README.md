@@ -45,13 +45,13 @@ If game ends by checkmate or stalemate, winner is player who has more scores,
 but if a player presses Surrend, other player wins.
 ### Score:
 Score is the key to win in this game, some movement have score:
-Hit: Pawn->+3 , Queen->+15 , others->+8 (you can't hit king!)
-Move: Pawn pass away half of board ->+3 , Check enemy king ->+10 , checkmate ->+50
-Extra move: if you have 30 scores, you can make an extra move!
+- Hit: Pawn->+3 , Queen->+15 , others->+8 (you can't hit king!)
+- Move: Pawn pass away half of board ->+3 , Check enemy king ->+10 , checkmate ->+50
+- Extra move: if you have 30 scores, you can make an extra move!
 ### Negative score:
 Some works add your negatice score , if your negative score reachs 15 , you will have a random move.
-Undo: return last moved piece and adds 5 negative scores
-Touch piece: if you choose a moveable piece and reselct in this turn, you'll get 5 negative scores
+- Undo: return last moved piece and adds 5 negative scores
+- Touch piece: if you choose a moveable piece and reselct in this turn, you'll get 5 negative scores
 ### Important notes
 - Game has auto save and you can continue crashed or closed games
 - Negative scores won't be saved in file
