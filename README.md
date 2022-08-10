@@ -56,7 +56,10 @@ Touch piece: if you choose a moveable piece and reselct in this turn, you'll get
 - In promotion, if you don't choose any chessman, game will crash, but you can continue game by laoding it
 - Canceling game will delete save file and restarting will clear move history in file
 - Saved Files with free spaces or unreadable moves, won't be opened
-  
+
+<div>
+</div>
+ 
 ## Load Game
 [![Load Screen Shot][Load]][Load]
 
