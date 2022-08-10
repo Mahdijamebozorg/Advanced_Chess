@@ -52,12 +52,12 @@ Some works add your negatice score , if your negative score reachs 15 , you will
 Undo: return last moved piece and adds 5 negative scores
 Touch piece: if you choose a moveable piece and reselct in this turn, you'll get 5 negative scores
 ### Important notes
-Game has auto save and you can continue crashed or closed games
-Negative scores won't be saved in file
-For game name, if a file exists with the same name, file will be overwriten
-In promotion, if you don't choose any chessman, game will crash, but you can continue game by laoding it
-Canceling game will delete save file and restarting will clear move history in file
-Saved Files with free spaces or unreadable moves, won't be opened
+- Game has auto save and you can continue crashed or closed games
+- Negative scores won't be saved in file
+- For game name, if a file exists with the same name, file will be overwriten
+- In promotion, if you don't choose any chessman, game will crash, but you can continue game by laoding it
+- Canceling game will delete save file and restarting will clear move history in file
+- Saved Files with free spaces or unreadable moves, won't be opened
 
 ## Built With
 
