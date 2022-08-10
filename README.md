@@ -3,7 +3,7 @@ Graphical 2P chess built with Qt Quick QML and C++
 
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="Images/ScreenShots/icon.png" alt="Icon" width="80" height="80">
   </a>
 </div>
 
@@ -63,6 +63,7 @@ Saved Files with free spaces or unreadable moves, won't be opened
 
 * [![Qt][Qt.com]][Qt-url]
 * [![C++][C++.com]][C++-url]
+
 
 [Home]: Images/ScreenShots/home.PNG
 [Login]: Images/ScreenShots/login.PNG
