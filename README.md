@@ -65,7 +65,7 @@ Saved Files with free spaces or unreadable moves, won't be opened
 * [![C++][C++.com]][C++-url]
 
 
-[Home]: Images/ScreenShots/home.PN
+[Home]: Images/ScreenShots/home.PNG
 [Login]: Images/ScreenShots/login.PNG
 [Load]: Images/ScreenShots/load.PNG
 [Game]: Images/ScreenShots/game.PNG
