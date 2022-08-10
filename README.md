@@ -8,7 +8,8 @@ Graphical 2P chess built with Qt Quick QML and C++
 </div>
 
 ## Game features:
-- Save and load game
+- Save game
+- View, load and delete saved games
 - Auto save the game on crash or unprincipled closing
 - Highlight cells the piece can go or hit
 - Undo
