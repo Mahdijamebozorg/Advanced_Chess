@@ -32,14 +32,8 @@ Graphical 2P chess built with Qt Quick QML and C++
 ## Login Page
 [![Login Screen Shot][Login]][Login]
   
-## Load Game
-[![Load Screen Shot][Load]][Load]
-
 ## Game Page
 [![Game Screen Shot][Game]][Game]
-
-## Promotion Dialog
-[![Promotion Screen Shot][Promotion]][Promotion]
 
 ## Game rules:
 This game is a modified 2P chess with all chess rules plus some features:
@@ -62,6 +56,12 @@ Touch piece: if you choose a moveable piece and reselct in this turn, you'll get
 - In promotion, if you don't choose any chessman, game will crash, but you can continue game by laoding it
 - Canceling game will delete save file and restarting will clear move history in file
 - Saved Files with free spaces or unreadable moves, won't be opened
+  
+## Load Game
+[![Load Screen Shot][Load]][Load]
+
+## Promotion Dialog
+[![Promotion Screen Shot][Promotion]][Promotion]
 
 [Home]: Images/ScreenShots/home.PNG
 [Login]: Images/ScreenShots/login.PNG
