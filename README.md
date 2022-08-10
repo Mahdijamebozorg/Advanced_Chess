@@ -22,6 +22,10 @@ Graphical 2P chess built with Qt Quick QML and C++
 - Animations
 - ...
 
+## Built With
+* [![Qt][Qt.com]][Qt-url]
+* [![C++][C++.com]][C++-url]
+
 ## Home Page
 [![Home Screen Shot][Home]][Home]
 
@@ -58,11 +62,6 @@ Touch piece: if you choose a moveable piece and reselct in this turn, you'll get
 - In promotion, if you don't choose any chessman, game will crash, but you can continue game by laoding it
 - Canceling game will delete save file and restarting will clear move history in file
 - Saved Files with free spaces or unreadable moves, won't be opened
-
-## Built With
-
-* [![Qt][Qt.com]][Qt-url]
-* [![C++][C++.com]][C++-url]
 
 [Home]: Images/ScreenShots/home.PNG
 [Login]: Images/ScreenShots/login.PNG
