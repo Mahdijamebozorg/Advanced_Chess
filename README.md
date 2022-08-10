@@ -42,7 +42,7 @@ Graphical 2P chess built with Qt Quick QML and C++
 This game is a modified 2P chess with all chess rules plus some features:
 ### Winner:
 If game ends by checkmate or stalemate, winner is player who has more scores,
-but if a player presses Surrend or Cancel, other player wins.
+but if a player presses Surrend, other player wins.
 ### Score:
 Score is the key to win in this game, some movement have score:
 Hit: Pawn->+3 , Queen->+15 , others->+8 (you can't hit king!)
