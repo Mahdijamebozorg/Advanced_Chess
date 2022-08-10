@@ -9,16 +9,17 @@ Graphical 2P chess built with Qt Quick QML and C++
 
 ## Game features:
 - Save and load game
-- Auto save the game on crash or close
-- Highlight cells which the piece can go or hit
+- Auto save the game on crash or unprincipled closing
+- Highlight cells the piece can go or hit
 - Undo
-- Positive and negative score
-- Random move for an amount of negative score
-- Extra move for an amount of positive score
-- Background music and function to pause it
-- full screen mode
-- Change language to Persian
-- Move animations
+- Positive and negative scores
+- Random moves
+- Extra moves
+- Background music
+- Full screen mode
+- Bilingual (English and Persian)
+- Animations
+- ...
 
 ## Home Page
 [![Home Screen Shot][Home]]()
