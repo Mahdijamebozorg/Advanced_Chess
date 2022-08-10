@@ -26,16 +26,16 @@ Graphical 2P chess built with Qt Quick QML and C++
 [![Home Screen Shot][Home]][Home]
 
 ## Login Page
-[![Login Screen Shot][Login]](Login-url)
+[![Login Screen Shot][Login]][Login]
   
 ## Load Game
-[![Load Screen Shot][Load]](Load-url)
+[![Load Screen Shot][Load]][Load]
 
 ## Game Page
-[![Game Screen Shot][Game]](Game-url)
+[![Game Screen Shot][Game]][Game]
 
 ## Promotion Dialog
-[![Promotion Screen Shot][Promotion]](Promotion-url)
+[![Promotion Screen Shot][Promotion]][Promotion]
 
 ## Game rules:
 This game is a modified 2P chess with all chess rules plus some features:
@@ -69,12 +69,6 @@ Touch piece: if you choose a moveable piece and reselct in this turn, you'll get
 [Load]: Images/ScreenShots/load.PNG
 [Game]: Images/ScreenShots/game.PNG
 [Promotion]: Images/ScreenShots/promotion.PNG
-
-[Home-url]: https://github.com/Mahdijamebozorg/Advanced_Chess/tree/main/Images/ScreenShots/home.PNG
-[Login-url]: https://github.com/Mahdijamebozorg/Advanced_Chess/tree/main/Images/ScreenShots/login.PNG
-[Load-url]: https://github.com/Mahdijamebozorg/Advanced_Chess/tree/main/Images/ScreenShots/load.PNG
-[Game-url]: https://github.com/Mahdijamebozorg/Advanced_Chess/tree/main/Images/ScreenShots/game.PNG
-[Promotion-url]: https://github.com/Mahdijamebozorg/Advanced_Chess/tree/main/Images/ScreenShots/promotion.PNG
 
 [Qt-url]: https://www.qt.io/
 [Qt.com]: https://img.shields.io/badge/qt-35495E?style=for-the-badge&logo=qt&logoColor=4FC08D
