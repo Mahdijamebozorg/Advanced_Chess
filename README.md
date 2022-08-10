@@ -1,11 +1,24 @@
 # Advanced_Chess
-Graphical chess with Qt Quick QML and C++
+Graphical 2P chess built with Qt Quick QML and C++
 
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 </div>
+
+## Game features:
+- Save and load game
+- Auto save the game on crash or close
+- Highlight cells which the piece can go or hit
+- Undo
+- Positive and negative score
+- Random move for an amount of negative score
+- Extra move for an amount of positive score
+- Background music and function to pause it
+- full screen mode
+- Change language to Persian
+- Move animations
 
 ## Home Page
 [![Home Screen Shot][Home]]()
@@ -21,6 +34,28 @@ Graphical chess with Qt Quick QML and C++
 
 ## Promotion Dialog
 [![Promotion Screen Shot][Promotion]]()
+
+## Game rules:
+This game is a modified 2P chess with all chess rules plus some features:
+### Winner:
+If game ends by checkmate or stalemate, winner is player who has more scores,
+but if a player presses Surrend, other player wins.
+### Score:
+Score is the key to win in this game, some movement have score:
+Hit: Pawn->+3 , Queen->+15 , others->+8 (you can't hit king!)
+Move: Pawn pass away half of board ->+3 , Check enemy king ->+10 , checkmate ->+50
+Extra move: if you have 30 scores, you can make an extra move!
+### Negative score:
+Some works add your negatice score , if your negative score reachs 15 , you will have a random move.
+Undo: return last moved piece and adds 5 negative scores
+Touch piece: if you choose a moveable piece and reselct in this turn, you'll get 5 negative scores
+### Important notes
+Game has auto save and you can continue crashed or closed games
+Negative scores won't be saved in file
+For game name, if a file exists with the same name, file will be overwriten
+In promotion, if you don't choose any chessman, game will crash, but you can continue game by laoding it
+Canceling game will delete save file and restarting will clear move history in file
+Saved Files with free spaces or unreadable moves, won't be opened
 
 ## Built With
 
