@@ -1074,7 +1074,6 @@ void GameManager::loadMoves()
         catch (FinalCellForPawn)
         {
             //------------------------------------- promotion
-            // fixing promotion bug in loading game
             if (fileManager.get_Moves().size() > i + 1)
             {
                 setMove(src, dest);
@@ -1092,7 +1091,9 @@ void GameManager::loadMoves()
 void GameManager::promotionForFile(string move)
 {
     if (move.substr(0, 3) != "PRF")
-        throw runtime_error("a promotion has conflict");
+    {
+        throw runtime_error(move + "promotion data is not complete");
+    }
 
     size_t pos = move.find(" ");
     Chessman::Index index = {stoi(move.substr(pos + 1, 1)), stoi(move.substr(pos + 2, 1))};

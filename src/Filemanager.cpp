@@ -47,13 +47,21 @@ void FileManager::readFile(std::string fileName, bool isChecking)
         if (file.eof()) // delimiter
             break;
 
-        // check enp
+        // triming
+        if (tempMove[0] == '\"')
+        {
+            tempMove = tempMove.substr(1, (tempMove.back() - 2));
+        }
+
+        // check promotion
         bool isPrm = false;
-        if(tempMove.size() == 11 || tempMove.size() == 12)
+        if (tempMove.size() == 9 || tempMove.size() == 10)
+        {
             isPrm = true;
+        }
 
         // if has unknow moves
-        if (!isPrm && (tempMove.size() < 20 || tempMove.size() > 26))
+        if (!isPrm && (tempMove.size() < 18 || tempMove.size() > 28))
         {
             // if is checking the file
             if (isChecking)
@@ -70,7 +78,7 @@ void FileManager::readFile(std::string fileName, bool isChecking)
         }
 
         // remove Rook single move on king-rook
-        if (tempMove.substr(1, 3) == "KRO")
+        if (tempMove.substr(0, 2) == "KRO")
         {
             moves.pop_back();
         }
