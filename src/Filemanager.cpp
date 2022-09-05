@@ -47,8 +47,13 @@ void FileManager::readFile(std::string fileName, bool isChecking)
         if (file.eof()) // delimiter
             break;
 
+        // check enp
+        bool isPrm = false;
+        if(tempMove.size() == 11 || tempMove.size() == 12)
+            isPrm = true;
+
         // if has unknow moves
-        if (tempMove.size() < 20 || tempMove.size() > 26)
+        if (!isPrm && (tempMove.size() < 20 || tempMove.size() > 26))
         {
             // if is checking the file
             if (isChecking)
