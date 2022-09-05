@@ -78,8 +78,9 @@ void FileManager::readFile(std::string fileName, bool isChecking)
         }
 
         // remove Rook single move on king-rook
-        if (tempMove.substr(0, 2) == "KRO")
+        if (tempMove.substr(0, 3) == "KRO")
         {
+
             moves.pop_back();
         }
 
