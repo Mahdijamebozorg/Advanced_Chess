@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <sys/stat.h>
+#include <thread>
 
 using namespace std;
 
@@ -37,9 +38,16 @@ void BackEnd::restartGame()
 
 void BackEnd::saveAndExit()
 {
-    manager->endGame();
-    manager->saveAutoSaved();
-    manager->getFileManager()->resetData();
+    std::thread endGame_thread([this](){manager->endGame();});
+    std::thread saveAutoSaved_thread([this](){manager->saveAutoSaved();});
+    // ensure that game is saved
+    saveAutoSaved_thread.join();
+    std::thread resetData_thread([this](){manager->getFileManager()->resetData();});
+
+    // ensure these are done
+    endGame_thread.join();
+    resetData_thread.join();
+
     previewsSrc = -1;
     srcIndex = -1;
     destIndex = -1;
@@ -49,8 +57,13 @@ void BackEnd::saveAndExit()
 
 void BackEnd::endGame()
 {
-    manager->endGame();
-    manager->getFileManager()->removeFile();
+    std::thread endGame_thread([this](){manager->endGame();});
+    std::thread removeFile_thread([this](){manager->getFileManager()->removeFile();});
+
+    // ensure these are done
+    endGame_thread.join();
+    removeFile_thread.join();
+
     previewsSrc = -1;
     srcIndex = -1;
     destIndex = -1;
@@ -60,9 +73,11 @@ void BackEnd::endGame()
 
 bool BackEnd::checkInput(QString name)
 {
+    // search in name
     for (auto ch : name.toStdString())
+        // if ch is not alpha, must be underline or space or digit
         if (!isalpha(ch))
-            if (ch != ' ' && ch != '_' && !isdigit(ch))
+            if (!isspace(ch) && ch != '_' && !isdigit(ch))
                 return false;
     return true;
 }
@@ -77,10 +92,13 @@ void BackEnd::getFiles()
             throw AccessDenied("can't make save files");
 
     _dirFiles.clear();
+
+    // open save folder
     DIR *dir;
     struct dirent *diread;
     if ((dir = opendir("./SavedGames")) != nullptr)
     {
+        // collect txt files names
         while ((diread = readdir(dir)) != nullptr)
         {
             string temp = diread->d_name;
@@ -381,7 +399,8 @@ unsigned BackEnd::cellState(unsigned index)
 bool BackEnd::isMoved(unsigned index)
 {
     if (previewsSrc != -1 && destIndex != -1)
-        if (index == previewsSrc || index == destIndex)
+        // if this cell is src or dest of recent move
+        if ((int)index == previewsSrc || (int)index == destIndex)
             return true;
 
     return false;
@@ -439,7 +458,8 @@ unsigned BackEnd::getDestIndex()
 bool BackEnd::unchoosePiece(unsigned index)
 {
     if (_change)
-    { //____________ on changing piece no error should be opened
+    {
+        //____________ on changing piece no error should be occored
         _change = false;
         return true;
     }
@@ -592,8 +612,12 @@ bool BackEnd::move(unsigned index) noexcept
 void BackEnd::undo()
 {
     auto back = manager->undo();
-    previewsSrc = IJToIndex(back.first);
-    destIndex = IJToIndex(back.second);
+
+    std::thread th1([this,&back](){previewsSrc = IJToIndex(back.first);});
+    std::thread th2([this, &back](){destIndex = IJToIndex(back.second);});
+
+    th1.join();
+    th2.join();
 
     emit moved();
 }
@@ -617,10 +641,14 @@ void BackEnd::randomMove()
 
     try
     {
-        temp = manager->randomMovements();
+        std::thread randomMove_thread([this, &temp](){temp = manager->randomMovements();});
+        randomMove_thread.join();
 
-        previewsSrc = (int)IJToIndex(temp.first);
-        destIndex = (int)IJToIndex(temp.second);
+        std::thread th1([this,&temp](){previewsSrc = (int)IJToIndex(temp.first);});
+        std::thread th2([this, &temp](){destIndex = (int)IJToIndex(temp.second);});
+
+        th1.join();
+        th2.join();
 
         manager->changeTurn();
         emit moved();
@@ -632,12 +660,15 @@ void BackEnd::randomMove()
     }
 }
 
+//__________________________________________________________________________ toggleRandom
+
 void BackEnd::toggleRandom()
 {
     _random_enabled = !_random_enabled;
 }
 
 //__________________________________________________________________________ promote
+
 void BackEnd::promote(unsigned type)
 {
     manager->promote(indexToIJ(destIndex), (Chessman::ChessType)type);

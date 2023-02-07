@@ -664,7 +664,7 @@ void GameManager::restartGame()
     startGame();
 }
 
-//________________________________________________________________________________________________________ endGame
+//________________________________________________________________________________________________________
 
 void GameManager::endGame()
 {
@@ -830,17 +830,37 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
 
 GameManager::GameStatus GameManager::analayzeGameStatus()
 {
-    // search in all user chessmen
+    bool found = false;
+
+    // search in current user pieces in
     for (shared_ptr<Chessman> &piece : users[turn]->getChessmansIn())
     {
-        // qDebug() << "analayzing: " <<QString::fromStdString(piece->getID());
+//        qDebug() << "Checking piece: " << QString::fromStdString(piece->getID()) << this->chess_board->getIndex(piece->getID()) << Qt::endl;
 
-        if (this->getCellState(this->chess_board->getIndex(piece->getID())).first.size() != 0)
-            // if at the least one piece still can move
-            return isKingChecked() ? GameStatus::CHECKED : GameStatus::NORMAL;
+        // this function checks if piece can move, make found true
+        auto lf = [this, &found, &piece]()
+        {
+            if (this->getCellState(this->chess_board->getIndex(piece->getID())).first.size() != 0)
+                if (!found)
+                    found = true;
+        };
+        // set a check thread for each piece
+        // (wanted to use mutltithreading but error did't let! so each thread must be finished first)
+        thread th(lf);
+        th.join();
+
+        // if found in this thread
+        if (found)
+            break;
     }
+
+
+    // if at the least one piece still can move
+    if (found)
+        return isKingChecked() ? GameStatus::CHECKED : GameStatus::NORMAL;
     // if no piece can move
-    return isKingChecked() ? GameStatus::CHECKMATE : GameStatus::STALEMATE;
+    else
+        return isKingChecked() ? GameStatus::CHECKMATE : GameStatus::STALEMATE;
 }
 
 //________________________________________________________________________________________________________ promote
@@ -915,65 +935,86 @@ User::Score GameManager::calucateScoreMovePiece(Chessman::Index src, Chessman::I
 
     //--------------------------------------------------------------------------------  hit enemy chessman
 
-    if (chess_board->getCell(dest).isFull())
+    auto hitL = [this, &temp, &dest]()
     {
-        Chessman::ChessType chess_type = chess_board->getCell(dest).getChessPieces()->getChessType();
-        switch (chess_type)
+        if (chess_board->getCell(dest).isFull())
         {
-        case Chessman::PAWN:
-            temp += 3;
-            break;
+            Chessman::ChessType chess_type = chess_board->getCell(dest).getChessPieces()->getChessType();
+            switch (chess_type)
+            {
+            case Chessman::PAWN:
+                temp += 3;
+                break;
 
-        case Chessman::ROOK:
-        case Chessman::BISHOP:
-        case Chessman::KNIGHT:
-            temp += 8;
-            break;
+            case Chessman::ROOK:
+            case Chessman::BISHOP:
+            case Chessman::KNIGHT:
+                temp += 8;
+                break;
 
-        case Chessman::QUEEN:
-            temp += 15;
-            break;
+            case Chessman::QUEEN:
+                temp += 15;
+                break;
 
-        default:
-            break;
+            default:
+                break;
+            }
         }
-    }
+    };
+
+    thread hitCheck(hitL);
 
     //-------------------------------------------------------------------------------- en-passant score
-    shared_ptr<Chessman> srcPiece = chess_board->getCell(src).getChessPieces();
-    shared_ptr<Chessman> destPiece = nullptr;
-    //---------------------- if white pawn
-    if (turn == USER1 && dest.first == 2)
+
+    auto enpL = [this, &src, &dest, &temp]()
     {
-        if (chess_board->getCell(make_pair(dest.first + 1, dest.second)).isFull())
+        shared_ptr<Chessman> srcPiece = chess_board->getCell(src).getChessPieces();
+        shared_ptr<Chessman> destPiece = nullptr;
+        //---------------------- if white pawn
+        if (turn == USER1 && dest.first == 2)
         {
-            destPiece = chess_board->getCell(make_pair(dest.first + 1, dest.second)).getChessPieces();
-            //------ if piece and piece behind is pawn
-            if (dynamic_cast<Pawn *>(destPiece.get()) != nullptr && dynamic_cast<Pawn *>(srcPiece.get()) != nullptr && destPiece->getColor() != srcPiece->getColor())
-                temp += 3;
+            if (chess_board->getCell(make_pair(dest.first + 1, dest.second)).isFull())
+            {
+                destPiece = chess_board->getCell(make_pair(dest.first + 1, dest.second)).getChessPieces();
+                //------ if piece and piece behind is pawn
+                if (dynamic_cast<Pawn *>(destPiece.get()) != nullptr && dynamic_cast<Pawn *>(srcPiece.get()) != nullptr && destPiece->getColor() != srcPiece->getColor())
+                    temp += 3;
+            }
         }
-    }
-    //---------------------- if black pawn
-    else if (dest.first == 5)
-    {
-        if (chess_board->getCell(make_pair(dest.first - 1, dest.second)).isFull())
+        //---------------------- if black pawn
+        else if (dest.first == 5)
         {
-            destPiece = chess_board->getCell(make_pair(dest.first - 1, dest.second)).getChessPieces();
-            //----- if piece and piece behind is pawn
-            if (dynamic_cast<Pawn *>(destPiece.get()) != nullptr && dynamic_cast<Pawn *>(srcPiece.get()) != nullptr && destPiece->getColor() != srcPiece->getColor())
-                temp += 3;
+            if (chess_board->getCell(make_pair(dest.first - 1, dest.second)).isFull())
+            {
+                destPiece = chess_board->getCell(make_pair(dest.first - 1, dest.second)).getChessPieces();
+                //----- if piece and piece behind is pawn
+                if (dynamic_cast<Pawn *>(destPiece.get()) != nullptr && dynamic_cast<Pawn *>(srcPiece.get()) != nullptr && destPiece->getColor() != srcPiece->getColor())
+                    temp += 3;
+            }
         }
-    }
+    };
+
+    thread enpCheck(enpL);
 
     //-------------------------------------------------------------------------------- move pawn from half of chessboard
 
-    if (chess_board->getCell(src).getChessPieces()->getChessType() == Chessman::PAWN)
+    auto pHalfL = [this, &temp, &src, &dest]()
     {
-        if ((src.first <= 3 && dest.first >= 4) || (src.first >= 4 && dest.first <= 3))
+        if (chess_board->getCell(src).getChessPieces()->getChessType() == Chessman::PAWN)
         {
-            temp += 3;
+            if ((src.first <= 3 && dest.first >= 4) || (src.first >= 4 && dest.first <= 3))
+            {
+                temp += 3;
+            }
         }
-    }
+    };
+
+    thread pHalfCheck(pHalfL);
+
+    // threads must be done before moving any piece
+    hitCheck.join();
+    enpCheck.join();
+    pHalfCheck.join();
 
     //    -------------------------- a temp move for getin status
     bool moved = false;
@@ -1087,6 +1128,7 @@ void GameManager::loadMoves()
 }
 
 //---------------------------------------------------------------------------- promotion For File
+// read states and call promotion while reading save file
 
 void GameManager::promotionForFile(string move)
 {

@@ -30,6 +30,7 @@ SOURCES += \
         src/Queen.cpp \
         src/Rook.cpp \
         src/User.cpp \
+    src/Utils.cpp
 
 RESOURCES += \
     qml.qrc
@@ -96,3 +97,4 @@ HEADERS += \
     include/Queen.hpp \
     include/Rook.hpp \
     include/User.hpp \
+    include/Utils.hpp

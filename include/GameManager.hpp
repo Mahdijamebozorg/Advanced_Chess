@@ -7,6 +7,7 @@
 #include "Filemanager.hpp"
 
 #include <stack>
+#include <thread>
 
 class GameManager
 {
@@ -38,66 +39,78 @@ public:
     void restartGame();
     void endGame();
 
-    //-------------------------------------------- files
+    //-------------------------------------------- File
     FileManager *getFileManager();
     void loadGame(std::string gameName);
     void loadMoves();
     void promotionForFile(std::string move);
-    void saveAutoSaved(); // manually
+    void saveAutoSaved();
 
+    //-------------------------------------------- Board
     void setChessBoardGame(const ChessBoardGame &);
     ChessBoardGame getChessBoardGame() const;
 
+    //--------------------------------------------
     void setUser1(User::Name, User::Score = 0, User::Score = 0);
     GameUser getUser1() const;
 
+    //--------------------------------------------
     void setUser2(User::Name, User::Score = 0, User::Score = 0);
     GameUser getUser2() const;
 
+    //--------------------------------------------
     void setGameName(GameName);
     GameName getGameName() const;
 
+    //--------------------------------------------
     void setTurn(Turn);
     Turn getTurn() const;
     void changeTurn();
 
-    // Enpasan functions
-    void allowEnpasan(Enpasan);
-    void notAllowEnpasan();
-    // Destructor
+    //--------------------------------------------
     ~GameManager();
 
     //------------------------------------------------------------------------------------- Movements
-    // CanGo functions
+
+    // Returns cell canGo and canHit
     std::pair<std::vector<Chessman::Index>, std::vector<Chessman::Index>> getCellState(
         Chessman::Index);
 
-    // Move and hit chessman
+    //-------------------------------------------- Move and hit chessman
     void checkMove(Chessman::Index src,
-                   Chessman::Index dest); // if is testing
+                   Chessman::Index dest);
 
-    void setMove(Chessman::Index src,
-                 Chessman::Index dest,
-                 bool in_undo = false,
-                 bool isTemp = false,
-                 bool isExtraMove = false);
+    void setMove(Chessman::Index src,       // move source
+                 Chessman::Index dest,      // move dest
+                 bool in_undo = false,      // if is calling in undo
+                 bool isTemp = false,       // if move is not permament
+                 bool isExtraMove = false); // is using extra move
 
-    // Convert order to string   // string order: "Chessman(ID) Xi Xi Chessman(ID) or N"
+    //-------------------------------------------- To save the movement
+    // string order: "Chessman(ID) Xi Xi Chessman(ID) or N"
     std::string convertOrderToString(Chessman::Index src, Chessman::Index dest);
 
-    // Undo
+    //-------------------------------------------- Undo movement
     std::pair<Chessman::Index, Chessman::Index> undo(bool isTemp = false);
 
-    // Random and Extra Movement functions
+    //--------------------------------------------
     std::pair<Chessman::Index, Chessman::Index> randomMovements();
+
+    //--------------------------------------------
     bool extraMovements();
     bool isThisExtramMove(std::string move);
-    //
+
+    //--------------------------------------------
     void limit_cells_for_king_check(Chessman::Index &src,
                                     std::vector<Chessman::Index> &canGo,
                                     std::vector<Chessman::Index> &canHit);
-    // When Pawn reach to final cell
+
+    //-------------------------------------------- When Pawn reach to final cell
     void promote(Chessman::Index, Chessman::ChessType);
+
+    //-------------------------------------------- Enpasan functions
+    void allowEnpasan(Enpasan);
+    void notAllowEnpasan();
 
     //    Chessman::Icon getHitPiece();
 
