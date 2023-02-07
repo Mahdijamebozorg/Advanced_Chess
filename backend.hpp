@@ -35,9 +35,6 @@ private:
     //
     bool _moved = false;
 
-    // files in save directory
-    std::vector<std::string> _dirFiles;
-
     // players name in the file
     std::vector<std::string> _filePlayersName;
 
@@ -110,7 +107,7 @@ public slots:
     void loadGame(unsigned index);
 
     // files count in save directory
-    unsigned filesCount();
+    unsigned filesCount() const;
 
     // delete chosen file
     void deleteFile(unsigned index);

@@ -18,7 +18,7 @@ public:
   using PawnsReachLast = std::vector<std::shared_ptr<Chessman>>;
 
   // get and set functions for make Singleton pattern
-  static User *&get(Name, Color, Score positive_score = 0, Score negative_score = 0);
+  static User *&getInstance(Name, Color, Score positive_score = 0, Score negative_score = 0);
 
   void setName(Name);
   Name getName() const;
@@ -40,10 +40,10 @@ public:
   std::shared_ptr<Chessman> getChessman(Chessman::ID, bool in) const;
 
   // hit chessman
-  void hitChessman(Chessman::ID, bool chessman_pawn_final_home = false); // Hit chessman
-  std::shared_ptr<Chessman> backChessmanInGame(Chessman::ID);            // Undo Chessman in game
+  void hitChessman(Chessman::ID, bool is_pawn_reached = false); // 
+  std::shared_ptr<Chessman> backChessmanToGame(Chessman::ID);            // Undo Chessman in game
   void addToChessmansIn(std::shared_ptr<Chessman>);                      // add chessman to ChessmanIn
-  std::shared_ptr<Chessman> removePawnsReach();
+  std::shared_ptr<Chessman> restoreLastPawnsReached();                   // restores and returns last moved pawn
 
   // Operators functions
   Score operator+(Score) const;

@@ -13,7 +13,7 @@ extern void checkRange(Chessman::Index);
 // Initialize static data member
 ChessBoard *ChessBoard::chess_board = nullptr;
 
-ChessBoard *&ChessBoard::get(User *white_user, User *black_user)
+ChessBoard *& ChessBoard::getInstance(User *white_user, User *black_user)
 {
   if (chess_board == nullptr)
   {
@@ -523,9 +523,9 @@ pair<bool, Chessman::Index> ChessBoard::isChecked(
   return make_pair(false, make_pair(100, 100));
 }
 
-//___________________________________________________________________________________________________ addChessmanIndex
+//___________________________________________________________________________________________________ addToBoard
 
-void ChessBoard::addChessmanIndex(Chessman::Color color, Chessman::Index index)
+void ChessBoard::addToBoard(Chessman::Color color, Chessman::Index index)
 {
   if (color == Chessman::WHITE)
     white_chessmans.push_back(index);

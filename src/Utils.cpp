@@ -1,16 +1,48 @@
-#include <iostream>
+#include <random>
+#include <stack>
+#include <stdexcept>
 #include <vector>
 #include <thread>
 
+#include <QDebug>
+
+#include "../include/Chessman.hpp"
+
 using namespace std;
 
+// CheckRange fucntion
+void checkRange(Chessman::Index index)
+{
+    if (index.first < 0 || index.first > 7 || index.second < 0 || index.second > 7)
+        throw out_of_range("positon must between 0, 7");
+}
+long unsigned randomNum()
+{
+    static mt19937 generator{random_device{}()}; // random engine
+
+    uniform_int_distribution<long> distribution{0, 1000000000}; // range
+
+    return distribution(generator);
+}
+
+void printStack(const std::stack<std::string> &moves)
+{
+    std::stack<std::string> temp = moves;
+    qDebug() << "====================================";
+    while (!temp.empty())
+    {
+        qDebug() << QString::fromStdString(temp.top());
+        temp.pop();
+    }
+    qDebug() << "====================================";
+}
 
 template <class ContainerT, class Val1T, class Val2T>
 bool multiThreadingSearch(
-    ContainerT &container,                     // search area
-    Val1T &src_args,                           // arg needed in function body
+    ContainerT &container,                    // search area
+    Val1T &src_args,                          // arg needed in function body
     bool (*check)(Val1T src_args, Val2T item) // functoin we want to call for each item in search area
-    )
+)
 {
     vector<thread> threads;
     bool found = false;

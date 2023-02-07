@@ -1,10 +1,8 @@
 #include "backend.hpp"
 #include <QDebug>
 #include "include/Exceptions.hpp"
-#include <dirent.h>
 #include <fstream>
 #include <iomanip>
-#include <sys/stat.h>
 #include <thread>
 
 using namespace std;
@@ -38,16 +36,7 @@ void BackEnd::restartGame()
 
 void BackEnd::saveAndExit()
 {
-    std::thread endGame_thread([this](){manager->endGame();});
-    std::thread saveAutoSaved_thread([this](){manager->saveAutoSaved();});
-    // ensure that game is saved
-    saveAutoSaved_thread.join();
-    std::thread resetData_thread([this](){manager->getFileManager()->resetData();});
-
-    // ensure these are done
-    endGame_thread.join();
-    resetData_thread.join();
-
+    manager->saveAndExit();
     previewsSrc = -1;
     srcIndex = -1;
     destIndex = -1;
@@ -57,13 +46,7 @@ void BackEnd::saveAndExit()
 
 void BackEnd::endGame()
 {
-    std::thread endGame_thread([this](){manager->endGame();});
-    std::thread removeFile_thread([this](){manager->getFileManager()->removeFile();});
-
-    // ensure these are done
-    endGame_thread.join();
-    removeFile_thread.join();
-
+    manager->endGame();
     previewsSrc = -1;
     srcIndex = -1;
     destIndex = -1;
@@ -86,80 +69,24 @@ bool BackEnd::checkInput(QString name)
 //________________// if save file doesn't exist , makes one
 void BackEnd::getFiles()
 {
-    struct stat buff;
-    if (stat("./SavedGames", &buff) != 0)
-        if (mkdir("./SavedGames") != 0)
-            throw AccessDenied("can't make save files");
-
-    _dirFiles.clear();
-
-    // open save folder
-    DIR *dir;
-    struct dirent *diread;
-    if ((dir = opendir("./SavedGames")) != nullptr)
-    {
-        // collect txt files names
-        while ((diread = readdir(dir)) != nullptr)
-        {
-            string temp = diread->d_name;
-            string suffix = temp.substr(temp.find('.'), temp.back());
-            if (suffix == ".txt")
-            {
-                _dirFiles.push_back(temp);
-            }
-        }
-        closedir(dir);
-    }
-    else
-    {
-        perror("opendir");
-        throw OpenFileFailed("can't acces files");
-    }
+    manager->readSaveFiles();
 }
 
 //__________________________________________________________________________ get file
 //________________// read plyer info
 QString BackEnd::getFileInfo(unsigned index)
 {
-    QString fileName = QString::fromStdString(_dirFiles[index]);
-
-    try
-    {
-        manager->getFileManager()->readFile(_dirFiles[index]);
-    }
-
-    catch (const LoadingFailed &e)
-    {
-        qDebug() << e.what();
-    }
-
-    catch (CheckingFailed &e)
-    {
-        qDebug() << e.what();
-        fileName = "Corrupted";
-    }
-
-    QString name1 = QString::fromStdString(manager->getFileManager()->get_P1_Name());
-    QString name2 = QString::fromStdString(manager->getFileManager()->get_P2_Name());
-
-    QString score1 = QString::fromStdString(
-        '(' + to_string(manager->getFileManager()->get_P1_Score()) + ')');
-    QString score2 = QString::fromStdString(
-        '(' + to_string(manager->getFileManager()->get_P2_Score()) + ')');
-
-    QString temp = fileName + " :   P1:   " + name1 + score1 + "      P2:   " + name2 + score2;
-
-    return temp;
+    QString data = QString::fromStdString(manager->getSaveFileInfo(index));
+    return data;
 }
 
 //__________________________________________________________________________ load test
 
 void BackEnd::loadGame(unsigned index)
 {
-    qDebug() << "loaded file: " << _dirFiles[index].c_str();
     try
     {
-        manager->loadGame(_dirFiles[index]);
+        manager->loadGame(index);
         emit gameLoaded();
     }
     catch (LoadingFailed &e)
@@ -171,17 +98,16 @@ void BackEnd::loadGame(unsigned index)
 
 //__________________________________________________________________________ filesCount
 
-unsigned BackEnd::filesCount()
+unsigned BackEnd::filesCount() const
 {
-    return _dirFiles.size();
+    return manager->getSaveFiles().size();
 }
 
 //__________________________________________________________________________ deleteFile
 
 void BackEnd::deleteFile(unsigned index)
 {
-    remove(("./SavedGames/" + (_dirFiles[index])).c_str());
-    this->getFiles();
+    manager->removeSaveFile(index);
 }
 
 //__________________________________________________________________________ i & j and index convertion
@@ -281,7 +207,8 @@ unsigned BackEnd::winner()
 
 void BackEnd::checkRandomMove()
 {
-    if(_random_enabled){
+    if (_random_enabled)
+    {
         if (manager->getTurn() == GameManager::USER1)
         {
             if (manager->getUser1()->getNegativeScore() >= 15)
@@ -613,8 +540,10 @@ void BackEnd::undo()
 {
     auto back = manager->undo();
 
-    std::thread th1([this,&back](){previewsSrc = IJToIndex(back.first);});
-    std::thread th2([this, &back](){destIndex = IJToIndex(back.second);});
+    std::thread th1([this, &back]()
+                    { previewsSrc = IJToIndex(back.first); });
+    std::thread th2([this, &back]()
+                    { destIndex = IJToIndex(back.second); });
 
     th1.join();
     th2.join();
@@ -641,11 +570,14 @@ void BackEnd::randomMove()
 
     try
     {
-        std::thread randomMove_thread([this, &temp](){temp = manager->randomMovements();});
+        std::thread randomMove_thread([this, &temp]()
+                                      { temp = manager->randomMovements(); });
         randomMove_thread.join();
 
-        std::thread th1([this,&temp](){previewsSrc = (int)IJToIndex(temp.first);});
-        std::thread th2([this, &temp](){destIndex = (int)IJToIndex(temp.second);});
+        std::thread th1([this, &temp]()
+                        { previewsSrc = (int)IJToIndex(temp.first); });
+        std::thread th2([this, &temp]()
+                        { destIndex = (int)IJToIndex(temp.second); });
 
         th1.join();
         th2.join();

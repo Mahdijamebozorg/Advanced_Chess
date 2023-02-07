@@ -15,7 +15,7 @@ using namespace std;
 std::array<User *, 2> User::users = {nullptr, nullptr};
 int User::cnt = 0;
 
-User *&User::get(Name name, Color color, Score positive_score, Score negative_score)
+User *& User::getInstance(Name name, Color color, Score positive_score, Score negative_score)
 {
   if (cnt < 2)
     users[cnt++] = new User(name, color, positive_score, negative_score);
@@ -37,7 +37,7 @@ void User::setName(Name name)
   this->name = name;
 }
 
-User::Name User::getName() const
+User::Name  User::getName() const
 {
   return name;
 }
@@ -47,7 +47,7 @@ void User::setColor(Color color)
   this->color = color;
 }
 
-User::Color User::getColor() const
+User::Color  User::getColor() const
 {
   return color;
 }
@@ -57,7 +57,7 @@ void User::setScore(Score score)
   this->score = score;
 }
 
-User::Score User::getScore() const
+User::Score  User::getScore() const
 {
   return score;
 }
@@ -67,7 +67,7 @@ void User::setNegativeScore(Score score)
   this->negative_score = score;
 }
 
-User::Score User::getNegativeScore() const
+User::Score  User::getNegativeScore() const
 {
   return negative_score;
 }
@@ -152,17 +152,17 @@ void User::setChessmansIn()
     chessmans_in[i]->setIcon((file_addres + names[i] + ".png"));
 }
 
-User::ChessmansIn User::getChessmansIn() const
+User::ChessmansIn  User::getChessmansIn() const
 {
   return chessmans_in;
 }
 
-User::ChessmansOut User::getChessmansOut() const
+User::ChessmansOut  User::getChessmansOut() const
 {
   return chessmans_out;
 }
 
-shared_ptr<Chessman> User::getChessman(Chessman::ID id, bool in) const
+shared_ptr<Chessman>  User::getChessman(Chessman::ID id, bool in) const
 {
   if (in)
   {
@@ -180,42 +180,51 @@ shared_ptr<Chessman> User::getChessman(Chessman::ID id, bool in) const
   throw invalid_argument("Any Chessman with this id not existed.");
 }
 
-void User::hitChessman(Chessman::ID id, bool chessman_pawn)
+// remove Chessman by hit
+void User::hitChessman(Chessman::ID id, bool is_pawn_reached)
 {
-  for (auto it = chessmans_in.begin(); it != chessmans_in.end(); it++)
+  // find chessman by id
+  for (auto chessman = chessmans_in.begin(); chessman != chessmans_in.end(); chessman++)
   {
-    if ((*it)->getID() == id)
+    if ((*chessman)->getID() == id)
     {
-      if (chessman_pawn)
-        pawns_reach_last.push_back(*it);
-      else
-        chessmans_out.push_back(*it);
+      // if is pawn which reached the last cell
+      if (is_pawn_reached)
+        pawns_reach_last.push_back(*chessman);
 
-      *it = nullptr;
-      chessmans_in.erase(it);
+      else
+        chessmans_out.push_back(*chessman);
+
+      // remove from in
+      chessmans_in.erase(chessman);
       return;
     }
   }
-
-  throw invalid_argument("any chessman with this id not founded.");
+  throw invalid_argument("User::hitChessman: chessman not found.");
 }
 
-shared_ptr<Chessman> User::backChessmanInGame(Chessman::ID id)
+// return chessman to game
+shared_ptr<Chessman> User::backChessmanToGame(Chessman::ID id)
 {
-  for (auto it = chessmans_out.begin(); it != chessmans_out.end(); it++)
+  // find chessman by id
+  for (auto chessman = chessmans_out.begin(); chessman != chessmans_out.end(); chessman++)
   {
-    if ((*it)->getID() == id)
+    if ((*chessman)->getID() == id)
     {
-      chessmans_in.push_back(*it);
-      *it = nullptr;
-      chessmans_out.erase(it);
+      // add in
+      chessmans_in.push_back(*chessman);
+
+      // remove from out
+      chessmans_out.erase(chessman);
+
+      // return added chessman
       return chessmans_in.back();
     }
   }
-  throw invalid_argument("Any chessman with this id not founded.");
+  throw invalid_argument("User::backChessmanToGame: chessman not found.");
 }
 
-Chessman::ID User::getKingID() const
+Chessman::ID  User::getKingID() const
 {
   for (auto const &item : chessmans_in)
     if (item->getID()[0] == 'K')
@@ -240,7 +249,7 @@ void User::addToChessmansIn(std::shared_ptr<Chessman> chess_man)
   chessmans_in.push_back(chess_man);
 }
 
-shared_ptr<Chessman> User::removePawnsReach()
+shared_ptr<Chessman> User::restoreLastPawnsReached()
 {
   chessmans_in.push_back(pawns_reach_last.back());
   pawns_reach_last.pop_back();

@@ -14,7 +14,7 @@ public:
   using Cells = std::array<std::array<Cell, 8>, 8>;
 
   // Static member functinos for Singeleton pattern
-  static ChessBoard *&get(User *, User *);
+  static ChessBoard *&getInstance(User *, User *);
 
   ~ChessBoard();
 
@@ -36,7 +36,7 @@ public:
   // chessmans Index functions
   void changeIndex(Chessman::Index src, Chessman::Index dest, bool hit);
   void removeChessmanIndex(Chessman::Index);
-  void addChessmanIndex(Chessman::Color, Chessman::Index);
+  void addToBoard(Chessman::Color, Chessman::Index);
 
   // set enpasan
   void setEnpasan(Chessman::Index, Chessman::Index);

@@ -37,14 +37,19 @@ public:
     //------------------------------------------------------------------------------------- game setup
     void startGame();
     void restartGame();
+    void resetData();
     void endGame();
 
     //-------------------------------------------- File
-    FileManager *getFileManager();
-    void loadGame(std::string gameName);
+    FileManager &getFileManager();
+    void loadGame(unsigned index);
     void loadMoves();
     void promotionForFile(std::string move);
-    void saveAutoSaved();
+    void saveAndExit();
+    std::string getSaveFileInfo(unsigned index);
+    std::vector<std::string> getSaveFiles();
+    void removeSaveFile(unsigned index);
+    void readSaveFiles();
 
     //-------------------------------------------- Board
     void setChessBoardGame(const ChessBoardGame &);
@@ -139,7 +144,9 @@ private:
     GameName game_name;
     Movements movements = {};
     Enpasan enpasan = std::make_pair(100, 100);
+
     FileManager fileManager;
+    std::thread fileOperation;
 };
 
 #endif /* end of include guard: GAMEMANAGER_H*/

@@ -7,7 +7,7 @@
 #include "../include/Queen.hpp"
 #include "../include/Rook.hpp"
 #include "../include/User.hpp"
-#include "Functions.cpp"
+#include "Utils.cpp"
 #include <ctime>
 #include <random>
 
@@ -19,7 +19,7 @@ using namespace std;
 GameManager *GameManager::game_manager = nullptr;
 
 //_______________________________________________________________________________________________________ get
-
+// ensure only one obj exists
 GameManager *&GameManager::get(GameName name)
 {
     if (game_manager == nullptr)
@@ -31,27 +31,40 @@ GameManager *&GameManager::get(GameName name)
 //_______________________________________________________________________________________________________ load game
 //-----------------------// sets game data
 
-void GameManager::loadGame(std::string gameName)
+void GameManager::loadGame(unsigned index)
 {
-    fileManager.readFile(gameName, false);
+    getFileManager().loadSaveFile(index);
 
-    string name1 = fileManager.get_P1_Name(), name2 = fileManager.get_P2_Name().c_str();
+    string name1 = getFileManager().get_P1_Name(), name2 = getFileManager().get_P2_Name().c_str();
 
     //------------------------- set users and chessmen
     this->setTurn(Turn::USER1);
 
-    this->game_name = gameName;
-    this->users[0] = User::get(name1, Chessman::Color::WHITE, 0, 0);
-    getUser1()->setColor(Chessman::Color::WHITE);
-    getUser1()->setChessmansIn();
+    this->game_name = getFileManager().get_File_Name();
 
-    this->users[1] = User::get(name2, Chessman::Color::WHITE, 0, 0);
-    getUser2()->setColor(Chessman::Color::BLACK);
-    getUser2()->setChessmansIn();
+    // user 1 setup
+    thread user1_th([this, &name1]()
+                    {
+                        users[0] = User::getInstance(name1, Chessman::Color::WHITE, 0, 0);
+                        users[0]->setColor(Chessman::Color::WHITE);
+                        users[0]->setChessmansIn(); //
+                    });
+
+    // user 2 setup
+    thread user2_th([this, &name2]()
+                    {
+                        users[1] = User::getInstance(name2, Chessman::Color::WHITE, 0, 0);
+                        users[1]->setColor(Chessman::Color::BLACK);
+                        users[1]->setChessmansIn(); //
+                    });
+
+    // ensure users are set before game start
+    user1_th.join();
+    user2_th.join();
 
     startGame();
 
-    this->loadMoves();
+    loadMoves();
 }
 
 //________________________________________________________________________________________________________ GameManager
@@ -65,24 +78,14 @@ GameManager::GameManager(GameName temp_game_name)
 
 GameManager::~GameManager()
 {
-    if (users[0] != nullptr)
-    {
-        delete users[0];
-        users[0] = nullptr;
-    }
-    if (users[1] != nullptr)
-    {
-        delete users[1];
-        users[1] = nullptr;
-    }
+    thread reset_data([this]()
+                      { resetData(); });
 
-    if (chess_board != nullptr)
-    {
-        delete chess_board;
-        chess_board = nullptr;
-    }
+    thread reset_file_manager([this]()
+                              { getFileManager().resetData(); });
 
-    chess_board = nullptr;
+    reset_data.join();
+    reset_file_manager.join();
 }
 
 //________________________________________________________________________________________________________ startGame
@@ -93,7 +96,7 @@ void GameManager::startGame()
     if (users[0] == nullptr || users[1] == nullptr)
         throw LoadingFailed("All user not setted.");
 
-    setChessBoardGame(ChessBoard::get(users[0], users[1]));
+    setChessBoardGame(ChessBoard::getInstance(users[0], users[1]));
 }
 
 //________________________________________________________________________________________________________ getCellState
@@ -119,11 +122,19 @@ pair<vector<Chessman::Index>, vector<Chessman::Index>> GameManager::getCellState
     }
     auto tempCellState = chess_board->getCanGo(index, true, enpasan);
 
-    //  _______________________________ remvoe dublicated values
-    tempCellState.first.erase(unique(tempCellState.first.begin(), tempCellState.first.end()),
-                              tempCellState.first.end());
-    tempCellState.second.erase(unique(tempCellState.second.begin(), tempCellState.second.end()),
-                               tempCellState.second.end());
+    // make seprate to calculate in diffrent threads
+    auto canGo = &tempCellState.first;
+    auto canHit = &tempCellState.second;
+
+    //  _______________________________ remvoe dublicated consecuitive values
+    thread th1([&canGo]()
+               { canGo->erase(unique(canGo->begin(), canGo->end()),
+                              canGo->end()); });
+    thread th2([&canHit]()
+               { canHit->erase(unique(canHit->begin(), canHit->end()),
+                               canHit->end()); });
+    th1.join();
+    th2.join();
 
     //  ___________________________________________ limit kimg checkable moves
     //  qDebug() << "-------------- canGo before limitation" << tempCellState.first;
@@ -279,7 +290,7 @@ void GameManager::setMove(
                 if (!isTemp)
                 {
                     qDebug() << "enp move: " << (temp_movement_ENP).c_str();
-                    this->fileManager.saveMove(temp_movement_ENP);
+                    this->getFileManager().saveMove(temp_movement_ENP);
                 }
                 movements.push(temp_movement_ENP);
                 return;
@@ -297,19 +308,20 @@ void GameManager::setMove(
         //_____________________________________________________ save move in stack
         auto tempMove = temp_movement + "$" + to_string(temp_score);
 
+        // if not in undo and last move is not same as current move
         if (!in_undo && (movements.empty() ? true : tempMove != movements.top()))
         {
             if (!isTemp)
             {
                 qDebug() << "move: " << tempMove.c_str();
-                this->fileManager.saveMove(tempMove);
+                this->getFileManager().saveMove(tempMove);
             }
             movements.push(tempMove);
         }
 
         //_____________________________________________________ check check
         if (!in_undo && isTemp && isKingChecked())
-            throw KingIsChecked("_____________king is checked");
+            throw KingIsChecked("King is checked");
     }
 }
 
@@ -317,16 +329,16 @@ void GameManager::setMove(
 
 void GameManager::setUser1(User::Name user1_name, User::Score user1_Pscore, User::Score user1_Nscore)
 {
-    this->users[0] = User::get(user1_name, User::Color::WHITE, user1_Pscore, user1_Nscore);
-    this->fileManager.set_P1_Name(users[0]->getName());
+    this->users[0] = User::getInstance(user1_name, User::Color::WHITE, user1_Pscore, user1_Nscore);
+    this->getFileManager().set_P1_Name(users[0]->getName());
 }
 
 //________________________________________________________________________________________________________ setUser2
 
 void GameManager::setUser2(User::Name user2_name, User::Score user2_Pscore, User::Score user2_Nscore)
 {
-    this->users[1] = User::get(user2_name, User::Color::BLACK, user2_Pscore, user2_Nscore);
-    this->fileManager.set_P2_Name(users[1]->getName());
+    this->users[1] = User::getInstance(user2_name, User::Color::BLACK, user2_Pscore, user2_Nscore);
+    this->getFileManager().set_P2_Name(users[1]->getName());
 }
 
 //________________________________________________________________________________________________________ getUser1
@@ -386,7 +398,7 @@ GameManager::Turn GameManager::getTurn() const
 void GameManager::setGameName(GameName game_name)
 {
     this->game_name = game_name;
-    this->fileManager.set_newFile(game_name);
+    this->getFileManager().set_newFile(game_name);
 }
 
 //________________________________________________________________________________________________________  getGameName
@@ -400,18 +412,20 @@ GameManager::GameName GameManager::getGameName() const
 
 string GameManager::convertOrderToString(Chessman::Index src, Chessman::Index dest)
 {
+    //--------------------------------------- Source
     shared_ptr<Chessman> temp_chessman = chess_board->getCell(src).getChessPieces();
-    if (temp_chessman == nullptr)
-        throw invalid_argument("no chessman exisetd in this cell.");
 
+    if (temp_chessman == nullptr)
+        throw invalid_argument("GameManager::convertOrderToString: no chessman exisetd in this cell.");
+
+    // temp += ID + ij + ij
     string temp = temp_chessman->getID() + ' ';
     temp += to_string(src.first) + to_string(src.second);
     temp += to_string(dest.first) + to_string(dest.second);
     temp += ' ';
 
-    // check destination
+    //--------------------------------------- Destination
     temp_chessman = chess_board->getCell(dest).getChessPieces();
-
     // if a piece is in dest
     if (temp_chessman != nullptr)
         temp += temp_chessman->getID();
@@ -420,7 +434,7 @@ string GameManager::convertOrderToString(Chessman::Index src, Chessman::Index de
 
     temp += "^";
 
-    // king rook
+    //--------------------------------------- King-Rook
     temp_chessman = chess_board->getCell(src).getChessPieces();
     Chessman::ChessType chess_type = temp_chessman->getChessType();
     if (chess_type == Chessman::KING)
@@ -457,89 +471,91 @@ string GameManager::convertOrderToString(Chessman::Index src, Chessman::Index de
 
 pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 {
+    // if have no move
     if (movements.empty())
         return make_pair(Chessman::Index(-1, -1), Chessman::Index(-1, -1));
 
-    string temp = movements.top();
+    string lastMove = movements.top();
+    movements.pop();
+
+    // place first space is move string
+    size_t pos = lastMove.find(" ");
 
     static bool extram_move_has_done;
 
     if (!isTemp)
     {
-        qDebug() << "undone move: " << QString::fromStdString(temp);
-        this->fileManager.delete_Last_Move();
+        this->getFileManager().delete_Last_Move();
     }
-    movements.pop();
 
     // if after allowing extra move user pressed undo
-    if (isThisExtramMove(temp) && !isTemp && !extram_move_has_done)
+    if (isThisExtramMove(lastMove) && !isTemp && !extram_move_has_done)
         changeTurn();
 
-    Chessman::Index temp_src;
+    Chessman::Index temp_src = {stoi(lastMove.substr(pos + 1, 1)), stoi(lastMove.substr(pos + 2, 1))};
     User::Score temp_score = 0;
 
-    //________________________________ if a king rook happened
-    if (temp.substr(0, 3) == "KRO")
+    //________________________________ King-Rook
+    // King-Rook has an extra move to undo
+    if (lastMove.substr(0, 3) == "KRO")
     {
-        size_t pos = temp.find(" ");
-        Chessman::Index temp_src = {stoi(temp.substr(pos + 1, 1)), stoi(temp.substr(pos + 2, 1))};
-        Chessman::Index temp_dest = {stoi(temp.substr(pos + 3, 1)), stoi(temp.substr(pos + 4, 1))};
+        // find move dest
+        Chessman::Index temp_dest = {stoi(lastMove.substr(pos + 3, 1)), stoi(lastMove.substr(pos + 4, 1))};
 
+        // undo move
         this->checkMove(temp_dest, temp_src);
         this->setMove(temp_dest, temp_src, true, isTemp);
 
+        // undo kingMoved flag
         dynamic_cast<King *>(chess_board->getCell(temp_src).getChessPieces().get())->kingNotMoved();
 
-        temp = movements.top();
+        // remove move
+        lastMove = movements.top();
         movements.pop();
-        this->fileManager.delete_Last_Move();
+        this->getFileManager().delete_Last_Move();
     }
-    //________________________________ if a pawn has promoted
-    else if (temp.substr(0, 3) == "PRF")
+    //________________________________ Promotion
+    else if (lastMove.substr(0, 3) == "PRF")
     {
-        changeTurn();
-        size_t pos = temp.find(" ");
-        temp_src = {stoi(temp.substr(pos + 1, 1)), stoi(temp.substr(pos + 2, 1))};
+        // remove new piece
         chess_board->hitChessman(temp_src);
 
-        unsigned int temp_turn;
-        if (turn == USER1)
-            temp_turn = 0;
-        else
-            temp_turn = 1;
+        // add pawn
+        chess_board->getCell(temp_src).setChessPieces(users[!turn]->restoreLastPawnsReached());
 
-        chess_board->getCell(temp_src).setChessPieces(users[temp_turn]->removePawnsReach());
-
-        temp = movements.top();
+        // remove promotion from moves
+        lastMove = movements.top();
         movements.pop();
-        this->fileManager.delete_Last_Move();
-
-        changeTurn();
+        this->getFileManager().delete_Last_Move();
     }
 
     //________________________________ return moved piece
-    size_t pos = temp.find(" ");
-    Chessman::Index src = {stoi(temp.substr(pos + 1, 1)), stoi(temp.substr(pos + 2, 1))};
-    Chessman::Index dest = {stoi(temp.substr(pos + 3, 1)), stoi(temp.substr(pos + 4, 1))};
+    pos = lastMove.find(" ");
+    Chessman::Index src = {stoi(lastMove.substr(pos + 1, 1)), stoi(lastMove.substr(pos + 2, 1))};
+    Chessman::Index dest = {stoi(lastMove.substr(pos + 3, 1)), stoi(lastMove.substr(pos + 4, 1))};
 
+    // must not cause any error
     this->checkMove(dest, src);
     this->setMove(dest, src, true, isTemp);
 
-    //_________________________________ undo for king-rook
+    //_________________________________ undo king-rook flags
+    // ensure move is done
     if (chess_board->getCell(src).isFull())
     {
         Chessman::ChessType chess_type = chess_board->getCell(src).getChessPieces()->getChessType();
+        // if is King
         if (chess_type == Chessman::KING)
         {
-            if ('#' == temp[temp.find("^") + 1])
+            if ('#' == lastMove[lastMove.find("^") + 1])
             {
                 dynamic_cast<King *>(chess_board->getCell(src).getChessPieces().get())
                     ->kingNotMoved();
             }
         }
+        // if is Rook
         else if (chess_type == Chessman::ROOK)
         {
-            if ('#' == temp[temp.find("^") + 1])
+            if ('#' == lastMove[lastMove.find("^") + 1])
             {
                 dynamic_cast<Rook *>(chess_board->getCell(src).getChessPieces().get())
                     ->rookNotMoved();
@@ -547,16 +563,19 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         }
     }
 
-    size_t pos2 = temp.find(" ", pos + 1);
-    //________________________________ if has hit a chessmen
-    if (temp[pos2 + 1] != 'N')
+    //_______________________________________________________________ if has hit a chessmen
+    size_t pos2 = lastMove.find(" ", pos + 1);
+
+    if (lastMove[pos2 + 1] != 'N')
     {
         Chessman::Index hitted_index;
         shared_ptr<Chessman> temp_chessman;
-        temp_chessman = users[turn]->getChessman(temp.substr(pos2 + 1, temp.find("^") - pos2 - 1),
-                                                 false);
+        temp_chessman = users[turn]->getChessman(
+            lastMove.substr(pos2 + 1, lastMove.find("^") - pos2 - 1), // hitted piece id
+            false);
 
-        if (temp.substr(0, 3) != "ENP")
+        // hit piece is in dest EXCEPT enp
+        if (lastMove.substr(0, 3) != "ENP")
         {
             hitted_index = dest;
         }
@@ -576,12 +595,15 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
             allowEnpasan(hitted_index);
         }
 
-        chess_board->addChessmanIndex(temp_chessman->getColor(), hitted_index);
+        // add to board
+        chess_board->addToBoard(temp_chessman->getColor(), hitted_index);
+
+        // return piece and add to cell
         chess_board->getCell(hitted_index)
-            .setChessPieces(users[turn]->backChessmanInGame(temp_chessman->getID()));
+            .setChessPieces(users[turn]->backChessmanToGame(temp_chessman->getID()));
     }
 
-    //____________________________ reallow en-passant
+    // --------------------------------------------------------- reallow en-passant
     if (movements.size() != 0) // && temp.substr(0, 3) != "ENP")
     {
         if (movements.top().substr(0, 2) == "AE")
@@ -594,6 +616,7 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 
     this->changeTurn();
 
+    // --------------------------------------------------------- score calculous
     if (!isTemp)
     {
         // undo neg score
@@ -601,19 +624,19 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         try
         {
             // 3 digits
-            temp_score = stoi(temp.substr(temp.find("$") + 1, 3));
+            temp_score = stoi(lastMove.substr(lastMove.find("$") + 1, 3));
         }
         catch (invalid_argument)
         {
             try
             {
                 // 2 digits
-                temp_score = stoi(temp.substr(temp.find("$") + 1, 2));
+                temp_score = stoi(lastMove.substr(lastMove.find("$") + 1, 2));
             }
             catch (invalid_argument)
             {
                 // 1 digits
-                temp_score = stoi(temp.substr(temp.find("$") + 1, 1));
+                temp_score = stoi(lastMove.substr(lastMove.find("$") + 1, 1));
             }
         }
 
@@ -621,8 +644,10 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         users[turn]->decScore(temp_score);
     }
 
+    // --------------------------------------------------------- Extra move
     // if user in last move allowed extra move
     if (movements.size() != 0 && !isTemp)
+    {
         if (isThisExtramMove(movements.top()))
         {
             changeTurn();
@@ -632,6 +657,7 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         {
             extram_move_has_done = false;
         }
+    }
 
     return make_pair(dest, src);
 }
@@ -640,61 +666,128 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 
 void GameManager::restartGame()
 {
-    this->fileManager.resetFile();
-
     string temp_name1 = users[0]->getName();
     string temp_name2 = users[1]->getName();
 
-    delete users[0];
-    users[0] = nullptr;
-    delete users[1];
-    users[1] = nullptr;
+    // reset FileManager data
+    thread reset_data([this]()
+                      { resetData(); });
 
-    delete chess_board;
-    chess_board = nullptr;
+    // reset file data
+    thread reset_file([this]()
+                      { getFileManager().resetFile(); });
 
-    setUser1(temp_name1);
-    setUser2(temp_name2);
+    // ensure data is reset before setting users
+    reset_data.join();
 
-    this->turn = USER1;
-    size_t size = this->movements.size();
-    for (size_t i = 0; i < size; i++)
-        movements.pop();
+    thread set_user1([this, &temp_name1]()
+                     { setUser1(temp_name1); });
+    thread set_user2([this, &temp_name2]()
+                     { setUser2(temp_name2); });
 
-    startGame();
+    // ensure users are set before start game
+    set_user1.join();
+    set_user2.join();
+
+    thread start_game([this]()
+                      {startGame();; });
+
+    start_game.join();
+    reset_file.join();
 }
 
 //________________________________________________________________________________________________________
 
 void GameManager::endGame()
 {
-    delete users[0];
-    users[0] = nullptr;
-    delete users[1];
-    users[1] = nullptr;
+    thread reset_data([this]()
+                      { resetData(); });
 
-    delete chess_board;
-    chess_board = nullptr;
+    thread remove_file([this]()
+                       { getFileManager().removeGameFile(); });
 
-    this->turn = USER1;
-    size_t size = this->movements.size();
-    for (size_t i = 0; i < size; i++)
-        movements.pop();
+    // ensure file is removed
+    remove_file.join();
+
+    thread reset_file_manager([this]()
+                              { getFileManager().resetData(); });
+
+    reset_data.join();
+    reset_file_manager.join();
+}
+
+//________________________________________________________________________________________________________
+
+void GameManager::resetData()
+{
+    // reset user 1
+    thread reset_user1([this]()
+                       {
+        delete users[0];
+        users[0] = nullptr; });
+
+    // reset user 2
+    thread reset_user2([this]()
+                       {
+        delete users[1];
+        users[1] = nullptr; });
+
+    // reset board
+    thread reset_board([this]()
+                       {
+        delete chess_board;
+        chess_board = nullptr;
+        this->turn = USER1; });
+
+    thread reset_moves([this]()
+                       {
+        for (size_t i = 0; i < this->movements.size(); i++)
+            movements.pop(); });
+
+    reset_user1.join();
+    reset_user2.join();
+    reset_board.join();
+    reset_moves.join();
+}
+
+//________________________________________________________________________________________________________
+
+void GameManager::saveAndExit()
+{
+    // save auto saved data
+    std::thread save_file([this]()
+                          {getFileManager().saveManually();; });
+
+    // reset GameManager data
+    std::thread reset_data([this]()
+                           { resetData(); });
+
+    // ensure that game is saved
+    save_file.join();
+
+    // close file and reset fileManager
+    std::thread reset_fileManager([this]()
+                                  { getFileManager().resetData(); });
+
+    reset_data.join();
+    reset_fileManager.join();
 }
 
 //________________________________________________________________________________________________________ randomMovements
 
 pair<Chessman::Index, Chessman::Index> GameManager::randomMovements()
 {
-    // random piece
+    // user pieces
     vector<shared_ptr<Chessman>> temp_chessmans = users[turn]->getChessmansIn();
 
+    // a random user piece
     Chessman::ID temp_id = temp_chessmans[randomNum() % temp_chessmans.size()]->getID();
     Chessman::Index temp_src = chess_board->getIndex(temp_id);
 
     // random movements
     vector<Chessman::Index> temp_can_go = getCellState(temp_src).first;
 
+    // if this piece can't move
     while (temp_can_go.size() == 0)
     {
         temp_id = temp_chessmans[randomNum() % temp_chessmans.size()]->getID();
@@ -704,6 +797,7 @@ pair<Chessman::Index, Chessman::Index> GameManager::randomMovements()
 
     Chessman::Index temp_dest = temp_can_go[randomNum() % temp_can_go.size()];
 
+    // move
     try
     {
         checkMove(temp_src, temp_dest);
@@ -735,21 +829,21 @@ bool GameManager::isThisExtramMove(std::string move)
     int temp_score;
     try
     {
-        // 3 digits
+        // if score is 3 digits
         temp_score = stoi(move.substr(move.find("$") + 1, 3));
     }
     catch (invalid_argument)
     {
         try
         {
-            // 2 digits
+            // " 2 digits
             temp_score = stoi(move.substr(move.find("$") + 1, 2));
         }
         catch (invalid_argument)
         {
             try
             {
-                // 1 digit
+                // " 1 digit
                 temp_score = stoi(move.substr(move.find("$") + 1, 1));
             }
             catch (invalid_argument)
@@ -779,6 +873,7 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
                                              std::vector<Chessman::Index> &canGo,
                                              std::vector<Chessman::Index> &canHit)
 {
+    // conver to list
     list<Chessman::Index> tempCango(canGo.begin(), canGo.end());
     list<Chessman::Index> tempCanHit(canHit.begin(), canHit.end());
 
@@ -801,6 +896,7 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
             setMove(src, index, false, true);
         }
 
+        // if move make user ckeck
         catch (KingIsChecked &s)
         {
             tempCango.remove(index);
@@ -812,6 +908,7 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
             qDebug() << s.what();
         }
 
+        // undo
         if (moved)
         {
             this->changeTurn();
@@ -819,6 +916,7 @@ void GameManager::limit_cells_for_king_check(Chessman::Index &src,
         }
     }
 
+    // change canGo and canHit
     canGo.clear();
     canHit.clear();
     copy(tempCango.begin(), tempCango.end(), back_inserter(canGo));
@@ -835,7 +933,7 @@ GameManager::GameStatus GameManager::analayzeGameStatus()
     // search in current user pieces in
     for (shared_ptr<Chessman> &piece : users[turn]->getChessmansIn())
     {
-//        qDebug() << "Checking piece: " << QString::fromStdString(piece->getID()) << this->chess_board->getIndex(piece->getID()) << Qt::endl;
+        //        qDebug() << "Checking piece: " << QString::fromStdString(piece->getID()) << this->chess_board->getIndex(piece->getID()) << Qt::endl;
 
         // this function checks if piece can move, make found true
         auto lf = [this, &found, &piece]()
@@ -854,7 +952,6 @@ GameManager::GameStatus GameManager::analayzeGameStatus()
             break;
     }
 
-
     // if at the least one piece still can move
     if (found)
         return isKingChecked() ? GameStatus::CHECKED : GameStatus::NORMAL;
@@ -867,7 +964,10 @@ GameManager::GameStatus GameManager::analayzeGameStatus()
 
 void GameManager::promote(Chessman::Index index, Chessman::ChessType chess_type)
 {
+    // set piece icon
     Chessman::Icon temp_icon = "qrc:/Assets/Icons/";
+
+    // set piece color
     Chessman::Color temp_color;
     if (turn == USER1)
     {
@@ -880,39 +980,40 @@ void GameManager::promote(Chessman::Index index, Chessman::ChessType chess_type)
         temp_icon += "B";
     }
 
+    // remove current piece
     users[turn]->hitChessman(chess_board->getCell(index).getChessPieces()->getID(), true);
-    string temp_name;
+
+    // add new piece
     switch (chess_type)
     {
     case Chessman::KNIGHT:
         chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Knight(temp_color, temp_icon + "Knight.png")));
-        temp_name = "H";
         break;
 
     case Chessman::BISHOP:
         chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Bishop(temp_color, temp_icon + "Bishop.png")));
-        temp_name = "B";
         break;
 
     case Chessman::ROOK:
         chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Rook(temp_color, temp_icon + "Rook.png")));
-        temp_name = "R";
         break;
 
     case Chessman::QUEEN:
         chess_board->getCell(index).setChessPieces(shared_ptr<Chessman>(new Queen(temp_color, temp_icon + "Queen.png")));
-        temp_name = "Q";
         break;
 
     default:
         throw invalid_argument("This ChessType is not allowed.");
     }
 
+    // add new piece to user piece
     users[turn]->addToChessmansIn(chess_board->getCell(index).getChessPieces());
 
+    // add promote move
     movements.push("PRF" + chess_board->getCell(index).getChessPieces()->getID() + " " + to_string(index.first) + to_string(index.second));
 
-    this->fileManager.saveMove("PRF" + chess_board->getCell(index).getChessPieces()->getID() + " " + to_string(index.first) + to_string(index.second));
+    // save promote move
+    this->getFileManager().saveMove("PRF" + chess_board->getCell(index).getChessPieces()->getID() + " " + to_string(index.first) + to_string(index.second));
 }
 
 //________________________________________________________________________________________________________ allowEnpasan
@@ -1059,43 +1160,100 @@ void GameManager::incScore(User::Score score)
     users[turn]->incScore(score);
 }
 
+//----------------------------------------------------------------------------
+
 void GameManager::deccScore(User::Score score)
 {
     users[turn]->decScore(score);
 }
+
+//----------------------------------------------------------------------------
 
 void GameManager::incNegativeScore(User::Score score)
 {
     users[turn]->incNegativeScore(score);
 }
 
+//----------------------------------------------------------------------------
+
 void GameManager::decNegativeScore(User::Score score)
 {
     users[turn]->decNegativeScore(score);
 }
 
-FileManager *GameManager::getFileManager()
+//----------------------------------------------------------------------------
+
+FileManager &GameManager::getFileManager()
 {
-    return &fileManager;
+    // ensure previews operation is done
+    if(fileOperation.joinable())
+        fileOperation.join();
+
+    return fileManager;
+}
+
+//----------------------------------------------------------------------------
+
+void GameManager::removeSaveFile(unsigned index)
+{
+    getFileManager().removeSaveFile(index);
+
+    // refresh the list
+    getFileManager().readSaveFiles();
+}
+
+//----------------------------------------------------------------------------
+
+void GameManager::readSaveFiles()
+{
+    getFileManager().readSaveFiles();
+}
+
+//----------------------------------------------------------------------------
+
+string GameManager::getSaveFileInfo(unsigned index)
+{
+    return getFileManager().getSaveFileInfo(index);
+}
+
+//----------------------------------------------------------------------------
+
+std::vector<std::string> GameManager::getSaveFiles()
+{
+    return getFileManager().getSaveFiles();
 }
 
 //---------------------------------------------------------------------------- load Moves
 //-------------------------------// redo all game moves
 void GameManager::loadMoves()
 {
-    if (fileManager.get_File_Name() == "")
+    if (getFileManager().get_File_Name() == "")
         throw LoadingFailed("no file loaded");
 
-    fileManager.add_to_autoSave(); // starting auto save
-    fileManager.resetFile();
-
-    for (unsigned i = 0; i < fileManager.get_Moves().size(); i++)
+    // empty file and start auto save
+    auto fileOpL = [this]()
     {
-        string move = fileManager.get_Moves()[i];
+        getFileManager().add_to_autoSave();
+        getFileManager().resetFile();
+    };
+
+    thread fileOp(fileOpL);
+    bool joined = false;
+
+    for (unsigned i = 0; i < getFileManager().get_Moves().size(); i++)
+    {
+        string move = getFileManager().get_Moves()[i];
         qDebug() << "performing loaded move: " << QString::fromStdString(move);
         size_t pos = move.find(" ");
         Chessman::Index src = {stoi(move.substr(pos + 1, 1)), stoi(move.substr(pos + 2, 1))};
         Chessman::Index dest = {stoi(move.substr(pos + 3, 1)), stoi(move.substr(pos + 4, 1))};
+
+        // ensure file op is done
+        if (!joined)
+        {
+            fileOp.join();
+            joined = true;
+        }
 
         // to emulate choosing piece
         try
@@ -1115,10 +1273,10 @@ void GameManager::loadMoves()
         catch (FinalCellForPawn)
         {
             //------------------------------------- promotion
-            if (fileManager.get_Moves().size() > i + 1)
+            if (getFileManager().get_Moves().size() > i + 1)
             {
                 setMove(src, dest);
-                promotionForFile(fileManager.get_Moves()[++i]);
+                promotionForFile(getFileManager().get_Moves()[++i]);
             }
             else
                 changeTurn();
@@ -1153,13 +1311,6 @@ void GameManager::promotionForFile(string move)
 
     else if (id == "B")
         promote(index, Chessman::BISHOP);
-}
-
-//---------------------------------------------------------------------------- save game
-
-void GameManager::saveAutoSaved()
-{
-    fileManager.saveManually();
 }
 
 //---------------------------------------------------------------------------- get Winner

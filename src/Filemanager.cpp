@@ -1,6 +1,7 @@
 #include "../include/Filemanager.hpp"
 #include "../include/Exceptions.hpp"
 #include <sys/stat.h>
+#include <dirent.h>
 #include <QDebug>
 
 using namespace std;
@@ -17,10 +18,12 @@ void FileManager::readFile(std::string fileName, bool isChecking)
 
     // open
     file.open(game_Name.c_str(), ios::in);
-    if (!file.is_open())
+
+    // if file error
+    if (!file.is_open() || file.bad())
     {
         file.close();
-        throw(OpenFileFailed("can't open file"));
+        throw(OpenFileFailed("Can't open file"));
     }
 
     // make sure is begining of file
@@ -30,10 +33,11 @@ void FileManager::readFile(std::string fileName, bool isChecking)
     getline(file, p1_Name);
     getline(file, p2_Name);
 
+    // if players names are empty
     if (!isChecking && (p1_Name.empty() || p2_Name.empty()))
     {
         file.close();
-        throw LoadingFailed("users names have not been saved well");
+        throw LoadingFailed("Users names have not been saved well");
     }
 
     // read moves in file
@@ -269,13 +273,98 @@ void FileManager::set_P2_Name(std::string name)
 
 //-------------------------------------------------------------------------------------------
 
-void FileManager::removeFile()
+void FileManager::removeGameFile()
 {
     remove(game_Name.c_str());
 }
 
 //-------------------------------------------------------------------------------------------
 
+void FileManager::loadSaveFile(unsigned index)
+{
+    readFile(savedGames[index], false);
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FileManager::readSaveFiles()
+{
+    struct stat buff;
+    if (stat("./SavedGames", &buff) != 0)
+        if (mkdir("./SavedGames") != 0)
+            throw AccessDenied("can't make save files");
+
+    savedGames.clear();
+
+    // open save folder
+    DIR *dir;
+    struct dirent *diread;
+    if ((dir = opendir("./SavedGames")) != nullptr)
+    {
+        // collect txt files names
+        while ((diread = readdir(dir)) != nullptr)
+        {
+            string temp = diread->d_name;
+            string suffix = temp.substr(temp.find('.'), temp.back());
+            if (suffix == ".txt")
+            {
+                savedGames.push_back(temp);
+            }
+        }
+        closedir(dir);
+    }
+    else
+    {
+        perror("opendir");
+        throw OpenFileFailed("can't acces files");
+    }
+}
+
+//-------------------------------------------------------------------------------------------
+
+string FileManager::getSaveFileInfo(unsigned index)
+{
+    string fileName = savedGames[index];
+    try
+    {
+        readFile(fileName);
+    }
+
+    catch (const LoadingFailed &e)
+    {
+        qDebug() << e.what();
+    }
+
+    catch (CheckingFailed &e)
+    {
+        qDebug() << e.what();
+        fileName = "Corrupted";
+    }
+
+    string name1 = p1_Name;
+    string name2 = p2_Name;
+
+    string score1 = '(' + to_string(p1_Score) + ')';
+    string score2 = '(' + to_string(p2_Score) + ')';
+
+    return (fileName + " :   P1:   " + name1 + score1 + "      P2:   " + name2 + score2);
+}
+
+//-------------------------------------------------------------------------------------------
+
+vector<string> FileManager::getSaveFiles() const
+{
+    return savedGames;
+}
+
+//-------------------------------------------------------------------------------------------
+
+void FileManager::removeSaveFile(unsigned index)
+{
+    remove(("./SavedGames/" + (savedGames[index])).c_str());
+}
+//-------------------------------------------------------------------------------------------
+// closes file and reset class data
 void FileManager::resetData()
 {
     file.close();

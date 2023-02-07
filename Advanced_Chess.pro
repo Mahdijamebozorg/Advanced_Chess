@@ -22,7 +22,6 @@ SOURCES += \
         src/ChessBoard.cpp \
         src/Chessman.cpp \
         src/Filemanager.cpp \
-        src/Functions.cpp \
         src/GameManager.cpp \
         src/King.cpp \
         src/Knight.cpp \
@@ -30,7 +29,7 @@ SOURCES += \
         src/Queen.cpp \
         src/Rook.cpp \
         src/User.cpp \
-    src/Utils.cpp
+        src/Utils.cpp
 
 RESOURCES += \
     qml.qrc
@@ -96,5 +95,4 @@ HEADERS += \
     include/Pawn.hpp \
     include/Queen.hpp \
     include/Rook.hpp \
-    include/User.hpp \
-    include/Utils.hpp
+    include/User.hpp
