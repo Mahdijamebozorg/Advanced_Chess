@@ -67,17 +67,33 @@ bool BackEnd::checkInput(QString name)
 
 //__________________________________________________________________________
 //________________// if save file doesn't exist , makes one
-void BackEnd::getFiles()
+bool BackEnd::readSaveFiles()
 {
-    manager->readSaveFiles();
+    try
+    {
+        manager->readSaveFiles();
+    }
+    catch (exception &e)
+    {
+        qDebug() << "BackEnd::readSaveFiles: " << e.what();
+        return false;
+    }
+    return true;
 }
 
 //__________________________________________________________________________ get file
 //________________// read plyer info
 QString BackEnd::getFileInfo(unsigned index)
 {
-    QString data = QString::fromStdString(manager->getSaveFileInfo(index));
-    return data;
+    try
+    {
+        return QString::fromStdString(manager->getSaveFileInfo(index));
+    }
+    catch (exception &e)
+    {
+        qDebug() << "BackEnd::getFileInfo: " << e.what() << Qt::endl;
+        return "Corrupted: " + QString::fromStdString((e.what()));
+    }
 }
 
 //__________________________________________________________________________ load test
@@ -89,9 +105,9 @@ void BackEnd::loadGame(unsigned index)
         manager->loadGame(index);
         emit gameLoaded();
     }
-    catch (LoadingFailed &e)
+    catch (exception &e)
     {
-        qDebug() << e.what();
+        qDebug() << "BackEnd::loadGame: " << e.what();
         emit fileError();
     }
 }
@@ -570,9 +586,7 @@ void BackEnd::randomMove()
 
     try
     {
-        std::thread randomMove_thread([this, &temp]()
-                                      { temp = manager->randomMovements(); });
-        randomMove_thread.join();
+        manager->randomMovements();
 
         std::thread th1([this, &temp]()
                         { previewsSrc = (int)IJToIndex(temp.first); });

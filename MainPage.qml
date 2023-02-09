@@ -20,6 +20,15 @@ Page {
         }
     }
 
+    Dialog {
+        id: folderErr
+        title: persian.checked ? "خظای فایل" : "File Error"
+        Text {
+            id: folderErrTxt
+            text: persian.checked ? "نمیتوان پوشه ی بازی های ذخیره شده را باز کرد!" : "Can't open GameSave folder!"
+        }
+    }
+
     Connections {
         target: bknd
         function onGameLoaded() {
@@ -82,6 +91,8 @@ Page {
             onClicked: mystack.push("LoginPage.qml")
         }
     }
+
+    // Load game button
     Rectangle {
         id: loadRec
         anchors.top: startRec.bottom
@@ -123,14 +134,19 @@ Page {
             font.italic: true
             font.pixelSize: this.height * 0.2
             onClicked: {
-                bknd.getFiles() //get files in directory
-                loadGameDialog.modelCount = 0 //to refresh
-                loadGameDialog.modelCount = bknd.filesCount() //get files count
-                loadGameDialog.open()
+                if (bknd.readSaveFiles()) //get files in directory
+                {
+                    loadGameDialog.modelCount = 0 //to refresh
+                    loadGameDialog.modelCount = bknd.filesCount() //get files count
+                    loadGameDialog.open()
+                } else
+                {
+                    folderErr.open()
+                }
             }
         }
     }
-    //loging button style
+    //Exit button style
     Rectangle {
         id: exitRec
         anchors.top: loadRec.bottom
@@ -163,7 +179,7 @@ Page {
             }
         }
 
-        //loging button
+        //Exit button
         Button {
             id: exit
             anchors.fill: parent

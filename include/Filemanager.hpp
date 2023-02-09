@@ -9,6 +9,7 @@ class FileManager
 {
 private:
     std::fstream file;
+    std::string file_Dir = "";
     std::string game_Name = "";
     std::string p1_Name = "";
     std::string p2_Name = "";
@@ -21,8 +22,6 @@ public:
     // reads file and fills class data
     void readFile(std::string fileName, bool temp = true);
 
-    // add (AutoSave) to current game file name
-    void add_to_autoSave();
 
     // removes (AutoSave) from current game file name
     void saveManually();
@@ -32,7 +31,8 @@ public:
     void set_P1_Name(std::string name);
     void set_P2_Name(std::string name);
 
-    std::string get_File_Name();
+    std::string get_File_Dir();
+    std::string get_Game_Name();
     std::string get_P1_Name();
     std::string get_P2_Name();
     unsigned get_P1_Score();

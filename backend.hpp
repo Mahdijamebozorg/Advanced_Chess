@@ -98,7 +98,7 @@ public slots:
     //--------------------------------------------------------- files
 
     // load .txt files from "SavedGames" folder
-    void getFiles();
+    bool readSaveFiles();
 
     // get information in file
     QString getFileInfo(unsigned index);

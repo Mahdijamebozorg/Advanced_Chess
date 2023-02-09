@@ -11,19 +11,35 @@ using namespace std;
 //------------------------------------------------------------------------- reading game from file
 void FileManager::readFile(std::string fileName, bool isChecking)
 {
+
+    // test
+    qDebug() << "in readFile: " << QString::fromStdString(savedGames[2]);
+
     resetData();
 
+    // test
+    qDebug() << "in readFile: " << QString::fromStdString(savedGames[2]);
+
     // dir
-    this->game_Name = "./SavedGames/" + fileName;
+    this->file_Dir = "./SavedGames/" + fileName;
+
+    this->game_Name = fileName;
+    // remove format
+    for (size_t i = 0; i < 4; i++)
+    {
+        game_Name.pop_back();
+    }
+
+    qDebug() << "Reading file: " << QString::fromStdString(file_Dir) << endl;
 
     // open
-    file.open(game_Name.c_str(), ios::in);
+    file.open(file_Dir.c_str(), ios::in);
 
     // if file error
     if (!file.is_open() || file.bad())
     {
         file.close();
-        throw(OpenFileFailed("Can't open file"));
+        throw(OpenFileFailed("Can't open " + file_Dir));
     }
 
     // make sure is begining of file
@@ -37,12 +53,11 @@ void FileManager::readFile(std::string fileName, bool isChecking)
     if (!isChecking && (p1_Name.empty() || p2_Name.empty()))
     {
         file.close();
-        throw LoadingFailed("Users names have not been saved well");
+        throw LoadingFailed("Users names have not been saved well in file " + file_Dir);
     }
 
     // read moves in file
     string tempMove;
-    qDebug() << "Checking: " << QString::fromStdString(fileName);
     while (!file.eof())
     {
         // file.ignore(1, '\"');
@@ -50,6 +65,10 @@ void FileManager::readFile(std::string fileName, bool isChecking)
 
         if (file.eof()) // delimiter
             break;
+
+        // ignore empty line
+        if (tempMove.empty())
+            continue;
 
         // triming
         if (tempMove[0] == '\"')
@@ -67,26 +86,22 @@ void FileManager::readFile(std::string fileName, bool isChecking)
         // if has unknow moves
         if (!isPrm && (tempMove.size() < 18 || tempMove.size() > 28))
         {
+            resetData();
             // if is checking the file
             if (isChecking)
             {
-                file.close();
-                throw CheckingFailed("moves are invalid");
+                throw CheckingFailed("Move " + tempMove + " has invalid size in file " + file_Dir);
             }
             // if is loading the file
             else
             {
-                file.close();
-                throw LoadingFailed("moves are invalid");
+                throw LoadingFailed("Move " + tempMove + " has invalid size in file " + file_Dir);
             }
         }
 
         // remove Rook single move on king-rook
         if (tempMove.substr(0, 3) == "KRO")
-        {
-
             moves.pop_back();
-        }
 
         moves.push_back(tempMove);
 
@@ -102,41 +117,24 @@ void FileManager::readFile(std::string fileName, bool isChecking)
     file.close();
 }
 
-//------------------------------------------------------------------------- auto save
-
-void FileManager::add_to_autoSave()
-{
-    string tempName = game_Name;
-    // remove format
-    for (size_t i = 0; i < 4; i++)
-        tempName.pop_back();
-
-    // check if is autosave
-    if (tempName.substr(tempName.find("(") + 1, tempName.find(")")) != "AutoSave)")
-        tempName += ("(AutoSave)");
-
-    // add format
-    tempName += ".txt";
-
-    // rename file to autosave
-    rename(game_Name.c_str(), tempName.c_str());
-    game_Name = tempName;
-}
-
 //------------------------------------------------------------------------- save Manually
 
 void FileManager::saveManually()
 {
-    string tempName = game_Name;
-    for (size_t i = 0; i < 14; i++)
-        tempName.pop_back();
+    string tempDir = "./SavedGames/" + game_Name;
 
-    tempName += ".txt";
-    rename(game_Name.c_str(), tempName.c_str());
+    tempDir += ".txt";
+    rename(file_Dir.c_str(), tempDir.c_str());
+    file_Dir = tempDir;
 }
 
 //-------------------------------------------------------------------------  get loaded game data
-string FileManager::get_File_Name()
+string FileManager::get_File_Dir()
+{
+    return this->file_Dir;
+}
+
+string FileManager::get_Game_Name()
 {
     return this->game_Name;
 }
@@ -167,7 +165,7 @@ vector<string> FileManager::get_Moves()
 
 void FileManager::resetFile()
 {
-    file.open(game_Name.c_str(), ios::out | ios::trunc);
+    file.open(file_Dir.c_str(), ios::out | ios::trunc);
     file << p1_Name << '\n'
          << p2_Name << '\n';
     file.close();
@@ -178,11 +176,11 @@ void FileManager::resetFile()
 //------------------------------------------------------------------------- add move to file
 void FileManager::saveMove(string move)
 {
-    file.open(this->game_Name.c_str(), ios::app);
-    if (!file.is_open())
+    file.open(this->file_Dir.c_str(), ios::app);
+    if (!file.is_open() || file.bad())
     {
         file.close();
-        throw(OpenFileFailed("can't open file"));
+        throw(OpenFileFailed("FileManager::saveMove: can't open " + file_Dir));
     }
 
     file << '\"' << move << '\"' << '\n';
@@ -195,11 +193,11 @@ void FileManager::delete_Last_Move()
     vector<string> tempMoves;
     string tempMove;
     //---------------------------------------- read
-    file.open(game_Name.c_str(), ios::in);
-    if (!file)
+    file.open(file_Dir.c_str(), ios::in);
+    if (!file.is_open() || file.bad())
     {
         file.close();
-        throw(OpenFileFailed("can't open file"));
+        throw(OpenFileFailed("FileManager::delete_Last_Move - read: can't open " + file_Dir));
     }
     file.seekg(0);
 
@@ -219,11 +217,11 @@ void FileManager::delete_Last_Move()
     file.close();
 
     //---------------------------------------- write
-    file.open(game_Name.c_str(), ios::trunc | ios::out);
-    if (!file.is_open())
+    file.open(file_Dir.c_str(), ios::trunc | ios::out);
+    if (!file.is_open() || file.bad())
     {
         file.close();
-        throw(OpenFileFailed("can't open file"));
+        throw(OpenFileFailed("FileManager::delete_Last_Move - write: can't open " + file_Dir));
     }
     file.seekp(0);
 
@@ -240,32 +238,46 @@ void FileManager::delete_Last_Move()
 
 //_________________________________________________________________________________________________ NEW FILE
 
-//------------------------------------------------------------------------- setting new game
+//-------------------------------------------------------------------------------------------
+// setting new game
 void FileManager::set_newFile(std::string gameName)
 {
+
     // if save file doesn't exist , makes one
     struct stat buff;
     if (stat("./SavedGames", &buff) != 0)
         if (mkdir("./SavedGames") != 0)
             throw OpenFileFailed("can't make save files");
 
-    this->game_Name = "./SavedGames/" + gameName + "(AutoSave)" + ".txt";
+    this->game_Name = gameName;
+    this->file_Dir = "./SavedGames/" + game_Name + "(AutoSave)" + ".txt";
 
-    qDebug() << "name test : " << game_Name.c_str();
-    file.open(game_Name.c_str(), ios::trunc | ios::out);
-    if (!file)
+    // test file
+    file.open(file_Dir.c_str(), ios::trunc | ios::out);
+
+    if (!file.is_open() || file.bad())
     {
         file.close();
         throw(OpenFileFailed("can't open file in set game"));
     }
+    file.close();
 }
+
+//-------------------------------------------------------------------------------------------
+
 void FileManager::set_P1_Name(std::string name)
 {
+    file.open(file_Dir, ios::trunc | ios::out);
     this->p1_Name = name;
     file << p1_Name << '\n';
+    file.close();
 }
+
+//-------------------------------------------------------------------------------------------
+
 void FileManager::set_P2_Name(std::string name)
 {
+    file.open(file_Dir, ios::ate);
     this->p2_Name = name;
     file << p2_Name << '\n';
     file.close();
@@ -275,30 +287,46 @@ void FileManager::set_P2_Name(std::string name)
 
 void FileManager::removeGameFile()
 {
-    remove(game_Name.c_str());
+    remove(file_Dir.c_str());
 }
 
 //-------------------------------------------------------------------------------------------
 
 void FileManager::loadSaveFile(unsigned index)
 {
+    // test
+    qDebug() << "before FileManager::loadSaveFile: " << QString::fromStdString(savedGames[index]);
+
     readFile(savedGames[index], false);
+
+    // add to autosave
+    string tempName = "./SavedGames/" + game_Name;
+    if (tempName.substr(tempName.find("(") + 1, tempName.find(")")) != "AutoSave)")
+        tempName += ("(AutoSave)");
+    tempName += ".txt";
+
+    this->file_Dir = tempName;
+
+    // test
+    qDebug() << "after FileManager::loadSaveFile: " << QString::fromStdString(savedGames[index]);
 }
 
 //-------------------------------------------------------------------------------------------
 
 void FileManager::readSaveFiles()
 {
+    savedGames.clear();
+
     struct stat buff;
     if (stat("./SavedGames", &buff) != 0)
         if (mkdir("./SavedGames") != 0)
-            throw AccessDenied("can't make save files");
-
-    savedGames.clear();
+            throw OpenFileFailed("FileManager::readSaveFiles: can't make SavedGames folder");
 
     // open save folder
     DIR *dir;
     struct dirent *diread;
+
+    // if can open folder
     if ((dir = opendir("./SavedGames")) != nullptr)
     {
         // collect txt files names
@@ -308,15 +336,18 @@ void FileManager::readSaveFiles()
             string suffix = temp.substr(temp.find('.'), temp.back());
             if (suffix == ".txt")
             {
+                qDebug() << QString::fromStdString(temp) << " added to save games" << Qt::endl;
                 savedGames.push_back(temp);
             }
         }
         closedir(dir);
+        dir = nullptr;
+        diread = nullptr;
     }
     else
     {
         perror("opendir");
-        throw OpenFileFailed("can't acces files");
+        throw OpenFileFailed("FileManager::readSaveFiles: can't acces SaveGames folder");
     }
 }
 
@@ -324,30 +355,20 @@ void FileManager::readSaveFiles()
 
 string FileManager::getSaveFileInfo(unsigned index)
 {
+    // test
+    qDebug() << "before FileManager::getSaveFileInfo: " << QString::fromStdString(savedGames[index]);
+
     string fileName = savedGames[index];
-    try
-    {
-        readFile(fileName);
-    }
 
-    catch (const LoadingFailed &e)
-    {
-        qDebug() << e.what();
-    }
-
-    catch (CheckingFailed &e)
-    {
-        qDebug() << e.what();
-        fileName = "Corrupted";
-    }
-
-    string name1 = p1_Name;
-    string name2 = p2_Name;
+    readFile(fileName, true);
 
     string score1 = '(' + to_string(p1_Score) + ')';
     string score2 = '(' + to_string(p2_Score) + ')';
 
-    return (fileName + " :   P1:   " + name1 + score1 + "      P2:   " + name2 + score2);
+    // test
+    qDebug() << "after FileManager::getSaveFileInfo: " << QString::fromStdString(savedGames[index]);
+
+    return (fileName + " :   P1:   " + p1_Name + score1 + "      P2:   " + p2_Name + score2);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -361,7 +382,13 @@ vector<string> FileManager::getSaveFiles() const
 
 void FileManager::removeSaveFile(unsigned index)
 {
+    // test
+    qDebug() << "before FileManager::removeSaveFile: " << QString::fromStdString(savedGames[index]);
+
     remove(("./SavedGames/" + (savedGames[index])).c_str());
+
+    // test
+    qDebug() << "before FileManager::removeSaveFile: " << QString::fromStdString(savedGames[index]);
 }
 //-------------------------------------------------------------------------------------------
 // closes file and reset class data
@@ -370,9 +397,9 @@ void FileManager::resetData()
     file.close();
     this->p1_Score = 0;
     this->p2_Score = 0;
-    this->p1_Name = "";
-    this->p2_Name = "";
-    this->game_Name = "";
+    this->p1_Name.clear();
+    this->p2_Name.clear();
+    this->file_Dir.clear();
     this->moves.clear();
 }
 

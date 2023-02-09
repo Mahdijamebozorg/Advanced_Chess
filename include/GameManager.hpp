@@ -34,21 +34,44 @@ public:
     // Static Singleton Pattern
     static GameManager *&get(GameName name);
 
-    //------------------------------------------------------------------------------------- game setup
+    //------------------------------------------------------------------------------------- Game Setup
+
+    // sets board , users must be set before this
     void startGame();
+
+    // resets data except users and game name
     void restartGame();
+
+    // reset class data
     void resetData();
+
+    // resets and delete save file
     void endGame();
 
     //-------------------------------------------- File
-    FileManager &getFileManager();
+
+    // loads game from save files in folder
     void loadGame(unsigned index);
+
+    // performs loaded file moves
     void loadMoves();
+
+    // promotion when reading moves from file
     void promotionForFile(std::string move);
+
+    // renames auto save to normal formm
     void saveAndExit();
+
+    // retun selected save game info
     std::string getSaveFileInfo(unsigned index);
+
+    // returns all save files in this folder
     std::vector<std::string> getSaveFiles();
+
+    // remove selected save file and refreshed the list
     void removeSaveFile(unsigned index);
+
+    // reads all save files in this dir
     void readSaveFiles();
 
     //-------------------------------------------- Board
@@ -56,14 +79,17 @@ public:
     ChessBoardGame getChessBoardGame() const;
 
     //--------------------------------------------
+    // adds user 1 name to file, and sets its pieces
     void setUser1(User::Name, User::Score = 0, User::Score = 0);
     GameUser getUser1() const;
 
     //--------------------------------------------
+    // adds user 2 name to file, and sets its pieces
     void setUser2(User::Name, User::Score = 0, User::Score = 0);
     GameUser getUser2() const;
 
     //--------------------------------------------
+    // makes a new file for game save
     void setGameName(GameName);
     GameName getGameName() const;
 
@@ -146,7 +172,6 @@ private:
     Enpasan enpasan = std::make_pair(100, 100);
 
     FileManager fileManager;
-    std::thread fileOperation;
 };
 
 #endif /* end of include guard: GAMEMANAGER_H*/
