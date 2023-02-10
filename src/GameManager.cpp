@@ -20,68 +20,99 @@ GameManager *GameManager::game_manager = nullptr;
 
 //_______________________________________________________________________________________________________ get
 // ensure only one obj exists
-GameManager *&GameManager::get(GameName name)
+GameManager *&GameManager::get()
 {
     if (game_manager == nullptr)
-        game_manager = new GameManager(name);
+        game_manager = new GameManager();
 
     return game_manager;
 }
 
-//_____________________________ __________________________________________________________________________ load game
+//_______________________________________________________________________________________________________ getFileManager
+
+FileManager *GameManager::getFileManager(bool endPreviewsOp)
+{
+    if (endPreviewsOp == true)
+    {
+        if (fileOperation.joinable())
+            fileOperation.join();
+
+        return &fileManager;
+    }
+    else
+    {
+        return &fileManager;
+    }
+}
+
+//_______________________________________________________________________________________________________ addFileOperation
+
+// finishes the previews op and adds new op
+template <typename Func>
+void GameManager::addFileOperation(Func func)
+{
+    // finish previews operation
+    if (fileOperation.joinable())
+        fileOperation.join();
+
+    // make a thread for function
+    thread th(func);
+
+    // add thread to fileOperation
+    fileOperation.swap(th);
+}
+
+//_______________________________________________________________________________________________________ load game
 //-----------------------// sets game data
 
 void GameManager::loadGame(unsigned index)
 {
     // load game from file
-    fileManager.loadSaveFile(index);
+    auto fileOp = [this, index]()
+    { getFileManager(false)->loadSaveFile(index); };
+    addFileOperation(fileOp);
 
-    string name1 = fileManager.get_P1_Name(), name2 = fileManager.get_P2_Name().c_str();
+    this->game_name = getFileManager()->get_Game_Name();
 
-    //------------------------- set users and chessmen
-    this->setTurn(Turn::USER1);
+    string name1 = getFileManager()->get_P1_Name(), name2 = getFileManager()->get_P2_Name().c_str();
 
-    this->game_name = fileManager.get_Game_Name();
+    // *important*
+    // because of using static var for setting pieces names,
+    // we can't use multithreading for setting users
 
     // user 1 setup
-    thread user1_th([this, &name1]()
-                    {
-                        users[0] = User::getInstance(name1, Chessman::Color::WHITE, 0, 0);
-                        users[0]->setColor(Chessman::Color::WHITE);
-                        users[0]->setChessmansIn(); //
-                    });
+    users[0] = User::getInstance(name1, Chessman::Color::WHITE, 0, 0);
+    users[0]->setColor(Chessman::Color::WHITE);
+    users[0]->setChessmansIn(); //
 
     // user 2 setup
-    thread user2_th([this, &name2]()
-                    {
-                        users[1] = User::getInstance(name2, Chessman::Color::WHITE, 0, 0);
-                        users[1]->setColor(Chessman::Color::BLACK);
-                        users[1]->setChessmansIn(); //
-                    });
+    users[1] = User::getInstance(name2, Chessman::Color::WHITE, 0, 0);
+    users[1]->setColor(Chessman::Color::BLACK);
+    users[1]->setChessmansIn(); //
 
-    // ensure users are set before game start
-    user1_th.join();
-    user2_th.join();
+    this->setTurn(Turn::USER1);
 
     startGame();
 
     loadMoves();
 }
 
-//________________________________________________________________________________________________________ GameManager
-
-GameManager::GameManager(GameName temp_game_name)
-{
-    this->game_name = temp_game_name;
-}
-
 //________________________________________________________________________________________________________ Distructor
 
 GameManager::~GameManager()
 {
-    fileManager.resetData();
+    auto fileOp = [this]()
+    { getFileManager(false)->resetData(); };
+    addFileOperation(fileOp);
+
+    // ensure file operations are done
+    fileOperation.join();
     resetData();
+    game_manager = nullptr;
 }
+//________________________________________________________________________________________________________ Constructor
+
+GameManager::GameManager() {}
 
 //________________________________________________________________________________________________________ startGame
 
@@ -89,7 +120,7 @@ void GameManager::startGame()
 {
     // error if users are no setted
     if (users[0] == nullptr || users[1] == nullptr)
-        throw LoadingFailed("All user not setted.");
+        throw LoadingFailed("All users not set.");
 
     setChessBoardGame(ChessBoard::getInstance(users[0], users[1]));
 }
@@ -286,7 +317,9 @@ void GameManager::setMove(
                 {
                     qDebug() << "enp move: " << (temp_movement_ENP).c_str();
 
-                    fileManager.saveMove(temp_movement_ENP);
+                    auto fileOp = [this, temp_movement_ENP]()
+                    { getFileManager(false)->saveMove(temp_movement_ENP); };
+                    addFileOperation(fileOp);
                 }
                 movements.push(temp_movement_ENP);
                 return;
@@ -311,7 +344,9 @@ void GameManager::setMove(
             if (!isTemp)
             {
                 qDebug() << "move: " << tempMove.c_str();
-                fileManager.saveMove(tempMove);
+                auto fileOp = [this, tempMove]()
+                { getFileManager(false)->saveMove(tempMove); };
+                addFileOperation(fileOp);
             }
             movements.push(tempMove);
         }
@@ -327,7 +362,10 @@ void GameManager::setMove(
 void GameManager::setUser1(User::Name user1_name, User::Score user1_Pscore, User::Score user1_Nscore)
 {
     this->users[0] = User::getInstance(user1_name, User::Color::WHITE, user1_Pscore, user1_Nscore);
-    fileManager.set_P1_Name(users[0]->getName());
+
+    auto fileOp = [this]()
+    { getFileManager(false)->set_P1_Name(users[0]->getName()); };
+    addFileOperation(fileOp);
 }
 
 //________________________________________________________________________________________________________ setUser2
@@ -335,7 +373,10 @@ void GameManager::setUser1(User::Name user1_name, User::Score user1_Pscore, User
 void GameManager::setUser2(User::Name user2_name, User::Score user2_Pscore, User::Score user2_Nscore)
 {
     this->users[1] = User::getInstance(user2_name, User::Color::BLACK, user2_Pscore, user2_Nscore);
-    fileManager.set_P2_Name(users[1]->getName());
+
+    auto fileOp = [this]()
+    { getFileManager(false)->set_P2_Name(users[1]->getName()); };
+    addFileOperation(fileOp);
 }
 
 //________________________________________________________________________________________________________ getUser1
@@ -390,12 +431,15 @@ GameManager::Turn GameManager::getTurn() const
     return turn;
 }
 
-//________________________________________________________________________________________________________ setGameName
+//________________________________________________________________________________________________________ newGame
 
-void GameManager::setGameName(GameName game_name)
+void GameManager::newGame(GameName gameName)
 {
-    this->game_name = game_name;
-    fileManager.set_newFile(game_name);
+    this->game_name = gameName;
+
+    auto fileOp = [this, gameName]()
+    { getFileManager(false)->set_newFile(gameName); };
+    addFileOperation(fileOp);
 }
 
 //________________________________________________________________________________________________________  getGameName
@@ -482,7 +526,9 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
 
     if (!isTemp)
     {
-        fileManager.delete_Last_Move();
+        auto fileOp = [this]()
+        { getFileManager(false)->delete_Last_Move(); };
+        addFileOperation(fileOp);
     }
 
     // if after allowing extra move user pressed undo
@@ -509,7 +555,10 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         // remove move
         lastMove = movements.top();
         movements.pop();
-        fileManager.delete_Last_Move();
+
+        auto fileOp = [this]()
+        { getFileManager(false)->delete_Last_Move(); };
+        addFileOperation(fileOp);
     }
     //________________________________ Promotion
     else if (lastMove.substr(0, 3) == "PRF")
@@ -524,7 +573,9 @@ pair<Chessman::Index, Chessman::Index> GameManager::undo(bool isTemp)
         lastMove = movements.top();
         movements.pop();
 
-        fileManager.delete_Last_Move();
+        auto fileOp = [this]()
+        { getFileManager(false)->delete_Last_Move(); };
+        addFileOperation(fileOp);
     }
 
     //________________________________ return moved piece
@@ -668,10 +719,14 @@ void GameManager::restartGame()
     string temp_name2 = users[1]->getName();
 
     // reset file data before reseting fileManger data
-    fileManager.resetFile();
+    auto fileOp1 = [this]()
+    { getFileManager(false)->resetFile(); };
+    addFileOperation(fileOp1);
 
     // reset FileManager data
-    fileManager.resetData();
+    auto fileOp2 = [this]()
+    { getFileManager(false)->resetData(); };
+    addFileOperation(fileOp2);
 
     // reset game data
     resetData();
@@ -687,8 +742,14 @@ void GameManager::restartGame()
 
 void GameManager::endGame()
 {
-    fileManager.removeGameFile();
-    fileManager.resetData();
+    auto fileOp1 = [this]()
+    { getFileManager(false)->removeGameFile(); };
+    addFileOperation(fileOp1);
+
+    auto fileOp2 = [this]()
+    { getFileManager(false)->resetData(); };
+    addFileOperation(fileOp2);
+
     resetData();
 }
 
@@ -731,10 +792,14 @@ void GameManager::resetData()
 void GameManager::saveAndExit()
 {
     // save auto saved data
-    fileManager.saveManually();
+    auto fileOp1 = [this]()
+    { getFileManager(false)->saveManually(); };
+    addFileOperation(fileOp1);
 
     // reset fileManager
-    fileManager.resetData();
+    auto fileOp2 = [this]()
+    { getFileManager(false)->resetData(); };
+    addFileOperation(fileOp2);
 
     // reset GameManager data
     resetData();
@@ -983,7 +1048,9 @@ void GameManager::promote(Chessman::Index index, Chessman::ChessType chess_type)
     movements.push(promotionMove);
 
     // save promote move
-    fileManager.saveMove(promotionMove);
+    auto fileOp = [this, promotionMove]()
+    { getFileManager(false)->saveMove(promotionMove); };
+    addFileOperation(fileOp);
 }
 
 //________________________________________________________________________________________________________ allowEnpasan
@@ -1155,46 +1222,73 @@ void GameManager::decNegativeScore(User::Score score)
 
 void GameManager::removeSaveFile(unsigned index)
 {
-    fileManager.removeSaveFile(index);
+    auto fileOp1 = [this, index]()
+    { getFileManager(false)->removeSaveFile(index); };
+    addFileOperation(fileOp1);
 
     // refresh the list
-    fileManager.readSaveFiles();
+    auto fileOp2 = [this]()
+    { getFileManager(false)->readSaveFiles(); };
+    addFileOperation(fileOp2);
 }
 
 //----------------------------------------------------------------------------
 
 void GameManager::readSaveFiles()
 {
-    fileManager.readSaveFiles();
+    auto fileOp = [this]()
+    { getFileManager(false)->readSaveFiles(); };
+    addFileOperation(fileOp);
 }
 
 //----------------------------------------------------------------------------
 
 string GameManager::getSaveFileInfo(unsigned index)
 {
-    return fileManager.getSaveFileInfo(index);
+    string data;
+
+    auto fileOp = [this, index, &data]()
+    { data = getFileManager(false)->getSaveFileInfo(index); };
+    addFileOperation(fileOp);
+
+    // ensure op is done
+    fileOperation.join();
+
+    return data;
 }
 
 //----------------------------------------------------------------------------
 
 std::vector<std::string> GameManager::getSaveFiles()
 {
-    return fileManager.getSaveFiles();
+    vector<string> data;
+
+    auto fileOp = [this, &data]()
+    { data = getFileManager(false)->getSaveFiles(); };
+    addFileOperation(fileOp);
+
+    // ensure op is done
+    fileOperation.join();
+
+    return data;
 }
 
 //---------------------------------------------------------------------------- load Moves
 //-------------------------------// redo all game moves
 void GameManager::loadMoves()
 {
-    if (fileManager.get_Game_Name() == "")
+    // exception must be thrown here, so can't use thread
+    if (getFileManager()->get_Game_Name() == "")
         throw LoadingFailed("no file loaded");
 
     // clear file
-    fileManager.resetFile();
+    auto fileOp = [this]()
+    { getFileManager(false)->resetFile(); };
+    addFileOperation(fileOp);
 
-    for (unsigned i = 0; i < fileManager.get_Moves().size(); i++)
+    for (unsigned i = 0; i < getFileManager()->get_Moves().size(); i++)
     {
-        string move = fileManager.get_Moves()[i];
+        string move = getFileManager()->get_Moves()[i];
         qDebug() << "performing loaded move: " << QString::fromStdString(move);
         size_t pos = move.find(" ");
         Chessman::Index src = {stoi(move.substr(pos + 1, 1)), stoi(move.substr(pos + 2, 1))};
@@ -1218,10 +1312,10 @@ void GameManager::loadMoves()
         catch (FinalCellForPawn)
         {
             //------------------------------------- promotion
-            if (fileManager.get_Moves().size() > i + 1)
+            if (getFileManager()->get_Moves().size() > i + 1)
             {
                 setMove(src, dest);
-                promotionForFile(fileManager.get_Moves()[++i]);
+                promotionForFile(getFileManager()->get_Moves()[++i]);
             }
             else
                 changeTurn();

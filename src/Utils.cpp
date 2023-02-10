@@ -1,3 +1,4 @@
+#include <iostream>
 #include <random>
 #include <stack>
 #include <stdexcept>
@@ -6,16 +7,17 @@
 
 #include <QDebug>
 
-#include "../include/Chessman.hpp"
-
 using namespace std;
 
 // CheckRange fucntion
-void checkRange(Chessman::Index index)
+void checkRange(pair<unsigned, unsigned> index)
 {
     if (index.first < 0 || index.first > 7 || index.second < 0 || index.second > 7)
         throw out_of_range("positon must between 0, 7");
 }
+
+// _______________________________________________________________________________________
+
 long unsigned randomNum()
 {
     static mt19937 generator{random_device{}()}; // random engine
@@ -24,6 +26,8 @@ long unsigned randomNum()
 
     return distribution(generator);
 }
+
+// _______________________________________________________________________________________
 
 void printStack(const std::stack<std::string> &moves)
 {
@@ -36,6 +40,8 @@ void printStack(const std::stack<std::string> &moves)
     }
     qDebug() << "====================================";
 }
+
+// _______________________________________________________________________________________
 
 template <class ContainerT, class Val1T, class Val2T>
 bool multiThreadingSearch(

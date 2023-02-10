@@ -22,11 +22,11 @@ public:
     // reads file and fills class data
     void readFile(std::string fileName, bool temp = true);
 
-
     // removes (AutoSave) from current game file name
     void saveManually();
 
     //--------------------------------------------------------------
+    void set_Name(std::string name);
     void set_newFile(std::string name);
     void set_P1_Name(std::string name);
     void set_P2_Name(std::string name);

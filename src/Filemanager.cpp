@@ -11,24 +11,13 @@ using namespace std;
 //------------------------------------------------------------------------- reading game from file
 void FileManager::readFile(std::string fileName, bool isChecking)
 {
-
-    // test
-    qDebug() << "in readFile: " << QString::fromStdString(savedGames[2]);
-
     resetData();
-
-    // test
-    qDebug() << "in readFile: " << QString::fromStdString(savedGames[2]);
 
     // dir
     this->file_Dir = "./SavedGames/" + fileName;
 
-    this->game_Name = fileName;
-    // remove format
-    for (size_t i = 0; i < 4; i++)
-    {
-        game_Name.pop_back();
-    }
+    // set game name
+    set_Name(fileName);
 
     qDebug() << "Reading file: " << QString::fromStdString(file_Dir) << endl;
 
@@ -239,22 +228,38 @@ void FileManager::delete_Last_Move()
 //_________________________________________________________________________________________________ NEW FILE
 
 //-------------------------------------------------------------------------------------------
+
+void FileManager::set_Name(std::string name)
+{
+    if (name.empty())
+        throw invalid_argument("Name is empty");
+
+    // if has format, remove it
+    auto pos = name.find('.');
+    if (pos != string::npos)
+        name = name.substr(0, pos);
+
+    // if has AutoSave suffix, remove it
+    string suffix = "(AutoSave)";
+    pos = name.find(suffix);
+    if (pos != string::npos)
+        name = name.substr(0, pos) + name.substr((pos + 1) + suffix.size());
+
+    this->game_Name = name;
+}
+
+//-------------------------------------------------------------------------------------------
 // setting new game
 void FileManager::set_newFile(std::string gameName)
 {
-
     // if save file doesn't exist , makes one
     struct stat buff;
     if (stat("./SavedGames", &buff) != 0)
         if (mkdir("./SavedGames") != 0)
             throw OpenFileFailed("can't make save files");
 
-    this->game_Name = gameName;
+    set_Name(gameName);
     this->file_Dir = "./SavedGames/" + game_Name + "(AutoSave)" + ".txt";
-
-    // test file
-    file.open(file_Dir.c_str(), ios::trunc | ios::out);
-
     if (!file.is_open() || file.bad())
     {
         file.close();
@@ -294,21 +299,17 @@ void FileManager::removeGameFile()
 
 void FileManager::loadSaveFile(unsigned index)
 {
-    // test
-    qDebug() << "before FileManager::loadSaveFile: " << QString::fromStdString(savedGames[index]);
+    string fileName = savedGames[index];
 
-    readFile(savedGames[index], false);
+    // read file data
+    readFile(fileName, false);
 
-    // add to autosave
-    string tempName = "./SavedGames/" + game_Name;
-    if (tempName.substr(tempName.find("(") + 1, tempName.find(")")) != "AutoSave)")
-        tempName += ("(AutoSave)");
-    tempName += ".txt";
+    // when no error, add file to autosave
+    string tempName = "./SavedGames/" + game_Name + "(AutoSave).txt";
+
+    rename(file_Dir.c_str(), tempName.c_str());
 
     this->file_Dir = tempName;
-
-    // test
-    qDebug() << "after FileManager::loadSaveFile: " << QString::fromStdString(savedGames[index]);
 }
 
 //-------------------------------------------------------------------------------------------
@@ -355,18 +356,12 @@ void FileManager::readSaveFiles()
 
 string FileManager::getSaveFileInfo(unsigned index)
 {
-    // test
-    qDebug() << "before FileManager::getSaveFileInfo: " << QString::fromStdString(savedGames[index]);
-
     string fileName = savedGames[index];
 
     readFile(fileName, true);
 
     string score1 = '(' + to_string(p1_Score) + ')';
     string score2 = '(' + to_string(p2_Score) + ')';
-
-    // test
-    qDebug() << "after FileManager::getSaveFileInfo: " << QString::fromStdString(savedGames[index]);
 
     return (fileName + " :   P1:   " + p1_Name + score1 + "      P2:   " + p2_Name + score2);
 }
@@ -382,13 +377,7 @@ vector<string> FileManager::getSaveFiles() const
 
 void FileManager::removeSaveFile(unsigned index)
 {
-    // test
-    qDebug() << "before FileManager::removeSaveFile: " << QString::fromStdString(savedGames[index]);
-
     remove(("./SavedGames/" + (savedGames[index])).c_str());
-
-    // test
-    qDebug() << "before FileManager::removeSaveFile: " << QString::fromStdString(savedGames[index]);
 }
 //-------------------------------------------------------------------------------------------
 // closes file and reset class data

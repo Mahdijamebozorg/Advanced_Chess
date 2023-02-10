@@ -1,4 +1,4 @@
-#ifndef GAMEMANAGER_H
+#ifndef GAMEMANAGER_HGameManager
 #define GAMEMANAGER_H
 
 #include "User.hpp"
@@ -32,7 +32,7 @@ public:
     };
 
     // Static Singleton Pattern
-    static GameManager *&get(GameName name);
+    static GameManager *&get();
 
     //------------------------------------------------------------------------------------- Game Setup
 
@@ -49,6 +49,15 @@ public:
     void endGame();
 
     //-------------------------------------------- File
+
+    // keeps file operation thread
+    std::thread fileOperation;
+
+    FileManager *getFileManager(bool endPreviewsOp = true);
+
+    // gets a callable and replace it to fileOp thread
+    template <typename Func>
+    void addFileOperation(Func);
 
     // loads game from save files in folder
     void loadGame(unsigned index);
@@ -90,7 +99,7 @@ public:
 
     //--------------------------------------------
     // makes a new file for game save
-    void setGameName(GameName);
+    void newGame(GameName);
     GameName getGameName() const;
 
     //--------------------------------------------
@@ -99,6 +108,7 @@ public:
     void changeTurn();
 
     //--------------------------------------------
+    GameManager();
     ~GameManager();
 
     //------------------------------------------------------------------------------------- Movements
@@ -159,8 +169,6 @@ public:
     void decNegativeScore(User::Score);
 
 private:
-    // Singeleton Pattern setups
-    GameManager(GameName);
     GameManager(const GameManager &) = delete; // Copy constructor
     static GameManager *game_manager;
 

@@ -12,7 +12,7 @@ using namespace std;
 
 void BackEnd::setGame(QString gameName)
 {
-    manager->setGameName(gameName.QString::toStdString());
+    manager->newGame(gameName.QString::toStdString());
 }
 
 //__________________________________________________________________________

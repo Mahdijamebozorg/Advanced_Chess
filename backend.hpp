@@ -48,7 +48,7 @@ private:
     void touchedPiece(GameManager::Turn);
 
     // game manager class object
-    std::unique_ptr<GameManager> manager = std::unique_ptr<GameManager>(GameManager::get("game"));
+    std::unique_ptr<GameManager> manager = std::unique_ptr<GameManager>(GameManager::get());
 
 public:
     std::pair<std::vector<Chessman::Index>, std::vector<Chessman::Index>> srcState;
