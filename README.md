@@ -68,7 +68,7 @@ Score is the key to win in this game, some movement have score:
 <p>&nbsp;</p>
 
 ### Negative score:
-Some works add your negatice score , if your negative score reachs 15 , you will have a random move.
+Some works increases your negative score , if your negative score reachs 15 , you will have a random move on a random piece.
 - Undo: return last moved piece and adds 5 negative scores
 - Touch piece: if you choose a moveable piece and reselct in this turn, you'll get 5 negative scores 
 
