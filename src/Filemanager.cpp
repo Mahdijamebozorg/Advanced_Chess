@@ -11,7 +11,7 @@ using namespace std;
 //------------------------------------------------------------------------- reading game from file
 void FileManager::readFile(std::string fileName, bool isChecking)
 {
-    // reset remove files details
+    // remove previews files details
     resetData();
 
     // dir
@@ -39,11 +39,16 @@ void FileManager::readFile(std::string fileName, bool isChecking)
     getline(file, p1_Name);
     getline(file, p2_Name);
 
+    qDebug() << "user1:" << QString::fromStdString(p1_Name) << "\tuser2" << QString::fromStdString(p2_Name);
+
     // if players names are empty
-    if (!isChecking && (p1_Name.empty() || p2_Name.empty()))
+    if (p1_Name.empty() || p2_Name.empty())
     {
         file.close();
-        throw LoadingFailed("Users names have not been saved well in file " + file_Dir);
+        if (isChecking)
+            throw CheckingFailed("Users names have not been saved well in file: " + file_Dir);
+        else
+            throw LoadingFailed("Users names have not been saved well in file: " + file_Dir);
     }
 
     // read moves in file
@@ -76,7 +81,7 @@ void FileManager::readFile(std::string fileName, bool isChecking)
         // if has unknow moves
         if (!isPrm && (tempMove.size() < 18 || tempMove.size() > 28))
         {
-            resetData();
+            file.close();
             // if is checking the file
             if (isChecking)
             {
@@ -279,29 +284,27 @@ void FileManager::set_newFile(std::string gameName)
 
     set_Name(gameName);
     this->file_Dir = "./SavedGames/" + game_Name + "(AutoSave)" + ".txt";
+
+    file.open(file_Dir.c_str(), ios::out);
     if (!file.is_open() || file.bad())
     {
         file.close();
         throw(OpenFileFailed("can't open file in set game"));
     }
-    file.close();
 }
 
 //-------------------------------------------------------------------------------------------
 
 void FileManager::set_P1_Name(std::string name)
 {
-    file.open(file_Dir, ios::trunc | ios::out);
     this->p1_Name = name;
     file << p1_Name << '\n';
-    file.close();
 }
 
 //-------------------------------------------------------------------------------------------
 
 void FileManager::set_P2_Name(std::string name)
 {
-    file.open(file_Dir, ios::ate);
     this->p2_Name = name;
     file << p2_Name << '\n';
     file.close();
@@ -425,6 +428,7 @@ void FileManager::resetData()
     this->p2_Score = 0;
     this->p1_Name.clear();
     this->p2_Name.clear();
+    this->game_Name.clear();
     this->file_Dir.clear();
     this->moves.clear();
 }

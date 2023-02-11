@@ -56,7 +56,19 @@ void GameManager::addFileOperation(Func func)
         fileOperation.join();
 
     // make a thread for function
-    thread th(func);
+    thread th([this, func]()
+              {
+                  // transfer exceptions using exception pointer
+                  globalExpPtr = nullptr;
+                  try
+                  {
+                      func();
+                  }
+                  catch (...)
+                  {
+                      globalExpPtr = current_exception();
+                  } //
+              });
 
     // add thread to fileOperation
     fileOperation.swap(th);
@@ -72,23 +84,22 @@ void GameManager::loadGame(unsigned index)
     { getFileManager(false)->loadSaveFile(index); };
     addFileOperation(fileOp);
 
+    // catch fileOperation exceptions
+    fileOperation.join();
+    if (globalExpPtr)
+        rethrow_exception(globalExpPtr);
+
     this->game_name = getFileManager()->get_Game_Name();
 
     string name1 = getFileManager()->get_P1_Name(), name2 = getFileManager()->get_P2_Name().c_str();
 
     // *important*
-    // because of using static var for setting pieces names,
+    // because of using static var for setting pieces ids,
     // we can't use multithreading for setting users
 
-    // user 1 setup
-    users[0] = User::getInstance(name1, Chessman::Color::WHITE, 0, 0);
-    users[0]->setColor(Chessman::Color::WHITE);
-    users[0]->setChessmansIn(); //
-
-    // user 2 setup
-    users[1] = User::getInstance(name2, Chessman::Color::WHITE, 0, 0);
-    users[1]->setColor(Chessman::Color::BLACK);
-    users[1]->setChessmansIn(); //
+    // users setup
+    this->users[0] = User::getInstance(name1, User::Color::WHITE, 0, 0);
+    this->users[1] = User::getInstance(name2, User::Color::BLACK, 0, 0);
 
     this->setTurn(Turn::USER1);
 
@@ -723,17 +734,13 @@ void GameManager::restartGame()
     { getFileManager(false)->resetFile(); };
     addFileOperation(fileOp1);
 
-    // reset FileManager data
-    auto fileOp2 = [this]()
-    { getFileManager(false)->resetData(); };
-    addFileOperation(fileOp2);
-
     // reset game data
     resetData();
 
-    // *important* these can't be paralel
-    setUser1(temp_name1);
-    setUser2(temp_name2);
+    this->users[0] = User::getInstance(temp_name1, User::Color::WHITE, 0, 0);
+    this->users[1] = User::getInstance(temp_name2, User::Color::BLACK, 0, 0);
+
+    setTurn(USER1);
 
     startGame();
 }
@@ -1251,8 +1258,10 @@ string GameManager::getSaveFileInfo(unsigned index)
     { data = getFileManager(false)->getSaveFileInfo(index); };
     addFileOperation(fileOp);
 
-    // ensure op is done
+    // catch fileOperation exceptions
     fileOperation.join();
+    if (globalExpPtr)
+        rethrow_exception(globalExpPtr);
 
     return data;
 }

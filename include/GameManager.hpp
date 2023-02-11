@@ -50,9 +50,6 @@ public:
 
     //-------------------------------------------- File
 
-    // keeps file operation thread
-    std::thread fileOperation;
-
     FileManager *getFileManager(bool endPreviewsOp = true);
 
     // gets a callable and replace it to fileOp thread
@@ -180,6 +177,12 @@ private:
     Enpasan enpasan = std::make_pair(100, 100);
 
     FileManager fileManager;
+
+    // keeps file operation thread
+    std::thread fileOperation;
+
+    // store threads exceptions
+    std::exception_ptr globalExpPtr = nullptr;
 };
 
 #endif /* end of include guard: GAMEMANAGER_H*/
