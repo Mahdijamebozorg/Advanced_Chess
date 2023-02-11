@@ -11,6 +11,7 @@ using namespace std;
 //------------------------------------------------------------------------- reading game from file
 void FileManager::readFile(std::string fileName, bool isChecking)
 {
+    // reset remove files details
     resetData();
 
     // dir
@@ -112,9 +113,19 @@ void FileManager::saveManually()
 {
     string tempDir = "./SavedGames/" + game_Name;
 
-    tempDir += ".txt";
-    rename(file_Dir.c_str(), tempDir.c_str());
-    file_Dir = tempDir;
+    // if new name already exists
+    if (rename(file_Dir.c_str(), (tempDir + ".txt").c_str()) != 0)
+    {
+        // add increasing numbers after name untill its done
+        unsigned count = 1;
+        while (rename(file_Dir.c_str(), (tempDir + to_string(count) + ".txt").c_str()) != 0)
+        {
+            count++;
+        }
+        this->file_Dir = tempDir + to_string(count) + ".txt";
+    }
+    else
+        this->file_Dir = tempDir + ".txt";
 }
 
 //-------------------------------------------------------------------------  get loaded game data
@@ -243,7 +254,15 @@ void FileManager::set_Name(std::string name)
     string suffix = "(AutoSave)";
     pos = name.find(suffix);
     if (pos != string::npos)
-        name = name.substr(0, pos) + name.substr((pos + 1) + suffix.size());
+    {
+        // has something after suffix
+        if (name.size() > pos + suffix.size())
+            name = name.substr(0, pos) + name.substr((pos + 1) + suffix.size());
+
+        // only has suffix after name
+        else
+            name = name.substr(0, pos);
+    }
 
     this->game_Name = name;
 }
@@ -301,15 +320,28 @@ void FileManager::loadSaveFile(unsigned index)
 {
     string fileName = savedGames[index];
 
-    // read file data
+    // read file data and set name and dir
     readFile(fileName, false);
 
     // when no error, add file to autosave
-    string tempName = "./SavedGames/" + game_Name + "(AutoSave).txt";
 
-    rename(file_Dir.c_str(), tempName.c_str());
+    // ensure file is closed
+    file.close();
 
-    this->file_Dir = tempName;
+    string tempDir = "./SavedGames/" + game_Name;
+    // if new name already exists
+    if (rename(file_Dir.c_str(), (tempDir + "(AutoSave).txt").c_str()) != 0)
+    {
+        // add increasing numbers after name untill its done
+        unsigned count = 1;
+        while (rename(file_Dir.c_str(), (tempDir + to_string(count) + "(AutoSave).txt").c_str()) != 0)
+        {
+            count++;
+        }
+        this->file_Dir = tempDir + to_string(count) + "(AutoSave).txt";
+    }
+    else
+        this->file_Dir = tempDir + "(AutoSave).txt";
 }
 
 //-------------------------------------------------------------------------------------------
@@ -334,11 +366,16 @@ void FileManager::readSaveFiles()
         while ((diread = readdir(dir)) != nullptr)
         {
             string temp = diread->d_name;
-            string suffix = temp.substr(temp.find('.'), temp.back());
-            if (suffix == ".txt")
+            auto pos = temp.find('.');
+            // if has format
+            if (pos != string::npos)
             {
-                qDebug() << QString::fromStdString(temp) << " added to save games" << Qt::endl;
-                savedGames.push_back(temp);
+                // if format is .txt
+                if (temp.substr(pos) == ".txt")
+                {
+                    qDebug() << QString::fromStdString(temp) << " added to save games" << Qt::endl;
+                    savedGames.push_back(temp);
+                }
             }
         }
         closedir(dir);
